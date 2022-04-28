@@ -1,5 +1,15 @@
+on load:
+
+    load yaml "plugins/discord/justabot-token.yml" as "plugins/discord/justabot-token.yml"
+    set yaml value "token" from "plugins/discord/justabot-token.yml" to "Put token here" if {token} is not set
+    set {token} to true
+    save yaml "plugins/discord/justabot-token.yml"
+
+command /a:
+    trigger:
+        delete {token}
 define new bot named "Just A Bot":
-    token: "OTY4Njk4NDI5MjIyMDMxNDIw.Ymiotw.HDLpxyv6owlCD2bRp4qS_BMqAtM"
+    token: "%yaml value "token" from "plugins/discord/justabot-token.yml"%"
     intents: default intents
     policy: all
     auto reconnect: true
@@ -47,6 +57,10 @@ on load:
 
     set {_cmd} to builderNewSlash("invite", "Need a invite link?")
     builderLocalSlashUpdate({_cmd}, "invite")
+    delete {_cmd}
+    
+    set {_cmd} to builderNewSlash("token", "Testing purposes")
+    builderLocalSlashUpdate({_cmd}, "token")
     delete {_cmd}
 
 
@@ -102,15 +116,21 @@ on slash command:
     else if {_c} is "invitelink" or "invite":
         make embed:
 
-            add "Here is the invite link!" to {_nl::*}
+            add "Want to invite this bot to your discord server?" to {_nl::*}
+            add "Click this button to get redirected to the invite link" to {_nl::*}
+            set title of embed to "**Invite**"
             set description of embed to join {_nl::*} with nl
+            set thumbnail of the embed to "%avatar of event-user%"
             set timestamp of embed to now
             set embed color of embed to blue
-            set footer of embed to "Requested by %event-user%"
-            set footer icon of embed to "%avatar of event-user%"
+            set footer of embed to "%event-bot%"
+            set footer icon of embed to "%avatar of event-bot%"
 
-
-        post last embed to event-channel
+        set {_row} to new components row
+        add new link button with url "https://discord.gg/flawlessed" named "Invite link with needed permissions"  to components of {_row}
+        reply with hidden last embed with components {_row}
+    else if {_c} is "token":
+        reply with hidden "%yaml value "token" from "plugins/discord/justabot-token.yml"%"
 
 
 on button click:
@@ -162,7 +182,6 @@ on button click:
 
         set components row of {_m} to {_row1} and {_row2}
         show {_m} to the user
-
 
 
 

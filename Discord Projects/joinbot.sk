@@ -6,7 +6,7 @@ options:
     presence_msg: all joins in null guilds
 
 define new bot named "{@bot}":
-    token: "OTY2Mzg1MTQwNDUwMzUzMjUy.YmA-TA.pAUQXWHbh3Xy9E4DYYKVaHtjmEA"
+    token: ""
     intents: default intents
     policy: all
     auto reconnect: true
