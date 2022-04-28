@@ -1,0 +1,30 @@
+        #set {_timespan} to toTimespan(arg 1)
+options:
+    appeal: https://discord.gg/rawsteal
+    no-reason: No provided reason
+    permission-msg: &cInsufficient permissions!
+
+command /history <offline player>:
+    aliases: checkpuns, puns, punishments
+    usage: &7Improper usage: &3/history (player)
+    permission message: {@permission-msg}
+    permission: punish.history
+    trigger:
+        if {history::%uuid of arg%::*} is not set:
+            send "&cNo previous history for this player"
+            stop
+        else:
+            send "&bPrevious history for %arg 1%" and ""
+            loop {history::%uuid of arg%::*}:
+                send "%loop-value%"
+            send ""
+
+
+command /clearhistory <offline player>:
+    permission: punish.clearhistory
+    permission message: {@permission-msg}
+    usage: &7Improper usage: &3/clearhistory (player)
+    aliases: ch, clearpuns, clearpunishments
+    trigger:
+        delete {history::%uuid of arg%::*}
+        send "&bHistory for %arg 1% was cleared."

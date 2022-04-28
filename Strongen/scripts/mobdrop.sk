@@ -1,0 +1,97 @@
+command /spawnboss <text> <number> <number> <number>:
+    usage: &3/spawnboss &f&n(boss) (x-coord) (y-coord) (z-coord) &f- &3&oThank qeid <3
+    permission: op
+    permission message: &3You do not have the required permission to use this command.
+    trigger:
+        if arg 1 is "king_zombie":
+            spawnBoss("king_zombie", arg 2, arg 3, arg 4)
+            stop
+        else:
+            send "&cThat boss does not exist!"
+            send "&cBosses: KING_ZOMBIE"
+
+function spawnBoss(type: text, x: number, y: number, z: number):
+    if {_type} is "king_zombie":
+        if {boss::active} is false:
+            spawn zombie at location({_x}, {_y}, {_z}, world "box")
+            set {_s} to last spawned zombie
+            add "{Attributes:[{Name:""generic.max_health"",Base:15000},{Name:""generic.attack_damage"",Base:300}],Health:15000,Tags:[""&6King Zombie""]}" to nbt of last spawned entity
+            set {_h} to health of last spawned entity
+            set {boss::active} to true
+            set {_mh} to max health of last spawned entity
+            set {_lse} to last spawned entity
+            set name of {_lse} to "&6&lKing Zombie &8[&c%{_h}%♥&c/%{_mh}%♥&8]"
+            broadcast "" and "&6&lBOSS SPAWN! &eA boss has spawned in the dungeon.. who will defeat it? &cit's very powerful." and ""
+on damage:
+    if victim is zombie:
+        if victim's name contains "King Zombie":
+            if attacker is player:
+                set {_h} to health of victim
+                set {_mh} to max health of victim
+                add damage to {dmg::%attacker%}
+                add "%attacker%" to {damage::%attacker%}
+                send action bar "&7You dealed &c&o%damage% &7to the boss! " to attacker
+                set name of victim to "&6&lKing Zombie &8[&c%{_h}%♥&c/%{_mh}%♥&8]"
+                bind hologram "&7&o%attacker% &7- &7%damage% &c⚔" to victim for 1.5 second offset by 0.3, 2.2, 0.4
+
+
+on death:
+    if victim is zombie:
+        if victim's name contains "King Zombie":
+
+            clear the drops
+            set {_10000} to unbreakable netherite sword named "&6&lKING &6Slayer Sword &9[1/10000%%]" with lore "" and "&8&lREAL Secret" and "" and "&f- &7Sharp 150" and "&f- &7Fire Aspect 30" and "&f- &7Damage: +300" and "&f- &7Health: +225" and ""
+            set {_100} to rotten flesh named "&3&lZOMBIE &fFlesh"
+            # i will add chestplate later
+            
+            
+            add "{AttributeModifiers:[{AttributeName:""generic.max_health"",Name:""generic.max_health"",Slot:""mainhand"",Amount:225,Operation:1,UUID:[I;1006459847,1011981869,1059873435,1740657032]},{AttributeName:""generic.attack_damage"",Name:""generic.attack_damage"",Slot:""mainhand"",Amount:350,Operation:1,UUID:[I;1006459847,1011981869,1059873435,1740657032]}],HideFlags:7,Enchantments:[{id:""minecraft:sharpness"",lvl:150},{id:""minecraft:fire_aspect"",lvl:30}]}" to nbt of {_10000}
+
+            set {_int_10000} to random integer between 1 and 10000
+            if {_int_10000} = 2:
+                drop {_10000} at victim's location
+            set {_int_100} to random integer between 1 and 100
+            if {_int_100} = 5:
+                drop {_100} at victim's location
+
+            
+            broadcast ""
+            broadcast "           &a&lBOSS KILLED &8[King Zombie]"
+            broadcast "           &6%attacker% &edealt the final blow."
+            broadcast ""
+            broadcast "           &e⚔ &e&lPLAYERS WHO DID MOST DAMAGE &e⚔"
+            broadcast ""
+            #loop {damage::*}:
+                #loop {dmg::*}:
+                    #broadcast "           &f%loop-value-1% &7&o(&c%loop-value-2% ⚔&7&o)"
+            broadcast "           &6&l1. &fNone &7&o(WIP)"
+            broadcast "           &e&l2. &fNone &7&o(WIP)"
+            broadcast "           &9&l3. &fNone &7&o(WIP)"
+
+            broadcast ""
+            broadcast "           &7&oThanks for participating! Another boss will spawn in 5 minutes."
+            broadcast ""
+            delete {damage::*}
+            set {boss::active} to false
+
+
+every 5 minutes:
+    spawnBoss("king_zombie", 102, 65, -638)
+
+command /fixboss:
+    permission: op
+    trigger:
+        set {boss::active} to false
+        send "&aSuccess."
+
+on pickup:
+    name of event-item = "&6&lKING &6Slayer Sword &9[1/10000%%]"
+    send "&b&lLEGENDARY FIND! &eYou found a &6Slayer Sword &efrom the dungeon!" to player
+    play sound "ui.toast.challenge_complete" at volume 1 to player
+    broadcast "&b%player% &efound a &6Slayer Sword &efrom the dungeon!"
+
+
+every 1 minutes:
+    loop all players:
+        "%region at loop-player%" contains "afk"
+        give 1 of nether star named "&c&lAFK &eToken" to loop-player 

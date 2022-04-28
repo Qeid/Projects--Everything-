@@ -1,0 +1,80 @@
+
+options:
+    bot: Join-Bot
+    guild: 966359342137868358
+    presence_type: watching
+    presence_msg: all joins in null guilds
+
+define new bot named "{@bot}":
+    token: "OTY2Mzg1MTQwNDUwMzUzMjUy.YmA-TA.pAUQXWHbh3Xy9E4DYYKVaHtjmEA"
+    intents: default intents
+    policy: all
+    auto reconnect: true
+    compression: none
+
+on guild ready:
+
+        set presence of bot "{@bot}" to {@presence_type} "{@presence_msg}"
+
+        set {_1} to new slash command named "setjoinrole" with description "Set the role in which members receive on join"
+
+        add new required role option named "role" with description "The role to supply" to options of {_1}
+
+        update {_1} locally in guild with id "{@guild}" # 'locally' or 'globally', take a guild or a bot.
+        update {_1} globally in bot "{@bot}" # 'locally' or 'globally', take a guild or a bot.
+        broadcast "done"
+
+
+        # set {_cmd1} to new slash command named "setlogchannel" with description "Set the channel in which logs get sent on guild join 123"
+
+        # add new required channel option named "channel" with description "The channel to supply" to options of {_cmd1}
+        # updateSlashs({_cmd1})
+on load:
+
+        set presence of bot "{@bot}" to {@presence_type} "{@presence_msg}"
+
+        set {_1} to new slash command named "setjoinrole" with description "Set the role in which members receive on join"
+
+        add new required role option named "role" with description "The role to supply" to options of {_1}
+
+        update {_1} locally in guild with id "{@guild}" # 'locally' or 'globally', take a guild or a bot.
+        update {_1} globally in bot "{@bot}" # 'locally' or 'globally', take a guild or a bot.
+        broadcast "done"
+
+
+        # set {_cmd1} to new slash command named "setlogchannel" with description "Set the channel in which logs get sent on guild join 123"
+
+        # add new required channel option named "channel" with description "The channel to supply" to options of {_cmd1}
+        # updateSlashs({_cmd1})
+
+
+
+
+    
+
+
+on slash command:
+    set {_c} to event-string
+    if {_c} is "setjoinrole":
+        set {_role} to argument "role" as role
+        set {_id} to discord id of {_role}
+
+        set {r::%discord id of event-guild%::role} to {_id}
+        reply with ":white_check_mark: *Join role was set to* %mention of {_role}%!"
+    if {_c} is "setlogchannel":
+        set {_role} to argument "channel" as channel
+        set {_id} to discord id of {_role}
+
+        set {r::%discord id of event-guild%::channel} to {_id}
+        reply with ":white_check_mark: *Log channel was set to* %mention of {_role}%!"
+
+on member join:
+    if {r::%discord id of event-guild%::role} is set:
+        add role with id "%{r::%discord id of event-guild%::role}%" to roles of event-member
+        open private channel of event-member and store it in {_channel}
+        post "Welcome to `%event-guild%` %mention of event-member%! We hope you enjoy your stay!" to {_channel}
+        #post "**AutoRole** has given you the %mention of {r::%discord id of event-guild%::role}% role." to {_channel}
+
+        post ":plus: %mention of event-member% `%discord id of event-member%` joined, i've **given** them the %mention of {r::%discord id of event-guild%::role}% role." to channel with id "%{r::%discord id of event-guild%::channel}%"
+
+        

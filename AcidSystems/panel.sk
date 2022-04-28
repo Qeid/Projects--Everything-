@@ -1,0 +1,163 @@
+# panel
+
+command /cloud:panel:plugineditor:
+    trigger:
+        if player's world is "%{data::worldName::%player's uuid%}%":
+            set metadata tag "plugineditor" of player to chest inventory with 4 rows named "Plugin Editor &7| &3%{data::serverName::%player's uuid%}%"
+            set slot 27, 28, 29, 30, 31, 32, 33 and 34 of metadata tag "plugineditor" of player to gray stained glass pane named "&f"
+            set slot 35 of metadata tag "plugineditor" of player to glowing arrow named "&3Next page"
+            set slot 27 of metadata tag "plugineditor" of player to glowing structure void named "&3Go back to panel"
+            if {server::plugins::%{data::serverName::%player's uuid%}%::essentials::installed} is false:
+                set slot 0 of metadata tag "plugineditor" of player to gray dye named "&3Essentials" with lore "&7This plugin makes server playing much easier! With" and "&7commands like /gamemode, /ban and more." and "" and "&c✗ Not Installed" and "" and "&7Click to install!"
+            else:
+                set slot 0 of metadata tag "plugineditor" of player to glowing lime dye named "&3Essentials" with lore "&7Thanks for installing!" and "" and "&a✓ Installed" and "" and "&7Click to uninstall!"
+            if {server::plugins::%{data::serverName::%player's uuid%}%::holographic::installed} is false:
+                set slot 1 of metadata tag "plugineditor" of player to gray dye named "&3Holographic Displays" with lore "&7Wanna make floating texts and" and "&7cool information around your server?" and "&7Install this for exactly that!" and "" and "&c✗ Not Installed" and "" and "&7Click to install!"
+            else:
+                set slot 1 of metadata tag "plugineditor" of player to glowing lime dye named "&3Holographic Displays" with lore "&7Thanks for installing!" and "" and "&a✓ Installed" and "" and "&7Click to uninstall!"
+            open (metadata tag "plugineditor" of player) to player
+
+        else:
+            send "&cInsufficient permissions!"
+command /cloud:panel:filemanager:
+    trigger:
+        if player's world is "%{data::worldName::%player's uuid%}%":
+            set metadata tag "filemanager" of player to chest inventory with 5 rows named "File Manager &7| &3%{data::serverName::%player's uuid%}%"
+            set slot 36 of metadata tag "filemanager" of player to glowing structure void named "&3Go back to panel"
+            open (metadata tag "filemanager" of player) to player
+        else:
+            send "&cInsufficient permissions!"
+
+on inventory click:
+    if compare(metadata tag "filemanager" of player, event-inventory) = true:
+        cancel event
+        if index of event-slot = 36:
+            execute player command "control"
+            play sound "ui.button.click" at volume 1
+
+command /cloud:panel:serverproperties:
+    trigger:
+        if player's world is "%{data::worldName::%player's uuid%}%":
+            set metadata tag "serverproperties" of player to chest inventory with 5 rows named "Server Properties &7| &3%{data::serverName::%player's uuid%}%"
+            set slot 36 of metadata tag "serverproperties" of player to glowing structure void named "&3Go back to panel"
+            open (metadata tag "serverproperties" of player) to player
+        else:
+            send "&cInsufficient permissions!"
+
+on inventory click:
+    if compare(metadata tag "serverproperties" of player, event-inventory) = true:
+        cancel event
+        if index of event-slot = 36:
+            execute player command "control"
+            play sound "ui.button.click" at volume 1
+
+on inventory click:
+    if compare(metadata tag "plugineditor" of player, event-inventory) = true:
+        cancel event
+        if index of event-slot = 27:
+            execute player command "control"
+            play sound "ui.button.click" at volume 1
+        if index of event-slot = 35:
+            send "&3No next page..."
+        if index of event-slot = 0:
+            play sound "ui.button.click" at volume 1
+            if {server::plugins::%{data::serverName::%player's uuid%}%::essentials::installed} is false:
+                set {server::plugins::%{data::serverName::%player's uuid%}%::essentials::installed} to true
+                set slot 0 of metadata tag "plugineditor" of player to glowing lime dye named "&3Essentials" with lore "&7Thanks for installing!" and "" and "&a✓ Installed" and "" and "&7Click to uninstall!"
+            else:
+                set {server::plugins::%{data::serverName::%player's uuid%}%::essentials::installed} to false
+                set slot 0 of metadata tag "plugineditor" of player to gray dye named "&3Essentials" with lore "&7This plugin makes server playing much easier! With" and "&7commands like /gamemode, /ban and more." and "" and "&c✗ Not Installed" and "" and "&7Click to install!"
+        if index of event-slot = 1:
+            play sound "ui.button.click" at volume 1
+            if {server::plugins::%{data::serverName::%player's uuid%}%::holographic::installed} is false:
+                set {server::plugins::%{data::serverName::%player's uuid%}%::holographic::installed} to true
+                set slot 1 of metadata tag "plugineditor" of player to glowing lime dye named "&3Holographic Displays" with lore "&7Thanks for installing!" and "" and "&a✓ Installed" and "" and "&7Click to uninstall!"
+            else:
+                set {server::plugins::%{data::serverName::%player's uuid%}%::holographic::installed} to false
+                set slot 1 of metadata tag "plugineditor" of player to gray dye named "&3Holographic Displays" with lore "&7Wanna make floating texts and" and "&7cool information around your server?" and "&7Install this for exactly that!" and "" and "&c✗ Not Installed" and "" and "&7Click to install!"
+
+on command "/holo":
+    if {server::plugins::%{data::serverName::%player's uuid%}%::holographic::installed} is false:
+        cancel event
+        send "&3This command is not available on this server."
+    else:
+        if player's world is "%{data::worldName::%player's uuid%}%":
+            uncancel event
+
+
+
+command /cloud:panel:deleteserver:
+    trigger:
+        if {data::serverAmount::%player's uuid%} <= 0:
+            send "&cYou don't have a server to delete!"
+            stop
+        else:
+            set metadata tag "deleteserver" of player to chest inventory with 5 rows named "Confirm? &7| &3%{data::serverName::%player's uuid%}%"
+            set slot 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 13, 17, 18, 22, 26, 27, 31, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44 of metadata tag "deleteserver" of player to gray stained glass pane named "&f"
+            set slot 10, 11, 12, 19, 20, 21, 28, 29, 30 of metadata tag "deleteserver" of player to glowing lime wool named "&aYes, I want to delete..."
+            set slot 14, 15, 16, 23, 24, 25, 32, 33, 34 of metadata tag "deleteserver" of player to glowing red wool named "&cNo, I don't want to delete..."
+
+
+
+
+            open (metadata tag "deleteserver" of player) to player
+on inventory click:
+    if compare(metadata tag "deleteserver" of player, event-inventory) = true:
+        cancel event
+        if index of event-slot = 10 or 11 or 12 or 19 or 20 or 21 or 28 or 29 or 30:
+            deleteServer(player)
+        if index of event-slot = 14 or 15 or 16 or 23 or 24 or 25 or 32 or 33 or 34:
+            close player's inventory
+            send "&cYou canceled the deletion process."
+
+
+function deleteServer(p: player):
+    if {data::serverAmount::%{_p}'s uuid%} <= 0:
+        send "&cYou don't have a server to delete!" to {_p}
+        stop
+    else:
+        play sound "entity.player.levelup" at volume 1 to {_p}
+        set {data::serverAmount::%{_p}'s uuid%} to 0
+        execute console command "mv delete %{data::worldName::%{_p}'s uuid%}%"
+        execute console command "mvconfirm"
+        send "&cYou deleted %{data::serverName::%{_p}'s uuid%}%" to {_p}
+        delete {data::worldName::%{_p}'s uuid%}
+        delete {data::serverName::%{_p}'s uuid%}
+        delete {server::plugins::%{data::serverName::%{_p}'s uuid%}%::*} 
+        set {data::hasServer::%{_p}'s uuid%} to false
+        remove "%{data::serverName::%{_p}'s uuid%}%" from {server::servers::*}
+
+
+command /control:
+    aliases: cloud:servers:control, panel, cloud:servers:panel
+    trigger:
+        if player's world is "lobby-1" or "lobby-2" or "world":
+            send "&cThis command cannot be executed here!"
+            stop
+        if player's world is "%{data::worldName::%player's uuid%}%":
+            set metadata tag "panel" of player to chest inventory with 1 rows named "Panel &7| &3%{data::serverName::%player's uuid%}%"
+            set slot 0, 2, 3, 4, 6, 7 of metadata tag "panel" of player to gray stained glass pane named "&f"
+            set slot 1 of metadata tag "panel" of player to glowing command block named "&aPlugin Editor" with lore "" and "&7&oClick to open and manage all" and "&7&oyour plugins." and ""
+            set slot 3 of metadata tag "panel" of player to glowing oak sign named "&cFile Manager" with lore "" and "&7&oClick to manage all your plugin" and "&7&ofiles and directories." and ""
+            set slot 5 of metadata tag "panel" of player to glowing redstone repeater named "&FServer Properties" with lore "" and "&7&oClick to open the server properties and" and "&7&ochange gamerules and stuff" and ""
+            set slot 8 of metadata tag "panel" of player to glowing arrow named "&7&oNext category..."
+            
+            open (metadata tag "panel" of player) to player
+        if player's world is not "%{data::worldName::%player's uuid%}%":
+            send "&cInsufficient permissions!"
+
+on inventory click:
+    if compare(metadata tag "panel" of player, event-inventory) = true:
+        cancel event
+        if index of event-slot = 1:
+            execute player command "cloud:panel:plugineditor"
+            play sound "block.barrel.open" at volume 1 to player
+        if index of event-slot = 3:
+            execute player command "cloud:panel:filemanager"
+            play sound "block.barrel.open" at volume 1 to player
+        if index of event-slot = 5:
+            execute player command "cloud:panel:serverproperties"
+            play sound "block.barrel.open" at volume 1 to player
+        if index of event-slot = 8:
+            send "&3Work in progress!"
+            play sound "entity.villager.no" at volume 1

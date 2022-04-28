@@ -1,0 +1,96 @@
+on rightclick:
+	if player's tool = paper named "&a&lMoney &8(1M)":
+		remove 1 paper from player's inventory
+		execute console command "eco give %player% 1000000"
+		play sound "entity.experience_orb.pickup" at volume 1 to player
+		stop
+	if player's tool = paper named "&a&lMoney &8(2M)":
+		remove 1 paper from player's inventory
+		execute console command "eco give %player% 2000000"
+		play sound "entity.experience_orb.pickup" at volume 1 to player
+		stop
+	if player's tool = paper named "&a&lMoney &8(3M)":
+		remove 1 paper from player's inventory
+		execute console command "eco give %player% 3000000"
+		play sound "entity.experience_orb.pickup" at volume 1 to player
+		stop
+	if player's tool = gold nugget named "&6&lTokens &8(5K)":
+		remove 1 gold nugget from player's inventory
+		execute console command "token give %player% 5000"
+		play sound "entity.experience_orb.pickup" at volume 1 to player
+		stop
+	if player's tool = gold nugget named "&6&lTokens &8(10K)":
+		remove 1 gold nugget from player's inventory
+		execute console command "token give %player% 10000"
+		play sound "entity.experience_orb.pickup" at volume 1 to player
+		stop
+	if player's tool = paper named "&a&lMoney &8(4M)":
+		remove 1 paper from player's inventory
+		execute console command "eco give %player% 4000000"
+		play sound "entity.experience_orb.pickup" at volume 1 to player
+		stop
+	if player's tool = paper named "&a&lMoney &8(5M)":
+		remove 1 paper from player's inventory
+		execute console command "eco give %player% 5000000"
+		play sound "entity.experience_orb.pickup" at volume 1 to player
+		stop
+	if player's tool = paper named "&a&lMoney &8(6M)":
+		remove 1 paper from player's inventory
+		execute console command "eco give %player% 6000000"
+		play sound "entity.experience_orb.pickup" at volume 1 to player
+		stop
+	if player's tool = paper named "&a&lMoney &8(7M)":
+		remove 1 paper from player's inventory
+		execute console command "eco give %player% 7000000"
+		play sound "entity.experience_orb.pickup" at volume 1 to player
+		stop
+	if player's tool = paper named "&a&lMoney &8(8M)":
+		remove 1 paper from player's inventory
+		execute console command "eco give %player% 8000000"
+		play sound "entity.experience_orb.pickup" at volume 1 to player
+		stop
+	if player's tool = paper named "&a&lMoney &8(15M)":
+		remove 1 paper from player's inventory
+		execute console command "eco give %player% 15000000"
+		play sound "entity.experience_orb.pickup" at volume 1 to player
+		stop
+	if player's tool = paper named "&a&lMoney &8(20M)":
+		remove 1 paper from player's inventory
+		execute console command "eco give %player% 20000000"
+		play sound "entity.experience_orb.pickup" at volume 1 to player
+		stop
+	if player's tool = paper named "&a&lMoney &8(10M)":
+		remove 1 paper from player's inventory
+		execute console command "eco give %player% 10000000"
+		play sound "entity.experience_orb.pickup" at volume 1 to player
+		stop
+	if player's tool = gold nugget named "&6&lTokens &8(30K)":
+		remove 1 gold nugget from player's inventory
+		execute console command "token give %player% 3000"
+		play sound "entity.experience_orb.pickup" at volume 1 to player
+		stop
+	if player's tool = gold nugget named "&6&lTokens &8(35K)":
+		remove 1 gold nugget from player's inventory
+		execute console command "token give %player% 35000"
+		play sound "entity.experience_orb.pickup" at volume 1 to player
+		stop
+	if player's tool = gold nugget named "&6&lTokens &8(15K)":
+		remove 1 gold nugget from player's inventory
+		execute console command "token give %player% 15000"
+		play sound "entity.experience_orb.pickup" at volume 1 to player
+		stop
+	if player's tool = gold nugget named "&6&lTokens &8(20K)":
+		remove 1 gold nugget from player's inventory
+		execute console command "token give %player% 20000"
+		play sound "entity.experience_orb.pickup" at volume 1 to player
+		stop
+	if player's tool = gold nugget named "&6&lTokens &8(45K)":
+		remove 1 gold nugget from player's inventory
+		execute console command "token give %player% 45000"
+		play sound "entity.experience_orb.pickup" at volume 1 to player
+		stop
+	if player's tool = gold nugget named "&6&lTokens &8(40K)":
+		remove 1 gold nugget from player's inventory
+		execute console command "token give %player% 40000"
+		play sound "entity.experience_orb.pickup" at volume 1 to player
+		stop

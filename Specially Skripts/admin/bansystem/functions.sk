@@ -1,0 +1,37 @@
+        #set {_timespan} to toTimespan(arg 1)
+options:
+    appeal: https://discord.gg/rawsteal
+    no-reason: No provided reason
+    permission-msg: &cInsufficient permissions!
+
+
+function toTimespan(t: text) :: timespan:
+    set {_conversion::s} to "SECONDS"
+    set {_conversion::m} to "MINUTES"
+    set {_conversion::h} to "HOURS"
+    set {_conversion::d} to "DAYS"
+    set {_l} to length of {_t}
+    set {_a} to {_l} - 1
+    set {_l::1} to first {_a} characters of {_t}
+    set {_l::2} to last character of {_t}
+    set {_t} to "%{_l::1}% %{_conversion::%{_l::2}%}%"
+    return ({_t} parsed as timespan)
+	
+
+function autoSeveritySilent(p: player, reason: text):
+    if {_reason} = "Spam / Flood":
+        if {sev::%uuid of {_p}%::spam_flood} is not set:
+            execute {_p} command "warn %{_p}% -s Spam / Flood"
+            add 1 to {sev::%uuid of {_p}%::spam_flood}
+        else if {sev::%uuid of {_p}%::spam_flood} = 1:
+            execute {_p} command "tempmute %{_p}% 1h -s Spam / Flood"
+            add 1 to {sev::%uuid of {_p}%::spam_flood}
+        else if {sev::%uuid of {_p}%::spam_flood} = 2:
+            execute {_p} command "tempmute %{_p}% 3h -s Spam / Flood"
+            add 1 to {sev::%uuid of {_p}%::spam_flood}
+        else if {sev::%uuid of {_p}%::spam_flood} = 3:
+            execute {_p} command "tempmute %{_p}% 12h -s Spam / Flood"
+            add 1 to {sev::%uuid of {_p}%::spam_flood}
+        else if {sev::%uuid of {_p}%::spam_flood} = 4:
+            execute {_p} command "mute %{_p}% -s Spam / Flood"
+            delete {sev::%uuid of {_p}%::spam_flood}

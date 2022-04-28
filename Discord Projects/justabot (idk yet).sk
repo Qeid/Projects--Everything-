@@ -1,0 +1,280 @@
+define new bot named "Just A Bot":
+    token: "OTY4Njk4NDI5MjIyMDMxNDIw.Ymiotw.HDLpxyv6owlCD2bRp4qS_BMqAtM"
+    intents: default intents
+    policy: all
+    auto reconnect: true
+    compression: none
+
+on load:
+    set {_cmd} to builderNewSlash("appchannel", "Set the channel to send applications to.")
+    builderNewOption({_cmd}, "channel", "Please, just supply a channel.", "channel", false)
+    builderLocalSlashUpdate({_cmd}, "appchannel")
+    delete {_cmd}
+    
+    set {_cmd} to builderNewSlash("setappmodal", "Send a (application modal) to the current channel.")
+    builderLocalSlashUpdate({_cmd}, "setappmodal")
+    delete {_cmd}
+
+    set {_cmd} to builderNewSlash("suggestchannel", "Set the channel to send suggestions to.")
+    builderNewOption({_cmd}, "channel", "Please, just supply a channel.", "channel", false)
+    builderLocalSlashUpdate({_cmd}, "suggestchannel")
+    delete {_cmd}
+    
+    set {_cmd} to builderNewSlash("setsuggestmodal", "Send a (suggestion modal) to the current channel.")
+    builderLocalSlashUpdate({_cmd}, "setsuggestmodal")
+    delete {_cmd}
+
+    set {_cmd} to builderNewSlash("suggest", "Make a suggestion!")
+    builderLocalSlashUpdate({_cmd}, "suggest")
+    delete {_cmd}
+    
+    set {_cmd} to builderNewSlash("ping", "Pong! (displays ping to our servers)")
+    builderLocalSlashUpdate({_cmd}, "ping")
+    delete {_cmd}
+
+    set {_cmd} to builderNewSlash("reload", "Reload all modules (can only be done by bot owners)")
+    builderLocalSlashUpdate({_cmd}, "reload")
+    delete {_cmd}
+
+    set {_cmd} to builderNewSlash("setsuggestcooldown", "Set the suggestion cooldown")
+    builderNewOption({_cmd}, "duration", "The duration for the cooldown (eg: 1h, 1d, 3s, etc)", "string", false)
+    builderLocalSlashUpdate({_cmd}, "setsuggestcooldown")
+    delete {_cmd}
+
+
+on slash command:
+    set {_c} to event-string
+    if {_c} is "appchannel":
+        set {_arg} to argument "channel" as string
+        if {_arg} is set:
+            set {_id} to discord id of {_arg}
+            set {disc::%discord id of event-guild%::appchannel} to {_id}
+            reply with "> **New applications will be sent to** %mention of channel with id {_id}%"
+        else:
+            reply with "> *Unable to do this action:* `Error: InvalidChannelException` Maybe you didn't supply a valid channnel?"
+    else if {_c} is "suggestchannel":
+        set {_arg} to argument "channel" as string
+        if {_arg} is set:
+            set {_id} to discord id of {_arg}
+            set {disc::%discord id of event-guild%::suggestchannel} to {_id}
+            reply with "> **New suggestions will be sent to** %mention of channel with id {_id}%"
+        else:
+            reply with "> *Unable to do this action:* `Error: InvalidChannelException` Maybe you didn't supply a valid channnel?"
+    else if {_c} is "setappmodal":
+        set {_row} to new components row
+        add new primary button with id "app-modal" named "New application" with emoji ":newspaper:" to components of {_row}
+        reply with hidden ":white_check_mark:"
+        post "> Click to create a new **application**" to event-channel with components {_row}
+    else if {_c} is "setsuggestmodal":
+        set {_row} to new components row
+        add new primary button with id "suggest-modal" named "New suggestion" with emoji ":person_raising_hand:" to components of {_row}
+        reply with hidden ":white_check_mark:"
+        post "> Click to create a new **suggestion**" to event-channel with components {_row}
+    else if {_c} is "suggest":
+        set {_row} to new components row
+        add new primary button with id "suggest-modal" named "Click to make a suggestion" with emoji ":person_raising_hand:" to components of {_row}
+        reply with hidden "**Click!**" with components {_row}
+    else if {_c} is "ping":
+        set {_ms} to bot ping of event-bot
+        if {_ms} < 90:
+            reply with "**Pong!** :ping_pong: `%bot ping of event-bot% ms` %nl%**Status:** :green_circle: *[Good]*%nl%*Experiencing __issues__? contact our developer:* `qeid##0001`"
+        else if {_ms} > 90:
+            reply with "**Pong!** :ping_pong: `%bot ping of event-bot% ms` %nl%**Status:** :yellow_circle: *[Okay]*%nl%*Experiencing __issues__? contact our developer:* `qeid##0001`"
+        else if {_ms} > 200:
+            reply with "**Pong!** :ping_pong: `%bot ping of event-bot% ms` %nl%**Status:** :red_circle: *[Bad]*%nl%*Experiencing __issues__? contact our developer:* `qeid##0001`"
+    else if {_c} is "setsuggestcooldown":
+        reply with ":x: *This module is currently disabled* Default suggest cooldown is **3 minutes**"
+    else if {_c} is "reload":
+        set {_i} to discord id of event-user
+        if {_i} = "730199667505102888":
+            execute console command "sk reload justabot"
+            reply with "> **Reloaded all modules and commands**"
+        else:
+            reply with ":x: *Unable to do this action*"
+
+on button click:
+    set {_button} to event-string
+    if {_button} = "app-modal":
+
+        set {_m} to new modal with id "modal" named "Application [beta]"
+
+        set {_row1} to new components row
+        set {_row2} to new components row
+
+        set {_input1} to new text input with id "question-1" named "Example title ##1"
+        set placeholder of {_input1} to "Example description"
+        set minimum range of {_input1} to 1
+        set maximum range of {_input1} to 3000
+        set required state of {_input1} to true
+        add {_input1} to components of {_row1}
+
+        set {_input2} to new text input with id "question-2" named "Example title ##2"
+        set placeholder of {_input2} to "Example description"
+        set minimum range of {_input2} to 1
+        set maximum range of {_input2} to 3000
+        set required state of {_input2} to false
+        add {_input2} to components of {_row2}
+
+        set components row of {_m} to {_row1} and {_row2}
+        show {_m} to the user
+        stop
+    else if {_button} = "suggest-modal":
+        set {_w} to difference between {ti::%discord id of event-guild%::%discord id of event-user%::cooldown} and now
+        if {_w} < 2 minutes:
+            set {_value} to difference between 2 minutes and {_w}
+            set {_str} to timespanFormat({_value})
+            reply with hidden ":x: You can use this interaction again in **%{_str}%**"
+            stop
+
+        set {ti::%discord id of event-guild%::%discord id of event-user%::cooldown} to now
+        
+        set {_m} to new modal with id "suggestion" named "New suggestion [beta]"
+
+        set {_row1} to new components row
+
+        set {_input1} to new text input with id "suggestion" named "Suggestion"
+        set placeholder of {_input1} to "Please, supply a suggestion! This suggestions will help us keep the server fresh."
+        set minimum range of {_input1} to 1
+        set maximum range of {_input1} to 1500
+        set required state of {_input1} to true
+        add {_input1} to components of {_row1}
+
+        set components row of {_m} to {_row1} and {_row2}
+        show {_m} to the user
+
+
+
+
+on modal receive:
+    set {_modal} to event-string
+    if {_modal} is "modal":
+        set {_a::1} to value of component with id "question-1"
+        set {_a::2} to value of component with id "question-2"
+        add "**New App Received:** %mention of event-user% `%discord id of event-user%`" to {_1::*}
+        add "[---------------------]" to {_1::*}
+        add "**Question 1**" to {_1::*}
+        add "> %{_a::1}%" to {_1::*}
+        add "**Question 2**" to {_1::*}
+        add "> %{_a::2}%" to {_1::*}
+        add "[---------------------]" to {_1::*}
+        post "%join {_1::*} with nl%" to channel with id "%{disc::%discord id of event-guild%::appchannel}%"
+        reply with hidden (join {_a::*} with nl)
+    else if {_modal} = "suggestion":
+        set {_a::1} to value of component with id "suggestion"
+        add "**Suggestion submitted by:** %mention of event-user% `%discord id of event-user%`" to {_1::*}
+        add "> %{_a::1}%" to {_1::*}
+        post "%join {_1::*} with nl%" to channel with id "%{disc::%discord id of event-guild%::suggestchannel}%"
+        reply with hidden (join {_1::*} with nl)
+
+
+
+
+
+
+
+
+
+function builderNewSlash(n: string, d: string) :: object:
+    set {_nslash} to new slash command named "%{_n}%" with desc {_d}
+    return {_nslash}
+
+
+function builderNewOption(v: object, n: string, d: string, t: string="string", o: boolean=false):
+    if {_t} = "string":
+        if {_o} = false:
+            add required string option named "%{_n}%" with description "%{_d}%" to options of {_v}
+        
+        else:
+            add string option named "%{_n}%" with description "%{_d}%" to options of {_v}
+
+    if {_t} = "boolean":
+        if {_o} = false:
+            add required boolean option named "%{_n}%" with description "%{_d}%" to options of {_v}
+        
+        else:
+            add boolean option named "%{_n}%" with description "%{_d}%" to options of {_v}
+
+    if {_t} = "user":
+        if {_o} = false:
+            add required user option named "%{_n}%" with description "%{_d}%" to options of {_v}
+        
+        else:
+            add user option named "%{_n}%" with description "%{_d}%" to options of {_v}
+    
+    if {_t} = "integer":
+        if {_o} = false:
+            add required integer option named "%{_n}%" with description "%{_d}%" to options of {_v}
+        
+        else:
+            add integer option named "%{_n}%" with description "%{_d}%" to options of {_v}
+
+    if {_t} = "number":
+        if {_o} = false:
+            add required number option named "%{_n}%" with description "%{_d}%" to options of {_v}
+        
+        else:
+            add number option named "%{_n}%" with description "%{_d}%" to options of {_v}
+    
+    if {_t} = "channel":
+        if {_o} = false:
+            add required channel option named "%{_n}%" with description "%{_d}%" to options of {_v}
+        
+        else:
+            add channel option named "%{_n}%" with description "%{_d}%" to options of {_v}
+    
+    if {_t} = "role":
+        if {_o} = false:
+            add required role option named "%{_n}%" with description "%{_d}%" to options of {_v}
+        
+        else:
+            add role option named "%{_n}%" with description "%{_d}%" to options of {_v}
+
+
+function builderAddSubCmd(n: string, d: string) :: object:
+    set {_r} to new sub command named {_n} with description {_d}
+    return {_r}
+
+function builderLocalSlashUpdate(slash: object, name: text):
+
+
+    delete {local::%{_name}%}
+    set {local::%{_name}%} to {_slash}
+
+    update command {local::*} locally in guild with id "839283557658132570"
+
+function timespanFormat(value: timespan) :: text:
+    set {_str} to "%{_value}%"
+    set {_l::*} to split {_str} at " "
+    loop {_l::*}:
+        delete {_i}
+        set {_i} to loop-value parsed as a number
+        {_i} is set
+        set {_i} to round({_i})
+        replace every "%loop-value%" in {_str} with "%{_i}%"
+
+        replace every " seconds" in {_str} with " secs"
+        replace every " second" in {_str} with " sec"
+
+        replace every " minutes" in {_str} with " mins"
+        replace every " minute" in {_str} with " min"
+
+        replace every " hours" in {_str} with " hrs"
+        replace every " hour" in {_str} with " hr"
+
+        replace every " days" in {_str} with " days"
+        replace every " day" in {_str} with " day"
+        replace every " and" in {_str} with ""
+
+    return "%{_str}%"
+
+function toTimespan(t: text) :: timespan:
+    set {_conversion::s} to "SECONDS"
+    set {_conversion::m} to "MINUTES"
+    set {_conversion::h} to "HOURS"
+    set {_conversion::d} to "DAYS"
+    set {_l} to length of {_t}
+    set {_a} to {_l} - 1
+    set {_l::1} to first {_a} characters of {_t}
+    set {_l::2} to last character of {_t}
+    set {_t} to "%{_l::1}% %{_conversion::%{_l::2}%}%"
+    return ({_t} parsed as timespan)

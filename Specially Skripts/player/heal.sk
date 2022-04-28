@@ -1,0 +1,156 @@
+options:
+    perm: server.helper
+    permmsg: &8» &7You do not have permission to use this command.
+
+command /tp <player=%player%>:
+    permission: staff.teleport
+    permission message: {@permmsg}
+    usage: &c/tp <player>
+    executable by: players
+    aliases: teleport
+    trigger:
+        remove "%player%" from {afkpool::*} if {afkpool::*} contains player
+        send "&c/tp <player>" to player if arg 1 is sender
+        teleport player to arg 1 if arg 1 isn't sender
+        send "&7[STAFF] &8» %{rankcolor::%player%}% &7teleported to %{rankcolor::%arg 1%}%&7." to all players where [input has permission "staff"] if arg 1 isn't sender
+
+command /tphere <player=%player%>:
+    permission: staff.teleport
+    permission message: {@permmsg}
+    usage: &c/tphere <player>
+    executable by: players
+    aliases: teleporthere
+    trigger:
+        send "&c/tphere <player>" to player if arg 1 is sender
+        teleport arg 1 to player if arg 1 isn't sender
+        send "&7[STAFF] &8» %{rankcolor::%player%}% &7teleported %{rankcolor::%arg 1%}%&7 to themselves." to all players where [input has permission "staff"] if arg 1 isn't sender
+
+command /checkuuid <offline player=%player%>:
+    permission: op
+    trigger:
+        send formatted "&3%arg 1%&7's &7UUID is: <sgt:%arg 1's uuid%>&3%arg 1's uuid%" to sender
+
+command /gmsp [<player>]:
+    permission: staff.gamemode.spectator
+    permission message: {@permmsg}
+    trigger:
+        if arg-1 is set:
+            if arg 1's gamemode is spectator:
+                send "&7Their gamemode is already spectator!"
+                stop
+            else:
+                set arg-1's gamemode to spectator
+                send "&7[STAFF] &8» %{rankcolor::%player%}% &7updated %{rankcolor::%arg 1%}%&7's gamemode to spectator." to all players where [input has permission "staff.notify"]
+        else:   
+            if player's gamemode is spectator:
+                send "&7Your gamemode is already spectator!"
+                stop
+            else:
+                set player's gamemode to spectator
+                send "&7[STAFF] &8» %{rankcolor::%player%}% &7updated their gamemode to spectator." to all players where [input has permission "staff.notify"]
+command /gms [<player>]:
+    permission: staff.gamemode.survival
+    permission message: {@permmsg}
+    trigger:
+        if arg-1 is set:
+            if arg 1's gamemode is survival:
+                send "&7Their gamemode is already survival!"
+                stop
+            else:
+                set arg-1's gamemode to survival
+                send "&7[STAFF] &8» %{rankcolor::%player%}% &7updated %{rankcolor::%arg 1%}%&7's gamemode to survival." to all players where [input has permission "staff.notify"]
+        else:   
+            if player's gamemode is survival:
+                send "&7Your gamemode is already survival!"
+                stop
+            else:
+                set player's gamemode to survival
+                send "&7[STAFF] &8» %{rankcolor::%player%}% &7updated their gamemode to survival." to all players where [input has permission "staff.notify"]
+
+command /gmc [<player>]:
+    permission: staff.gamemode.creative
+    permission message: {@permmsg}
+    trigger:
+        if arg-1 is set:
+            if arg 1's gamemode is creative:
+                send "&7Their gamemode is already creative!"
+                stop
+            else:
+                set arg-1's gamemode to creative
+                send "&7[STAFF] &8» %{rankcolor::%player%}% &7updated %{rankcolor::%arg 1%}%&7's gamemode to creative." to all players where [input has permission "staff.notify"]
+        else:   
+            if player's gamemode is creative:
+                send "&7Your gamemode is already creative!"
+                stop
+            else:
+                set player's gamemode to creative
+                send "&7[STAFF] &8» %{rankcolor::%player%}% &7updated their gamemode to creative." to all players where [input has permission "staff.notify"]
+
+command /fly [<player>]:
+    permission: staff.fly
+    permission message: {@permmsg}
+    trigger:
+        if arg 1 is not set:
+            if player's flight mode is false:
+                set player's flight mode to true
+                send "&7[STAFF] &8» %{rankcolor::%player%}% &7updated their flight to &atrue&7." to all players where [input has permission "staff.notify"]
+
+            else:
+                set player's flight mode to false
+                send "&7[STAFF] &8» %{rankcolor::%player%}% &7updated their flight to &cfalse&7." to all players where [input has permission "staff.notify"]
+        else if arg 1 is set:
+            if arg 1's flight mode is false:
+                set arg's flight mode to true
+                send "&7[STAFF] &8» %{rankcolor::%player%}% &7updated %{rankcolor::%arg 1%}%&7's flight to &cfalse&7." to all players where [input has permission "staff.notify"]
+            else:
+                set arg 1's flight mode to false
+                send "&7[STAFF] &8» %{rankcolor::%player%}% &7updated %{rankcolor::%arg 1%}%&7's flight to &atrue&7." to all players where [input has permission "staff.notify"]
+
+command /updaterankcolors <player>:
+    permission: op
+    permission message: {@permmsg}
+    trigger:
+        updateRankColor(arg 1)
+        send "&aDone. Their rank color is &f[%{rankcolor::%arg 1%}%&f]"
+        
+command /updateallrankcolors:
+    permission: op
+    permission message: {@permmsg}
+    trigger:
+        loop all players:
+            updateRankColor(loop-player)
+        send "&aUpdated everyones rank color!"
+
+on join:
+    updateRankColor(player)
+
+function updateRankColor(p: player):
+	if {_p}'s group = "default":
+		set {rankcolor::%{_p}%} to "&7%{_p}%"
+	else if {_p}'s group = "vip":
+		set {rankcolor::%{_p}%} to "<##30ff00>%{_p}%"
+	else if {_p}'s group = "mvp":
+		set {rankcolor::%{_p}%} to "<##41DAF7>%{_p}%"
+	else if {_p}'s group = "captain":
+		set {rankcolor::%{_p}%} to "<##4199FB>%{_p}%"	
+	else if {_p}'s group = "tester":
+		set {rankcolor::%{_p}%} to "<##41DAF7>%{_p}%"
+	else if {_p}'s group = "smm":
+		set {rankcolor::%{_p}%} to "&9%{_p}%"
+	else if {_p}'s group = "<3":
+		set {rankcolor::%{_p}%} to "<##ff00f6>%{_p}%"
+	else if {_p}'s group = "partner":
+		set {rankcolor::%{_p}%} to "<##db00ff>%{_p}%"
+	else if {_p}'s group = "juniormod":
+		set {rankcolor::%{_p}%} to "<##2FC313>%{_p}%"
+	else if {_p}'s prefix contains "mod":
+		set {rankcolor::%{_p}%} to "<##FFFB00>%{_p}%"
+	else if {_p}'s group = "seniormod":
+		set {rankcolor::%{_p}%} to "<##FFCC00>%{_p}%"
+	else if {_p}'s group = "developer":
+		set {rankcolor::%{_p}%} to "<##2088A5>%{_p}%"
+	else if {_p}'s group = "manager":
+		set {rankcolor::%{_p}%} to "<##EB3920>%{_p}%"
+	else if {_p}'s group = "admin":
+		set {rankcolor::%{_p}%} to "<##EB3920>%{_p}%"
+

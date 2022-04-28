@@ -1,0 +1,391 @@
+
+command /rank [<text>] [<offline player>] [<text>]:
+       executable by: console and players
+       permission: staff.rank
+       permission message: &c&l(!) &7You must be &4&lADMIN &7or higher to perform this.
+       trigger:
+              arg 1 is not set:
+                     send "&7&l&m-------------&b&l&m-------------&7&l&m-------------&b&l&m-------------"
+                     send "                                    &b&lRanks"
+                     send "&7View &b/rank help &7for more on how to use this!"
+                     send "&7&oNote: if a player has a higher rank then the one your setting, it"
+                     send "&7&owill not update."
+                     send ""
+                     send "&7Made by &bQeid &7and &bskSpud"
+                     send "&7Running version &b&o1.1.0 &7on &c&lSane&f&lPrison"
+                     send "&7&l&m-------------&b&l&m-------------&7&l&m-------------&b&l&m-------------"
+                     stop
+              arg 1 is "list":
+                     send "&7&l&m-------------&b&l&m-------------&7&l&m-------------&b&l&m-------------"
+                     send "&7&o() = group name"
+                     send "&7&o[] = group prefix"
+                     send "&7&o- - = grantable or not"
+                     send ""
+                     send "                    &eAvailable Ranks"
+                     send "&7(owner&7) [ &4&lOWNER &8&l| &7Skript &7 ] &7-&atrue&7-"
+                     send "&7(co-owner&7) [ &a&mCO-OWNER &8&l| &7Skript &7 ] &7-&cfalse&7-"
+                     send "&7(manager&7) [ &c&l&mMANAGER &8&l| &7Skript &7 ] &7-&cfalse&7-"
+                     send "&7(admin&7) [ &4&lADMIN &8&l| &7Skript &7 ] &7-&atrue&7-"
+                     send "&7(developer&7) [ &9&lDEVELOPER &8&l| &7Skript &7 ] &7-&atrue&7-"
+                     send "&7(srmod&7) [ &6&lMOD &8&l| &7Skript &7 ] &7-&atrue&7-"
+                     send "&7(mod&7) [ &6&lJRMOD &8&l| &7Skript &7 ] &7-&atrue&7-"
+                     send "&7(builder&7) [ &d&lBUILDER &8&l| &7Skript &7 ] &7-&atrue&7-"
+                     send "&7(ultra&7) [ &c&lULTRA &8&l| &7Skript &7 ] &7-&atrue&7-"
+                     send "&7(obsidian&7) [ &5&lOBSIDIAN &8&l| &7Skript &7 ] &7-&atrue&7-"
+                     send "&7(emerald&7) [ &a&lEMERALD &8&l| &7Skript &7 ] &7-&atrue&7-"
+                     send "&7(diamond&7) [ &b&lDIAMOND &8&l| &7Skript &7 ] &7-&atrue&7-"
+                     send "&7(gold&7) [ &f&lGOLD &8&l| &7Skript &7 ] &7-&atrue&7-"
+                     send "&7(iron&7) [ &f&lIRON &8&l| &7Skript &7 ] &7-&atrue&7-"
+                     send "&7(coal&7) [ &8&lCOAL &8&l| &7Skript &7 ] &7-&atrue&7-"
+                     send "&7(default&7) [ &7&oNo Prefix ] &7-&atrue&7-"
+                     send "&7&l&m-------------&b&l&m-------------&7&l&m-------------&b&l&m-------------"
+                     stop
+              arg 1 is "help":
+                     send "&7&l&m-------------&b&l&m-------------&7&l&m-------------&b&l&m-------------"
+                     send "&b/rank &faddgroup <target> <rank> &8| &7&oThis adds a player's rank to argument 2 (&7&oNote: if a player has a higher rank then the one your setting, it"
+                     send "&7&owill not update.)"
+                     send "&b/rank &flist &8| &7&oShows you the list of available ranks (Note: You can change these ranks in the config, not in-game.)"
+                     send "&b/rank &fsetprefix &8| &7&oSets a player's prefix. (Can be with color codes.)"
+                     send "&7&l&m-------------&b&l&m-------------&7&l&m-------------&b&l&m-------------"
+                     stop
+              arg 1 is "addgroup":
+                     arg 2 is not set:
+                            send player title "&c&lUSAGE" with subtitle "&7Please provide a player." for 2 seconds
+                            stop
+              arg 1 is "setprefix":
+                     arg 2 is not set:
+                            send "&cThis command is currently disabled."
+                            stop
+              arg 1 is "setprefix":
+                     arg 2 is set:
+                            arg 3 is not set:
+                                   send "&cThis command is currently disabled."
+                                   stop
+              arg 1 is "addgroup":
+                     arg 2 is set:
+                            arg 3 is not set:
+                                   send player title "&c&lUSAGE" with subtitle "&7Please provide a group." for 2 seconds
+                                   stop
+              arg 1 is "addgroup":
+                     arg 2 is set:
+                            arg 3 is "owner":
+                                   if player's prefix does not contain "Owner":
+                                          send "&cThis rank has a higher priority then yours! You cannot grant it."
+                                   else:
+                                          execute console command "lpb user %arg 2% parent add owner"
+                                          send "&3&lSTAFF &8| &f%arg 2%&7's rank was updated to &4&lOwner" to all players where [input has permission "staff.notify"]
+                                          send "&aYou granted this player &4&lOwner"
+                                          send "&aYour rank was updated to &4&lOwner" to arg 2
+                            arg 3 is "co-owner":
+                                   send "&cSorry, this rank isn't grantable."
+                            arg 3 is "manager":
+                                   send "&cSorry, this rank isn't grantable."
+                            arg 3 is "srbuilder":
+                                   send "&cSorry, this rank isn't grantable."
+                            arg 3 is "advertiser" or "ad":
+                                   send "&cSorry, this rank isn't grantable."
+                            arg 3 is "beta":
+                                   send "&cSorry, this rank isn't grantable."
+                            arg 3 is "yt" or "youtube":
+                                   send "&cSorry, this rank isn't grantable."
+                            arg 3 is "admin":
+                                   execute console command "lpb user %arg 2% parent add admin"
+                                   send "&3&lSTAFF &8| &f%arg 2%&7's rank was updated to &4&lAdmin" to all players where [input has permission "staff.notify"]
+                                   send "&aYou granted this player &4&lAdmin"
+                                   send "&aYour rank was updated to &4&lAdmin" to arg 2
+                            arg 3 is "developer" or "dev":
+                                   execute console command "lpb user %arg 2% parent add developer"
+                                   send "&3&lSTAFF &8| &f%arg 2%&7's rank was updated to &9&lDeveloper" to all players where [input has permission "staff.notify"]
+                                   send "&aYou granted this player &9&lDeveloper"
+                                   send "&aYour rank was updated to &9&lDeveloper" to arg 2
+                            arg 3 is "mod":
+                                   execute console command "lpb user %arg 2% parent add mod"
+                                   send "&3&lSTAFF &8| &f%arg 2%&7's rank was updated to &6&lMod" to all players where [input has permission "staff.notify"]
+                                   send "&aYou granted this player &6&lMod"
+                                   send "&aYour rank was updated to &6&lMod" to arg 2
+                            arg 3 is "jrmod":
+                                   execute console command "lpb user %arg 2% parent add jrmod"
+                                   send "&3&lSTAFF &8| &f%arg 2%&7's rank was updated to &6&lJr Mod" to all players where [input has permission "staff.notify"]
+                                   send "&aYou granted this player &6&lJr Mod"
+                                   send "&aYour rank was updated to &6&lJr Mod" to arg 2
+                            arg 3 is "builder":
+                                   execute console command "lpb user %arg 2% parent add builder"
+                                   send "&3&lSTAFF &8| &f%arg 2%&7's rank was updated to &d&lBuilder" to all players where [input has permission "staff.notify"]
+                                   send "&aYou granted this player &d&lBuilder"
+                                   send "&aYour rank was updated to &d&lBuilder" to arg 2 
+                            arg 3 is "ultra":
+                                   execute console command "lpb user %arg 2% parent add ultra"
+                                   send "&3&lSTAFF &8| &f%arg 2%&7's rank was updated to &c&lUltra" to all players where [input has permission "staff.notify"]
+                                   send "&aYou granted this player &c&lUltra"
+                                   send "&aYour rank was updated to &c&lUltra" to arg 2
+                            arg 3 is "obsidian":
+                                   execute console command "lpb user %arg 2% parent set obsidian"
+                                   send "&3&lSTAFF &8| &f%arg 2%&7's rank was updated to &5&lObsidian" to all players where [input has permission "staff.notify"]
+                                   send "&aYou granted this player &5&lObsidian"
+                                   send "&aYour rank was updated to &5&lObsidian" to arg 2
+                            arg 3 is "emerald":
+                                   execute console command "lpb user %arg 2% parent add emerald"
+                                   send "&3&lSTAFF &8| &f%arg 2%&7's rank was updated to &a&lEmerald" to all players where [input has permission "staff.notify"]
+                                   send "&aYou granted this player &a&lEmerald"
+                                   send "&aYour rank was updated to &a&lEmerald" to arg 2
+                            arg 3 is "diamond":
+                                   execute console command "lpb user %arg 2% parent add diamond"
+                                   send "&3&lSTAFF &8| &f%arg 2%&7's rank was updated to &b&lDiamond" to all players where [input has permission "staff.notify"]
+                                   send "&aYou granted this player &b&lDiamond"
+                                   send "&aYour rank was updated to &b&lDiamond" to arg 2
+                            arg 3 is "gold":
+                                   execute console command "lpb user %arg 2% parent add gold"
+                                   send "&3&lSTAFF &8| &f%arg 2%&7's rank was updated to &e&lGold" to all players where [input has permission "staff.notify"]
+                                   send "&aYou granted this player &e&lGold"
+                                   send "&aYour rank was updated to &e&lGold" to arg 2
+                            arg 3 is "iron":
+                                   execute console command "lpb user %arg 2% parent add iron"
+                                   send "&3&lSTAFF &8| &f%arg 2%&7's rank was updated to &f&lIron" to all players where [input has permission "staff.notify"]
+                                   send "&aYou granted this player &f&lIron"
+                                   send "&aYour rank was updated to &f&lIron" to arg 2
+                            arg 3 is "coal":
+                                   execute console command "lpb user %arg 2% parent add coal"
+                                   send "&3&lSTAFF &8| &f%arg 2%&7's rank was updated to &8&lCoal" to all players where [input has permission "staff.notify"]
+                                   send "&aYou granted this player &8&lCoal"
+                                   send "&aYour rank was updated to &8&lCoal" to arg 2
+                            arg 3 is "default":
+                                   execute console command "lpb user %arg 2% parent add default"
+                                   send "&3&lSTAFF &8| &f%arg 2%&7's rank was updated to &7Default" to all players where [input has permission "staff.notify"]
+                                   send "&aYou granted this player &7Default"
+                                   send "&aYou rank was updated to &7Default" to arg 2
+                                   stop
+                            arg 3 is not "default" or "jrmod" or "mod" or "admin" or "owner" or "manager" or "advertiser" or "ad" or "beta" or "yt" or "youtube" or "obsidian" or "srbuilder" or "builder" or "ultra" or "coal" or "iron" or "gold" or "diamond" or "emerald" or "developer" or "dev" or "co-owner":
+                                   send "&cSorry, we couldn't find that rank in our database. Please view /rank list."
+
+
+
+
+
+
+
+command /clearchat [<text>]:
+	permission: staff.clearchat
+	permission message: &c&l(!) &7You must be &6&lJR MOD &7or higher to perform this.
+	trigger:
+		if arg 1 is not set:
+			loop 999 times:
+				broadcast ""
+			broadcast ""
+			broadcast "&9&lCHAT &8| &7Chat was cleared by %colored player's prefix%%player%"
+			broadcast ""
+			play sound "entity.experience_orb.pickup" at volume 1 to all players
+			stop
+		if arg 1 is "-s":
+			loop 999 times:
+				broadcast ""
+			send "&3&lSTAFF &8| %colored player's prefix%&7%player% &7cleared server chat." to all players where [input has permission "staff.notify"]
+			broadcast ""
+			broadcast "&9&lCHAT &8| &7Chat was cleared by a staff member."
+			broadcast ""
+			play sound "entity.experience_orb.pickup" at volume 1 to all players
+			stop
+		if arg 1 is set:
+			if arg 1 is not "-s":
+				send "&cUsage: /clearchat [-s]"
+command /mutechat [<text>]:
+	aliases: mc
+	permission: staff.mutechat
+	permission message: &c&l(!) &7You must be &4&lADMIN &7or higher to perform this.
+	trigger:
+		if arg 1 is not set:
+			if {mutechat} is not true:
+				set {mutechat} to true
+				broadcast ""
+				broadcast "&9&lCHAT &8| &7Chat was muted by %colored player's prefix%%player%"
+				broadcast ""
+				play sound "block.anvil.land" at volume 1 to all players
+			else:
+				set {mutechat} to false
+				broadcast ""
+				broadcast "&9&lCHAT &8| &7Chat was unmuted by %colored player's prefix%%player%"
+				broadcast ""
+				play sound "entity.experience_orb.pickup" at volume 1 to all players
+				stop
+		if arg 1 is "-s":
+			if {mutechat} is not true:
+				send "&3&lSTAFF &8| %colored player's prefix%&7%player% &7muted server chat." to all players where [input has permission "staff.notify"]
+				set {mutechat} to true
+				broadcast ""
+				broadcast "&9&lCHAT &8| &7Chat was muted by a staff member."
+				broadcast ""
+				play sound "block.anvil.land" at volume 1 to all players
+			else:
+				set {mutechat} to false
+				send "&3&lSTAFF &8| %colored player's prefix%&7%player% &7unmuted server chat." to all players where [input has permission "staff.notify"]
+				broadcast ""
+				broadcast "&9&lCHAT &8| &7Chat was unmuted by a staff member."
+				broadcast ""
+				play sound "entity.experience_orb.pickup" at volume 1 to all players
+				stop
+		if arg 1 is set:
+			if arg 1 is not "-s":
+				send "&cUsage: /mutechat [-s]"
+				
+				
+				
+on chat:
+	if {mutechat} is true:
+		if player doesn't have permission "staff.bypass":
+			cancel event
+			send "&9&lCHAT &8| &7You cannot talk while chat is muted."
+		else:
+			uncancel event
+	else:
+		stop
+
+
+
+command /sc [<text>]:
+	permission: staff.sc
+	permission message: &c&l(!) &7You must be &6&lJR MOD &7or higher to perform this.
+	trigger:
+		if arg 1 is not set:
+			if {scTrue::%uuid of player%} is false:
+				send title "&6&lSTAFF CHAT" with subtitle "&7Staff chat was toggled on." for 2 seconds
+				play sound "entity.experience_orb.pickup" at volume 1 to player
+				send "&6&l(!) &7Staff chat is toggled on"
+				set {scTrue::%uuid of player%} to true
+			else:
+				send title "&6&lSTAFF CHAT" with subtitle "&7Staff chat was toggled off." for 2 seconds
+				play sound "entity.experience_orb.pickup" at volume 1 to player
+				send "&6&l(!) &7Staff chat is toggled off"
+				set {scTrue::%uuid of player%} to false
+		else if arg 1 is set:
+			send "&3&lSTAFF &8| %colored player's prefix%%player's display name%&f: &b%arg 1%" to all players where [input has permission "staff.notify"]
+on chat:
+	if {scTrue::%uuid of player%} is true:
+		cancel event
+		send "&3&lSTAFF &8| %colored player's prefix%%player's display name%&f: &b%message%" to all players where [input has permission "staff.notify"]
+	else:
+		stop
+		
+		
+		
+command /teleport <player>:
+	usage: &c&l(!) &7Improper usage: /teleport (player)
+	aliases: /tp
+	permission: staff.tp
+	permission message: &c&l(!) &7You must be &6&lMOD &7or higher to perform this.
+	trigger:
+		teleport player to arg 1
+		send "&7You teleported to &c%colored arg 1's prefix%%arg 1's display name% &8(%arg 1%&8)"
+		send "&c&l(S) &7%player% &7teleported to %arg 1%" to all players where [{staffalerts::%player%} = true]
+command /teleporthere <player>:
+	usage: &c&l(!) &7Improper usage: /teleporthere (player)
+	aliases: /tphere
+	permission: staff.tp
+	permission message: &c&l(!) &7You must be &6&lMOD &7or higher to perform this.
+	trigger:
+		teleport arg to player
+		send "&7You teleported &c%colored arg 1's prefix%%arg 1's display name% &8(%arg 1%&8) &7to &cYou"
+		send "&c&l(S) &7%player% &7teleported %arg 1% to %player%" to all players where [{staffalerts::%player%} = true]
+command /tp <player>:
+	usage: &c&l(!) &7Improper usage: /tp (player)
+	aliases: /tp
+	permission: staff.tp
+	permission message: &c&l(!) &7You must be &6&lMOD &7or higher to perform this.
+	trigger:
+		teleport player to arg 1
+		send "&7You teleported to &c%colored arg 1's prefix%%arg 1's display name% &8(%arg 1%&8)"
+		send "&c&l(S) &7%player% &7teleported to %arg 1%" to all players where [{staffalerts::%player%} = true]
+command /tphere <player>:
+	usage: &c&l(!) &7Improper usage: /tphere (player)
+	aliases: /tphere
+	permission: staff.tp
+	permission message: &c&l(!) &7You must be &6&lMOD &7or higher to perform this.
+	trigger:
+		teleport arg to player
+		send "&7You teleported &c%colored arg 1's prefix%%arg 1's display name% &8(%arg 1%&8) &7to &cYou"
+		send "&c&l(S) &7%player% &7teleported %arg 1% to %player%" to all players where [{staffalerts::%player%} = true]
+				
+				
+command /staffalerts:
+	permission: staff.notify
+	permission message: &c&l(!) &7You must be &6&lJR MOD &7or higher to perform this.
+	aliases: dsa
+	trigger:
+		if {staffalerts::%uuid of player%} is false:
+			send title "&c&lSTAFF ALERTS" with subtitle "&7Staff alerts was toggled on" for 2 seconds
+			play sound "entity.experience_orb.pickup" at volume 1 to player
+			send "&c&l(!) &7Staff alerts are toggled on"
+			set {staffalerts::%uuid of player%} to true
+		else:
+			send title "&c&lSTAFF ALERTS" with subtitle "&7Staff alerts was toggled off." for 2 seconds
+			play sound "entity.experience_orb.pickup" at volume 1 to player
+			send "&c&l(!) &7Staff alerts are toggled off"
+			set {staffalerts::%uuid of player%} to false
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+command /gmc [<player>]:
+	trigger:
+		if arg 1 is not set:
+			if player has permission "staff.gamemode.self":
+				set player's gamemode to creative
+				send "&3&lSTAFF &8| &f%player% &7updated their gamemode to &3Creative"
+				wait 2 ticks
+				send "<##33E9FF>&lSTATUS &8| &7Your gamemode was updated to <##33E9FF>Creative"
+			else if player does not have permission "staff.gamemode.self" or "staff.gamemode.others":
+				send "&c&l(!) &7You must be &6&lMOD &7or higher to perform this"
+		if arg 1 is set:
+			if player has permission "staff.gamemode.others":
+				set arg 1's gamemode to creative
+				send "&3&lSTAFF &8| &f%player% &7updated &7%arg 1%&7's gamemode to &3Creative"
+				wait 2 ticks
+				send "<##33E9FF>&lSTATUS &8| &7Your gamemode was updated to <##33E9FF>Creative &7by %player%"
+			else if player does not have permission "staff.gamemode.self" or "staff.gamemode.others":
+				send "&c&l(!) &7You must be &6&lMOD &7or higher to perform this"
+command /gms [<player>]:
+	trigger:
+		if arg 1 is not set:
+			if player has permission "staff.gamemode.self":
+				set player's gamemode to survival
+				send "&3&lSTAFF &8| &f%player% &7updated their gamemode to &3Survival"
+				wait 2 ticks
+				send "<##33E9FF>&lSTATUS &8| &7Your gamemode was updated to <##33E9FF>Survival"
+			else if player does not have permission "staff.gamemode.self" or "staff.gamemode.others":
+				send "&c&l(!) &7You must be &6&lMOD &7or higher to perform this"
+		if arg 1 is set:
+			if player has permission "staff.gamemode.others":
+				set arg 1's gamemode to survival
+				send "&3&lSTAFF &8| &f%player% &7updated &7%arg 1%&7's gamemode to &3Survival"
+				wait 2 ticks
+				send "<##33E9FF>&lSTATUS &8| &7Your gamemode was updated to <##33E9FF>Survival &7by %player%"
+			else if player does not have permission "staff.gamemode.self" or "staff.gamemode.others":
+				send "&c&l(!) &7You must be &6&lMOD &7or higher to perform this"
+command /gmsp [<player>]:
+	trigger:
+		if arg 1 is not set:
+			if player has permission "staff.gamemode.self":
+				set player's gamemode to spectator
+				send "&3&lSTAFF &8| &f%player% &7updated their gamemode to &3Spectator"
+				wait 2 ticks
+				send "<##33E9FF>&lSTATUS &8| &7Your gamemode was updated to <##33E9FF>Spectator"
+			else if player does not have permission "staff.gamemode.self" or "staff.gamemode.others":
+				send "&c&l(!) &7You must be &6&lMOD &7or higher to perform this"
+		if arg 1 is set:
+			if player has permission "staff.gamemode.others":
+				set arg 1's gamemode to spectator
+				send "&3&lSTAFF &8| &f%player% &7updated &7%arg 1%&7's gamemode to &3Spectator"
+				wait 2 ticks
+				send "<##33E9FF>&lSTATUS &8| &7Your gamemode was updated to <##33E9FF>Spectator &7by %player%"
+			else if player does not have permission "staff.gamemode.self" or "staff.gamemode.others":
+				send "&c&l(!) &7You must be &6&lMOD &7or higher to perform this"
+on command "/gma":
+	if player doesn't have permission "op":
+		cancel event
+		send "&cWhy do you need this command?"
+	else:
+		uncancel event

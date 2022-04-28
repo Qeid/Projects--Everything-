@@ -1,0 +1,1823 @@
+options:
+    R_LIST_FORMAT: &8&o[&6[priority] letter priority&8&o] &7- &e[group] &f([displayname]&f)
+
+
+on load:
+    refreshRanks()
+        
+function refreshRanks():
+    loop {data::ranks::ranklist::*}:
+        set {_n} to loop-value
+        if {data::weight::letter::%{_n}%} = "z %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 2500
+        else if {data::weight::letter::%{_n}%} = "y %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 2000
+        else if {data::weight::letter::%{_n}%} = "x %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 1900
+        else if {data::weight::letter::%{_n}%} = "w %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 1800
+        else if {data::weight::letter::%{_n}%} = "v %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 1700
+        else if {data::weight::letter::%{_n}%} = "u %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 1500
+        else if {data::weight::letter::%{_n}%} = "t %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 1400
+        else if {data::weight::letter::%{_n}%} = "s %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 1300
+        else if {data::weight::letter::%{_n}%} = "r %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 1200
+        else if {data::weight::letter::%{_n}%} = "q %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 1100
+        else if {data::weight::letter::%{_n}%} = "p %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 1000
+        else if {data::weight::letter::%{_n}%} = "o %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 950
+        else if {data::weight::letter::%{_n}%} = "n %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 900
+        else if {data::weight::letter::%{_n}%} = "m %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 850
+        else if {data::weight::letter::%{_n}%} = "l %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 800
+        else if {data::weight::letter::%{_n}%} = "k %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 700
+        else if {data::weight::letter::%{_n}%} = "j %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 600
+        else if {data::weight::letter::%{_n}%} = "i %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 500
+        else if {data::weight::letter::%{_n}%} = "h %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 400
+        else if {data::weight::letter::%{_n}%} = "g %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 350
+        else if {data::weight::letter::%{_n}%} = "f %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 325
+        else if {data::weight::letter::%{_n}%} = "e %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 300
+        else if {data::weight::letter::%{_n}%} = "d %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 250
+        else if {data::weight::letter::%{_n}%} = "c %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 100
+        else if {data::weight::letter::%{_n}%} = "b %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 50
+        else if {data::weight::letter::%{_n}%} = "a %{_n}%":
+            set {data::ranks::%{_n}%::priority} to 0     
+command /rank [<text>] [<text>] [<text>] [<text>]:
+    permission: easycore.rank
+    permission message: &cYou must be admin or higher to use this command!
+    aliases: easycore:rank
+    trigger:
+        if arg 1 is not set:
+            helpCMD(player)
+            stop
+        if arg 1 is not "group" or "player" or "help":
+            send "&cUnknown method &7%arg 1%&c." and "&cPlease view &7/rank help &cfor more information."
+            stop
+        if arg 2 is not "create" or "setdefault" or "setitalic" or "setpriority" or "setdisplayname" or "setbold" or "setcolor" or "help" or "delete" or "info" or "list" or "setprefix" or "setsuffix" or "setrank" or "setplayerprefix" or "setplayersuffix":
+            send "&cUnknown sub-method&c." and "&cPlease view &7/rank help &cfor more information."
+            stop
+        if arg 1 is "help":
+            helpCMD(player)
+            stop
+        if arg 1 is "group":
+            if arg 2 is "setdefault":
+                if arg 3 is set:
+                    setDefaultRank(player, arg 3)
+                    stop
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information." 
+        if arg 1 is "group":
+            if arg 2 is "setcolor":
+                if arg 3 is set:
+                    if arg 4 is set:
+
+                        setRankColor(player, arg 3, arg 4)
+                        stop
+                    else:
+                        send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "group":
+            if arg 2 is "create":
+                if arg 3 is set:
+                    if arg 4 is set:
+                        if length of arg 4 < 2:
+                            if arg 4 = "a" or "b" or "c" or "d" or "e" or "f" or "g" or "h" or "i" or "j" or "k" or "l" or "m" or "n" or "o" or "p" or "q" or "r" or "s" or "t" or "u" or "v" or "w" or "x" or "y" or "z":
+                                createRankWithWeight(player, arg 3, arg 4)
+                                stop
+                            else:
+                                send "&cThat's not a valid letter!"
+                        else:
+                            send "&cThat's not a valid letter!"
+                    else:
+                        createRankWithoutWeight(player, arg 3)
+                        stop
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "group":
+            if arg 2 is "setpriority":
+                if arg 3 is set:
+                    if arg 4 is set:
+                        if length of arg 4 < 2:
+                            if arg 4 = "a" or "b" or "c" or "d" or "e" or "f" or "g" or "h" or "i" or "j" or "k" or "l" or "m" or "n" or "o" or "p" or "q" or "r" or "s" or "t" or "u" or "v" or "w" or "x" or "y" or "z":
+                                setGroupLetterPriority(player, arg 3, arg 4)
+                                stop
+                    else:
+                        send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "group":
+            if arg 2 is "setitalic":
+                if arg 3 is set:   
+                    setItalic(player, arg 3)
+                    stop
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "group":
+            if arg 2 is "setbold":
+                if arg 3 is set:   
+                    setBold(player, arg 3)
+                    stop
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "group":
+            if arg 2 is "delete":
+                if arg 3 is set:   
+                    deleteRank(player, arg 3)
+                    stop
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "group":
+            if arg 2 is "info":
+                if arg 3 is set:   
+                    infoRank(player, arg 3)
+                    stop
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "group":
+            if arg 2 is "list":
+                listRanks(player)
+                stop
+        if arg 1 is "group":
+            if arg 2 is "setprefix":
+                if arg 3 is set:
+                    if arg 4 is set:
+                        setRankPrefix(player, arg 3, arg 4)
+                        stop
+                    else:
+                        send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "group":
+            if arg 2 is "setdisplayname":
+                if arg 3 is set:
+                    if arg 4 is set:
+                        setRankDisplayName(player, arg 3, arg 4)
+                        stop
+                    else:
+                        send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "group":
+            if arg 2 is "setsuffix":
+                if arg 3 is set:
+                    if arg 4 is set:
+                        setRankSuffix(player, arg 3, arg 4)
+                        stop
+                    else:
+                        send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "player":
+            if arg 2 is "setrank":
+                if arg 3 is set:
+                    if arg 4 is set:
+                        set {_a2} to arg 3 parsed as a player
+                        setPlayerRank(player, {_a2}, arg 4)
+                        stop
+                    else:
+                        send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "player":
+            if arg 2 is "setprefix":
+                if arg 3 is set:
+                    if arg 4 is set:
+                        set {_a2} to arg 3 parsed as a player
+                        setPlayerPrefix(player, {_a2}, arg 4)
+                    else:
+                        send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "player":
+            if arg 2 is "setsuffix":
+                if arg 3 is set:
+                    if arg 4 is set:
+                        set {_a2} to arg 3 parsed as a player
+                        setPlayerSuffix(player, {_a2}, arg 4)
+                    else:
+                        send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+
+function helpCMD(p: player):
+    send "" to {_p}
+    send "&8> &bHelp commands" to {_p}
+    send "&8&oMethods: player, help, group" to {_p}
+    send "" to {_p}
+    send "&7- &f/rank group create <name> [weight] &8- &7&oCreates a rank" to {_p}
+    send "&7- &f/rank group delete <name> &8- &7&oDeletes a rank" to {_p}
+    send "&7- &f/rank group info <name> &8- &7&oCreates a rank" to {_p}
+    send "&7- &f/rank group setprefix <rank> <prefix> &8- &7&oSets a rank's prefix" to {_p}
+    send "&7- &f/rank group setsuffix <rank> <suffix> &8- &7&oSets a rank's prefix" to {_p}
+    send "&7- &f/rank group setitalic <rank> &8- &7&oSets a rank's color name to italic" to {_p}
+    send "&7- &f/rank group setbold <rank> &8- &7&oSets a rank's color name to bold" to {_p}
+    send "&7- &f/rank group setcolor <rank> <color name> &8- &7&oSets a rank's color" to {_p}
+    send "&7- &f/rank group setdefault <rank> &8- &7&oSets a rank to be the default rank given on first join" to {_p}
+    send "&7- &f/rank group list &8- &7&oLists ranks" to {_p}
+    send "" to {_p}
+    send "&7- &f/rank player setrank <player> <rank> &8- &7&oSets a player's rank to the desired." to {_p}
+    send "&7- &f/rank player setprefix <player> <prefix> &8- &7&oSets a player's prefix" to {_p}
+    send "&7- &f/rank player setsuffix <player> <suffix> &8- &7&oSets a player's suffix" to {_p}
+    send "" to {_p}
+every 10 seconds:
+    loop {data::ranks::ranklist::*}:
+        if {data::ranks::%loop-value%::prefix} is not set:
+            set {data::ranks::%loop-value%::prefix} to ""
+        if {data::ranks::%loop-value%::suffix} is not set:
+            set {data::ranks::%loop-value%::suffix} to ""
+        if {data::ranks::%loop-value%::color} is not set:
+            set {data::ranks::%loop-value%::color} to "§f"
+        if {data::ranks::%{_n}%::list::*} is not set:
+            set {data::ranks::%{_n}%::list::*} to "None"
+
+function infoRank(p: player, n: text):
+    if {data::ranks::ranklist::*} contains {_n}:
+        send "" to {_p}
+        send "&8> &aShowing information for &2%{_n}%" to {_p}
+        send "" to {_p}
+        send "&8> &aPrefix: &f%colored {data::ranks::%{_n}%::prefix}%" to {_p}
+        send "&8> &aSuffix: &f%colored {data::ranks::%{_n}%::suffix}%" to {_p}
+        send "" to {_p}
+        send "&8> &aPermissions:" to {_p}
+        send "   &2None" to {_p}
+        send "" to {_p}
+        send "&8> &aPlayers in this group:" to {_p}
+        send "   &2%{data::ranks::%{_n}%::list::*}%"  to {_p}
+        send "" to {_p}
+    else:
+        send "&cUnknown rank &7%{_n}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+
+function setDefaultRank(p: player, t: text):
+    if {data::ranks::ranklist::*} contains {_t}:
+        set {data::ranks::defaultgroup} to "%{_t}%"
+        send "&aDefault group was updated to &2%{_t}%&a." to {_p}
+        send "&aPlayer's will receive this rank on first join." to {_p}
+
+on first join:
+    if {data::ranks::defaultgroup} is set:
+        cspr(player, {data::ranks::defaultgroup})
+        send "&fYou were granted %{data::ranks::defaultgroup}%"
+        stop
+        set player's default nametag to "%colored {data::ranks::player::%player's uuid%::prefix}%%player%"
+    else:
+        send "&c[LOG] No default group was set! Not granting rank..." to console
+        stop
+
+on join:
+    loadData(player)
+
+function loadData(p: player):
+    set {data::ranks::player::%{_p}'s uuid%::prefix} to "%{data::ranks::%{data::ranks::player::%{_p}'s uuid%::group}%::prefix}%"
+    set {data::ranks::player::%{_p}'s uuid%::color} to "%{data::ranks::%{data::ranks::player::%{_p}'s uuid%::group}%::color}%"
+
+    send "&7Loading data..." to {_p}
+    set {_time} To a random integer between 2 and 5
+    set {_end} To "%{_time}% seconds" parsed as a time span
+    set {_color} to getPlayerColor({_p})
+    set {_p}'s default nametag to "%{_color}%%{_p}%"
+    wait {_end}
+    send "&a[DATA] Retrieved data of %{_p}% &asuccessfully!" to console
+    set {_rank} to getPlayerGroup({_p})
+    set {_display} to getGroupDisplayName({_rank})
+    send "&aLoaded your rank %{_display}% &aand all of your permissions!" to {_p}
+
+every 10 seconds:
+    loop all players:
+        set {data::ranks::player::%loop-player's uuid%::prefix} to "%{data::ranks::%{data::ranks::player::%loop-player's uuid%::group}%::prefix}%"
+        set {data::ranks::player::%loop-player's uuid%::color} to "%{data::ranks::%{data::ranks::player::%loop-player's uuid%::group}%::color}%"
+        #send "&7Saved all your data." to loop-player
+every 2 seconds:
+    loop all players:
+        updateTabName(loop-player)
+
+
+function updateTabName(p: player):
+    if {vanish::%{_p}%} is not set:
+        set {_p}'s tablist name to colored {data::ranks::player::%{_p}'s uuid%::tabdisplay}
+    else:
+        stop
+
+function setPlayerRank(p: player, t: player, r: text):
+    if {data::ranks::ranklist::*} contains {_r}:
+
+        add {_t} to {data::ranks::%{_r}%::list::*}
+
+        set {_group} to getPlayerGroup({_t})
+        set {_oldDisplay} to getGroupDisplayName({_group})
+
+        set {data::ranks::player::%{_t}'s uuid%::group} to "%{_r}%"
+        set {_displayname} to getGroupDisplayName({data::ranks::player::%{_t}'s uuid%::group})
+
+        send "&cYour rank is no longer %{_oldDisplay}%&c, it is now set to %{_displayname}%&c." to {_t}
+
+        set {data::ranks::player::%{_t}'s uuid%::prefix} to "%{data::ranks::%{_r}%::prefix}%"
+        set {data::ranks::player::%{_t}'s uuid%::color} to "%{data::ranks::%{_r}%::color}%"
+        set {data::ranks::player::%{_t}'s uuid%::tabdisplay} to "%{data::ranks::%{_r}%::prefix}%%{_t}%"
+        set {_color} to getPlayerColor({_t})
+        set {_t}'s default nametag to "%{_color}%%{_t}%"
+        send "&aYou updated %{_t}%&a's rank to &2%{_r}%&a. They must rejoin for all effects to change." to {_p}
+
+    else:
+        send "&cUnknown rank &7%{_r}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+
+function cspr(p: player, r: text):
+    if {data::ranks::ranklist::*} contains {_r}:
+        add {_p} to {data::ranks::%{_r}%::list::*}
+        execute console command "luckperms:permissions user %{_t}% parent set %{_r}%"
+        set {data::ranks::player::%{_p}'s uuid%::prefix} to "%{data::ranks::%{_r}%::prefix}%"
+        set {data::ranks::player::%{_p}'s uuid%::color} to "%{data::ranks::%{_r}%::color}%"
+        set {data::ranks::player::%{_p}'s uuid%::group} to "%{_r}%"
+        set {data::ranks::player::%{_p}'s uuid%::tabdisplay} to "%{data::ranks::%{_r}%::prefix}%%{_p}%"
+
+
+function setRankColor(p: player, r: text, c: text):
+    if {data::ranks::ranklist::*} contains {_r}:
+        if {_c} = "dark_red":
+            set {data::ranks::%{_r}%::color} to "§4"
+            send "&aColor of &2%{_r}% &awas updated to §4dark_red&a." to {_p}
+            stop
+        else if {_c} = "red":
+            set {data::ranks::%{_r}%::color} to "§c"
+            send "&aColor of &2%{_r}% &awas updated to §cred&a." to {_p}
+            stop
+        else if {_c} = "gold":
+            set {data::ranks::%{_r}%::color} to "§6"
+            send "&aColor of &2%{_r}% &awas updated to §6gold&a." to {_p}
+            stop
+        else if {_c} = "yellow":
+            set {data::ranks::%{_r}%::color} to "§e"
+            send "&aColor of &2%{_r}% &awas updated to §eyellow&a." to {_p}
+            stop
+        else if {_c} = "dark_green":
+            set {data::ranks::%{_r}%::color} to "§2"
+            send "&aColor of &2%{_r}% &awas updated to §2dark_green&a." to {_p}
+            stop
+        else if {_c} = "green":
+            set {data::ranks::%{_r}%::color} to "§a"
+            send "&aColor of &2%{_r}% &awas updated to §agreen&a." to {_p}
+            stop
+        else if {_c} = "cyan":
+            set {data::ranks::%{_r}%::color} to "§3"
+            send "&aColor of &2%{_r}% &awas updated to §3cyan&a." to {_p}
+            stop
+        else if {_c} = "dark_blue":
+            set {data::ranks::%{_r}%::color} to "§1"
+            send "&aColor of &2%{_r}% &awas updated to §1dark_blue&a." to {_p}
+            stop
+        else if {_c} = "blue":
+            set {data::ranks::%{_r}%::color} to "§9"
+            send "&aColor of &2%{_r}% &awas updated to §9blue&a." to {_p}
+            stop
+        else if {_c} = "pink":
+            set {data::ranks::%{_r}%::color} to "§d"
+            send "&aColor of &2%{_r}% &awas updated to §dpink&a." to {_p}
+            stop
+        else if {_c} = "purple":
+            set {data::ranks::%{_r}%::color} to "§5"
+            send "&aColor of &2%{_r}% &awas updated to §5purple&a." to {_p}
+            stop
+        else if {_c} = "white":
+            set {data::ranks::%{_r}%::color} to "§f"
+            send "&aColor of &2%{_r}% &awas updated to §fwhite&a." to {_p}
+            stop
+        else if {_c} = "gray":
+            set {data::ranks::%{_r}%::color} to "§7"
+            send "&aColor of &2%{_r}% &awas updated to §7gray&a." to {_p}
+            stop
+        else if {_c} = "dark_gray":
+            set {data::ranks::%{_r}%::color} to "§8"
+            send "&aColor of &2%{_r}% &awas updated to §8dark_gray&a." to {_p}
+            stop
+        else if {_c} = "black":
+            set {data::ranks::%{_r}%::color} to "§0"
+            send "&aColor of &2%{_r}% &awas updated to §0black&a." to {_p}
+            stop
+        else if {_c} = "aqua":
+            set {data::ranks::%{_r}%::color} to "§b"
+            send "&aColor of &2%{_r}% &awas updated to §baqua&a." to {_p}
+            stop
+        else:
+            send "&cUnknown color &7%{_c}%&c." to {_p}
+    else:
+        send "&cUnknown rank &7%{_r}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+        
+function setRankPrefix(p: player, g: text, v: text):
+    if {data::ranks::ranklist::*} contains {_g}:
+        set {data::ranks::%{_g}%::prefix} to "%{_v}%"
+        set {data::ranks::%{_g}%::tabdisplay} to "%{data::ranks::%{_g}%::prefix}%"
+        execute console command "luckperms:permissions group %{_g}% meta setprefix %{_v}%"
+        send "&aPrefix of &2%{_g}% &ais now &f%colored {_v}%" to {_p}
+    else:
+        send "&cUnknown rank &7%{_g}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+
+
+function setItalic(p: player, r: text):
+    if {data::ranks::ranklist::*} contains {_r}:
+        set {data::ranks::%{_r}%::color} to "%{data::ranks::%{_r}%::color}%&o"
+        send "&2%{_r}% &anow has a italic color. &7(%{data::ranks::%{_r}%::color}%&7)" to {_p}
+
+    else:
+        send "&cUnknown rank &7%{_r}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+
+function setBold(p: player, r: text):
+    if {data::ranks::ranklist::*} contains {_r}:
+        set {data::ranks::%{_r}%::color} to "%{data::ranks::%{_r}%::color}%&l"
+        send "&2%{_r}% &anow has a bold color. &7(%{data::ranks::%{_r}%::color}%&7)" to {_p}
+
+    else:
+        send "&cUnknown rank &7%{_r}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+
+
+function setPlayerPrefix(p: player, t: player, r: text):
+    set {data::ranks::player::%{_t}'s uuid%::prefix} to colored {_r}
+    send "&aYou updated %{_t}%&a's prefix to &f%colored {_r}%" to {_p}
+
+function setPlayerSuffix(p: player, t: player, r: text):
+    set {data::ranks::player::%{_t}'s uuid%::suffix} to colored {_r}
+    send "&aYou updated %{_t}%&a's suffix to &f%colored {_r}%" to {_p}
+
+function setRankSuffix(p: player, g: text, v: text):
+    if {data::ranks::ranklist::*} contains {_g}:
+        set {data::ranks::%{_g}%::suffix} to "%{_v}%"
+        execute console command "luckperms:permissions group %{_g}% meta setsuffix %{_v}%"
+        send "&aSuffix of &2%{_g}% &ais now &f%colored {_v}%" to {_p}
+    else:
+        send "&cUnknown rank &7%{_g}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+
+function createRankWithWeight(p: player, n: string, letter: text):
+    if {data::ranks::ranklist::*} contains "%{_n}%":
+        send "&cThat rank already exists!" to {_p}
+        stop
+    else:
+        execute console command "luckperms:permissions creategroup %{_n}%"
+        set {data::ranks::%{_n}%::displayname} to "&f%{_n} in proper case%"
+        set {data::weight::letter::%{_n}%} to "%{_letter}% %{_n}%"
+        set {data::ranks::%{_n}%::group} to {_n}
+        set {_format} to "{@R_LIST_FORMAT}"
+        replace all "[priority]" in {_format} with {_letter}
+        replace all "[displayname]" in {_format} with "&f%{_n} in proper case%"
+        replace all "[group]" in {_format} with {_n} in proper case
+        add {_format} to {data::ranks::rankletter::*}
+        send "&aCreated rank &2%{_n}% &awith letter priority &2%{_letter}%" to {_p}
+
+        add "%{_n}%" to {data::ranks::ranklist::*}
+
+        refreshRanks()
+
+function createRankWithoutWeight(p: player, n: string):
+    if {data::ranks::ranklist::*} contains "%{_n}%":
+        send "&cThat rank already exists!" to {_p}
+        stop
+    else:
+        execute console command "luckperms:permissions creategroup %{_n}%"
+        set {data::ranks::%{_n}%::displayname} to "&f%{_n} in proper case%"
+        set {data::weight::letter::%{_n}%} to "a"
+        set {data::ranks::%{_n}%::group} to {_n}
+        set {_format} to "{@R_LIST_FORMAT}"
+        replace all "[priority]" in {_format} with "a"
+        replace all "[displayname]" in {_format} with "&f%{_n} in proper case%"
+        replace all "[group]" in {_format} with {_n} in proper case
+        add {_format} to {data::ranks::rankletter::*}
+        send "&aCreated rank &2%{_n}% &awith letter priority &2a" to {_p}
+
+        add "%{_n}%" to {data::ranks::ranklist::*}
+
+function deleteRank(p: player, n: string):
+    if {data::ranks::ranklist::*} doesn't contain "%{_n}%":
+        send "&cUnknown rank &7%{_n}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+        stop
+    else:
+        execute console command "luckperms:permissions deletegroup %{_n}%"
+        send "&aDeleted rank &2%{_n}% &asuccessfully. Goodbye rank!" to {_p}
+        set {_format} to "{@R_LIST_FORMAT}"
+        remove {_n} from {data::ranks::ranklist::*}
+        remove "&8&o[&6%{data::weight::letter::%{_n}%}% in uppercase letter priority&8&o] &7- &e%{data::ranks::%{_n}%::group}% in proper case &f(%{data::ranks::%{_n}%::displayname}%&f)" from {data::ranks::rankletter::*}
+        
+        delete {data::ranks::%{_n}%::*}
+
+function getPlayerColor(p: player) :: text:
+    if {data::ranks::player::%{_p}'s uuid%::color} is set:
+        return {data::ranks::player::%{_p}'s uuid%::color}
+    else:
+        return "&cThat player doesn't have a color assigned!"
+
+function getPlayerPrefix(p: player) :: text:
+    if {data::ranks::player::%{_p}'s uuid%::prefix} is set:
+        return {data::ranks::player::%{_p}'s uuid%::prefix}
+    else:
+        return "&cThat player doesn't have a prefix assigned!"
+
+function getPlayerGroup(p: player) :: text:
+    if {data::ranks::player::%{_p}'s uuid%::group} is set:
+        return {data::ranks::player::%{_p}'s uuid%::group}
+    else:
+        return "&cThat player doesn't have a group assigned!"
+
+function getGroupColor(rank: text) :: text:
+    return {data::ranks::%{_rank}%::color}
+
+function getGroupDisplayName(rank: text) :: text:
+    return {data::ranks::%{_rank}%::displayname}
+
+
+function listRanks(p: player):
+    delete {data::ranks::rankletter::*}
+    set {_format} to "{@R_LIST_FORMAT}"
+    loop {data::ranks::ranklist::*}:
+        replace all ""
+        add "&8&o[&6%{data::weight::letter::%loop-value%} in uppercase% &f(%{data::ranks::%loop-value%::priority}%&f) &6priority&8&o] &7- &e%{data::ranks::%loop-value%::group} in proper case% &f(%{data::ranks::%loop-value%::displayname}%&f)" to {data::ranks::rankletter::*}
+    set {_sorted::*} to (alphabetically sorted {data::ranks::rankletter::*})
+    set {_value::*} to reversed {_sorted::*}
+    send "&7&oListing all ranks:" to {_p}
+    send "&6&m--------------------------------------" to {_p}
+    loop {_value::*}:
+        send "%loop-value%" to {_p}
+    send "&6&m--------------------------------------" to {_p}
+
+
+function setRankDisplayName(p: player, r: text, value: text):
+    if {data::ranks::ranklist::*} contains {_r}:
+        set {data::ranks::%{_r}%::displayname} to colored {_value} in proper case
+        send "&aSuccessfully updated display name of &2%{_r}%&a. &f(%colored {_value} in proper case%&f)" to {_p}
+
+    else:
+        send "&cUnknown rank &7%{_r}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+
+
+
+function setGroupLetterPriority(p: player, r: text, value: text):
+    if {data::ranks::ranklist::*} contains {_r}:
+        set {data::weight::letter::%{_r}%} to "%{_value}% %{_r}%"
+        send "&aSuccessfully updated letter priority of &2%{_r}%&a. &f(%{_value} in proper case%&f)" to {_p}
+
+    else:
+        send "&cUnknown rank &7%{_r}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+
+on load:
+    loop {data::ranks::ranklist::*}:
+        if getGroupColor(loop-value) = "&4":
+            set {block::%loop-value%} to red wool
+        else if getGroupColor(loop-value) = "&9" or "&9&o" or "&9&l" or "&9&l&o" or "&9&o&l":
+            set {block::%loop-value%} to blue wool
+        else if getGroupColor(loop-value) = "&f" or "&f&o" or "&f&l" or "&f&l&o" or "&f&o&l":
+            set {block::%loop-value%} to white wool
+        else if getGroupColor(loop-value) = "&7" or "&7&o" or "&7&l" or "&7&l&o" or "&7&o&l":
+            set {block::%loop-value%} to light gray wool
+        else if getGroupColor(loop-value) = "&c" or "&c&o" or "&c&l" or "&c&l&o" or "&c&o&l":
+            set {block::%loop-value%} to red wool
+        else if getGroupColor(loop-value) = "&a" or "&a&o" or "&a&l" or "&a&l&o" or "&a&o&l":
+            set {block::%loop-value%} to lime wool
+        else if getGroupColor(loop-value) = "&d" or "&d&o" or "&d&l" or "&d&l&o" or "&d&o&l":
+            set {block::%loop-value%} to pink wool
+        else if getGroupColor(loop-value) = "&3" or "&3&o" or "&3&l" or "&3&l&o" or "&3&o&l":
+            set {block::%loop-value%} to cyan wool
+        else if getGroupColor(loop-value) = "&5" or "&5&o" or "&5&l" or "&5&l&o" or "&5&o&l":
+            set {block::%loop-value%} to purple wool
+        else if getGroupColor(loop-value) = "&2" or "&2&o" or "&2&l" or "&2&l&o" or "&2&o&l":
+            set {block::%loop-value%} to dark green wool
+        else if getGroupColor(loop-value) = "&8" or "&8&o" or "&8&l" or "&8&l&o" or "&8&o&l":
+            set {block::%loop-value%} to gray wool
+        else if getGroupColor(loop-value) = "&e" or "&e&o" or "&e&l" or "&e&l&o" or "&e&o&l":
+            set {block::%loop-value%} to yellow wool
+        else if getGroupColor(loop-value) = "&6" or "&6&o" or "&6&l" or "&6&l&o" or "&6&o&l":
+            set {block::%loop-value%} to orange wool
+        else if getGroupColor(loop-value) = "&b" or "&b&o" or "&b&l" or "&b&l&o" or "&b&o&l":
+            set {block::%loop-value%} to light blue wool
+        else if getGroupColor(loop-value) = "&1" or "&1&o" or "&1&l" or "&1&l&o" or "&1&o&l":
+            set {block::%loop-value%} to blue wool
+        else if getGroupColor(loop-value) is not set:
+            set {block::%loop-value%} to white wool
+command /showgrant <player>:
+    trigger:
+        set {_color} to getPlayerColor(arg 1)
+        set metadata tag "grant" of player to chest inventory with 4 rows named "Granting %{_color}%%arg 1% &8(&d1/3&8)"
+        set {_n} to 0
+        set {_sorted::*} to (alphabetically sorted {data::weight::letter::*})
+        set {_value::*} to reversed {_sorted::*}
+        loop {_value::*}:
+            set slot {_n} of metadata tag "grant" of player to white wool named "&8[%loop-value in uppercase%&8] &f%{data::ranks::%loop-value%::displayname}%" #with lore "&6&m---------------------------" and "&ePrefix: %colored {data::ranks::%loop-value%::prefix}%" and "&eSuffix: " and "&ePriority: &d%{data::weight::letter::%loop-value%} in uppercase% &d(%{data::ranks::%loop-value%::priority}%&d)" and "&eName: &d%{data::ranks::%loop-value%::group} in uppercase%" and "&eVisible: &dtrue" and "&eGrantable: &dtrue" and "&eColor: %{data::ranks::%loop-value%::color}%Example" and "&6&m---------------------------" and "&a&lLeft click to grant %{data::ranks::%loop-value%::displayname}% &a&lto %{_color}%%arg 1%"
+            add 1 to {_n}
+        open (metadata tag "grant" of player) to player
+
+
+ 
+command /priority:
+    trigger:
+        set {_g} to getPlayerGroup(player)
+        loop {data::ranks::ranklist::*}:
+            set {_display} to getGroupDisplayName(loop-value)
+            set {_d2} to getGroupDisplayName({_g})
+            if {data::ranks::%loop-value%::priority} < {data::ranks::%{_g}%::priority}:
+                send "&aYour priority %{_d2}% &7[&c%{data::ranks::%{_g}%::priority}%&7]&a is above %{_display}% &7[&c%{data::ranks::%loop-value%::priority}%&7]"
+
+
+
+
+
+# +----------------------------------------------------------------------------------------------+ #
+# |                                                                                              | #
+# |                                       CONFIGURATION                                          | #
+# |                                                                                              | #
+# |                                  Configuration for easyCore                                  | #
+# |                                                                                              | #
+# +----------------------------------------------------------------------------------------------+ #
+
+
+
+
+
+options:
+
+    PREFIX: &7[&dEasyCore&7]
+    REPORT_PREFIX: &2[REPORT]
+    STAFF_PREFIX: &b[S]
+
+    PLAYER_NOT_ONLINE: &cThat player is not online!
+    NO_PERMISSION: &cNo permissions!
+
+# REPORT
+    LIST-ALL-FORMAT: %{pr}% &eThere are &d[players]&7/&d[max] &eplayers online&7: %nl%&f%nl%&e[list]
+    REPORT-DOESNT-HAVE: %{pr}% [target] &edoesn't have any reports recorded.
+    REPORT-FORMAT: %{rp}% &3Report of [reported] &3by [reporter] &3for &b[reason]&3.
+    REPORT-CHECK: %{pr}% &e[reported] &ewas reported by [reporter] &efor &d[reason]&e at &d[date]&e.
+    REPORT-CLEAR: %{pr}% &eSuccessfully cleared [target]'s &ereports.
+    REPORT-COOLDOWN: %{pr}% &eYou can use this command again in &d[time]&e.
+    REPORT-COOLDOWN-AMOUNT: 10 seconds
+    REPORT-TO-PLAYER: &aThanks for submitting your report. Staff will take a look at it!
+    REPORT-CANT-REPORT-YOURSELF: &cYou can't report yourself!
+# GAMEMODE
+    ALREADY-HAVE: &cYour gamemode is already &c[gamemode]&c.
+    UPDATED: %{pr}% &eYour gamemode has been updated to &d[gamemode]&e.
+    ALREADY-HAVE-OTHER: &c[player]'s &cgamemode is already set to &c[gamemode]&c.
+    UPDATED-OTHER-SENDER: %{pr}% &eYou updated [player]'s &egamemode to &d[gamemode]
+    UPDATED-OTHER-TARGET: %{pr}% &eYour gamemode was updated to &d[gamemode] &eby [sender]&e.
+    WRONG: &cThat's not a valid gamemode!
+#GOD-MODE
+    GOD-ENABLED: %{pr}% &eGod Mode is now &aenabled&e.
+    GOD-ENABLED-OTHER-SENDER: %{pr}% &eGod Mode for [player] &eis now &aenabled&e.
+    GOD-DISABLED-OTHER-SENDER: %{pr}% &eGod Mode for [player] &eis now &cdisabled&e.
+    GOD-DISABLED: %{pr}% &eGod Mode is now &cdisabled&e.
+#STAFF-CONNECT-DISCONNECT
+    STAFF-CONNECT: %{sp}% &3[player] &3connected to the server.
+    STAFF-DISCONNECT: %{sp}% &3[player] &3disconnected from the server.
+#STAFF-CHAT
+    STAFF-CHAT-ENABLED: %{pr}% &eStaff Chat is now &aenabled&e!
+    STAFF-CHAT-DISABLED: %{pr}% &eStaff Chat is now &cdisabled&e!
+    STAFF-CHAT-FORMAT: %{sp}% &7(server) [player]&b: [message]
+#ADMIN-CHAT
+    ADMIN-CHAT-ENABLED: %{pr}% &eAdmin Chat is now &aenabled&e!
+    ADMIN-CHAT-DISABLED: %{pr}% &eAdmin Chat is now &cdisabled&e!
+    ADMIN-CHAT-FORMAT: &c[AC] &7(server) [player]&b: [message]
+#BROADCAST
+    BROADCAST-FORMAT: &7[&dBroadcast&7] &e[message]
+#INVENTORY-CLEAR
+    CLEAR-SELF: %{pr}% &eYou have cleared your inventory. (&d[total] total items&e)
+    CLEAR-OTHER-SENDER: %{pr}% &eYou have cleared &f&o[target]'s &einventory. &e(&d[total] total items&e)
+    CLEAR-OTHER-TARGET: %{pr}% &eYour inventory has been cleared by &f&o[player]&e. &e(&d[total] total items&e)
+#PING:
+    PING-SELF: &eYour ping&7: &d[ping] ms
+    PING-OTHER: &e[target]'s &eping&7: &d[ping] ms
+#HEAL
+    HEAL: %{pr}% &eYou healed [target-with]&e.
+    HEAL-STAFF: &8&o[[player]&8&o: &7healed &7[target-without]&8&o]
+#FEED
+    FEED: %{pr}% &eYou feeded [target-with]&e.
+    FEED-STAFF: &8&o[[player]&8&o: &7feeded &7[target-without]&8&o]
+#SKUll
+    SKULL-GIVEN: &7You received [player]'s &7skull.
+#MORE
+    INVALID-MORE-ITEM: &cYou can't be holding air!
+    MORE-SUCCESS: &eSuccessfully set &dhand item amount &eto its max amount.
+
+#TELEPORT
+    TP-TARGET: &eYou teleported to [target]&e.
+    TP-PLAYER-STAFF-FORMAT: &8&o[[player]&8&o: &7teleported to [target]&8&o]
+
+    TO-COORDS: &eYou teleported to &dx: [x]&e, &dy: [y]&e, &dz: [z]&e.
+    TO-COORDS-SENDER: &eYou teleported &6[target] &eto &dx: [x]&e, &dy: [y]&e, &dz: [z]&e.
+    TO-COORDS-STAFF: &8&o[[player]&8&o: &7teleported to [x] [y] [z]&8&o]
+    TO-COORDS-STAFF-OTHER: &8&o[[player]&8&o: &7teleported [target] &7to [x], [y], [z]&8&o]
+    #TP-HERE
+    TP-HERE-SENDER: &eYou teleported [target] &eto &dYou&e.
+    #TP-HERE-TARGET:
+    TP-HERE-STAFF-FORMAT: &8&o[[player]&8&o: &7teleported [target] &7to &7[player-without]&8&o]
+    OFFLINE-PLAYER-FAILED: &cSorry, but we couldn't find the last online location of that player!
+    OFFLINE-PLAYER-SUCCESS: &eYou teleported to &6[player]'s &elast logged location.
+#VANISH:
+    VANISH-SELF: &eYou are now &dvanished&e.
+    UNVANISH-SELF: &eYou are now &dvisible&e.
+    VANISH-SELF-STAFF: &8&o[[player]&8&o: &7vanished&8&o]
+    UNVANISH-SELF-STAFF: &8&o[[player]&8&o: &7unvanished&8&o]
+    #OTHER
+    VANISH-OTHER: &6[target] &eis now &dvanished&e.
+    UNVANISH-OTHER: &6[target] &eis now &dvisible&e.
+    VANISH-OTHER-STAFF: &8&o[[player]&8&o: &7vanished [target]&8&o]
+    UNVANISH-OTHER-STAFF: &8&o[[player]&8&o: &7unvanished [target]&8&o]
+
+    VANISH-TAG: &7[V] [player]
+
+on load:
+    set {pr} to "{@PREFIX}"
+    set {rp} to "{@REPORT_PREFIX}"
+    set {sp} to "{@STAFF_PREFIX}"
+
+
+
+# +----------------------------------------------------------------------------------------------+ #
+# |                                                                                              | #
+# |                                         CODE                                                 | #
+# |                          do not touch unless you know what you're doing!                     | #
+# |                                                                                              | #
+# |                                Code to make the skript work                                  | #
+# |                                                                                              | #
+# +----------------------------------------------------------------------------------------------+ #
+# +----------------------------------------------------------------------------------------------+ #
+# |                                                                                              | #
+# |                                         CODE                                                 | #
+# |                          do not touch unless you know what you're doing!                     | #
+# |                                                                                              | #
+# |                                Code to make the skript work                                  | #
+# |                                                                                              | #
+# +----------------------------------------------------------------------------------------------+ #
+# +----------------------------------------------------------------------------------------------+ #
+# |                                                                                              | #
+# |                                         CODE                                                 | #
+# |                          do not touch unless you know what you're doing!                     | #
+# |                                                                                              | #
+# |                                Code to make the skript work                                  | #
+# |                                                                                              | #
+# +----------------------------------------------------------------------------------------------+ #
+
+command /report <player> <text>:
+    usage: &cMissing arguments! /report <player> <reason>
+    aliases: easycore:report
+    trigger:
+        if arg 1 = player:
+            send "{@REPORT-CANT-REPORT-YOURSELF}"
+             
+        set {_w} to difference between {cooldown::report::%player%::lastused} and now
+        if {_w} < {@REPORT-COOLDOWN-AMOUNT}:
+            set {_value} to difference between {@REPORT-COOLDOWN-AMOUNT} and {_w}
+            set {_str} to timespanFormat({_value})
+            set {_message} to "{@REPORT-COOLDOWN}"
+            replace every "[time]" in {_message} with "%{_str}%" 
+            send "%{_message}%"
+            stop
+
+        set {cooldown::report::%player%::lastused} to now
+        reportPlayer(arg 1, player, arg 2)
+
+function timespanFormat(value: timespan) :: text:
+    set {_str} to "%{_value}%"
+    set {_l::*} to split {_str} at " "
+    loop {_l::*}:
+        delete {_i}
+        set {_i} to loop-value parsed as a number
+        {_i} is set
+        set {_i} to round({_i})
+        replace every "%loop-value%" in {_str} with "%{_i}%"
+
+        replace every " seconds" in {_str} with " SECONDS"
+        replace every " second" in {_str} with " SECOND"
+
+        replace every " minutes" in {_str} with " MINUTES"
+        replace every " minute" in {_str} with " MINUTE"
+
+        replace every " hours" in {_str} with " HOURS"
+        replace every " hour" in {_str} with " HOUR"
+
+        replace every " days" in {_str} with " DAYS"
+        replace every " day" in {_str} with " HOUR"
+    
+    return "%{_str}%"
+
+
+command /reports <offline player>:
+    permission: easycore.reports
+    permission message: {@NO_PERMISSION}
+    aliases: easycore:reports, easycore:checkreports, checkreports
+    usage: &cInvalid usage! /reports <player>
+    trigger:
+        if {report::target::%arg 1's uuid%} is set:
+            loop {reports::%arg 1's uuid%::*}:
+                send loop-value
+        else:
+            set {_m} to "{@REPORT-DOESNT-HAVE}"
+            set {_mm} to replacePlaceholders("report", {_m}, arg 1)
+            send {_mm}
+
+command /clearreports <offline player>:
+    permission: easycore.clearreports
+    aliases: easycore:clearreports, easycore:reportclear, reportclear
+    permission message: {@NO_PERMISSION}
+    usage: &cInvalid usage! /clearreports <player>
+    trigger:
+        if {report::target::%arg 1's uuid%} is set:
+            delete {report::target::%arg 1's uuid%}
+            delete {report::reason::%arg 1's uuid%}
+            delete {report::reporter::%arg 1's uuid%}
+            delete {report::date::%arg 1's uuid%}
+            delete {reports::%arg 1's uuid%::*}
+            set {_m} to "{@REPORT-CLEAR}"
+            set {_mm} to replacePlaceholders("report", {_m}, arg 1)
+            send {_mm}
+        else:
+            set {_m} to "{@REPORT-DOESNT-HAVE}"
+            set {_mm} to replacePlaceholders("report", {_m}, arg 1)
+            send {_mm}
+
+    
+    
+
+function reportPlayer(target: player, p: player, reason: text):
+    set {_message} to "{@REPORT-TO-PLAYER}"
+    set {_message1} to "{@REPORT-CHECK}"
+    set {_message2} to "{@REPORT-FORMAT}"
+    
+    set {_c} to getPlayerColor({_p})
+    set {_ct} to getPlayerColor({_target})
+
+    set {report::target::%{_target}'s uuid%} to "%{_ct}%%{_target}%"
+    set {report::reason::%{_target}'s uuid%} to {_reason}
+    set {report::reporter::%{_target}'s uuid%} to "%{_c}%%{_p}%"
+    set {report::date::%{_target}'s uuid%} to now
+
+    # logs report
+    set {_actualmessage1} to replacePlaceholders("report", {_message1}, {_target})
+    add "%{_actualmessage1}%" to {reports::%{_target}'s uuid%::*}
+
+    # sends report to staff
+    set {_actualmessage2} to replacePlaceholders("report", {_message2}, {_target})
+    send "%{_actualmessage2}%" to all players where [input has permission "easycore.reports"]
+
+    # send report success message
+    set {_actualmessage} to replacePlaceholders("report", {_message}, {_target})
+    send "%{_actualmessage}%" to {_p}
+        
+        
+command /getMyRank:
+    permission: easycore.debug
+    permission message: {@NO_PERMISSION}
+    aliases: easycore:getMyRank
+    trigger:
+        send "Your prefix is: %colored {data::ranks::player::%player's uuid%::prefix}%"
+        send "Your suffix is: %{data::ranks::player::%player's uuid%::suffix}%"
+        send "Your color is: %colored {data::ranks::player::%player's uuid%::color}%this"
+        send "Your group is: %{data::ranks::player::%player's uuid%::group}%"
+
+
+command /list:
+    aliases: easycore:list
+    permission: easycore.list
+    permission message: {@NO_PERMISSION}
+    trigger:
+        set {_m} to "{@LIST-ALL-FORMAT}"
+        set {_mm} to replacePlaceholders("list", {_m}, player)
+        send {_mm}
+
+
+command /gamemode [<text>] [<offline player>]:
+    aliases: easycore:gm, gm, easycore:gamemode
+    permission: easycore.gamemode
+    permission message: {@NO_PERMISSION}
+    trigger:
+        if arg 1 is "survival" or "0" or "s":
+            if arg 2 is not set:
+                if player's gamemode = survival:
+                    set {_q} to "{@ALREADY-HAVE}"
+                    set {_m} to replacePlaceholders("gamemode_survival", {_q}, player)
+                    send {_m}
+                    stop
+                else:
+                    set {_q} to "{@UPDATED}"
+                    set {_m} to replacePlaceholders("gamemode_survival", {_q}, player)
+                    send {_m}
+                    set player's gamemode to Survival
+            else if arg 2 is set:
+                if arg 2 is online:
+                    if arg 2's gamemode = survival:
+                        set {_q} to "{@ALREADY-HAVE-OTHER}"
+                        set {_m} to replacePlaceholders("gamemode_survival", {_q}, arg 2)
+                        send {_m}
+                        stop
+                    else:
+                        set {_q} to "{@UPDATED-OTHER-SENDER}"
+                        set {_m} to replacePlaceholders("gamemode_survival", {_q}, arg 2)
+                        send {_m} to player
+
+                        set {_5} to "{@UPDATED-OTHER-TARGET}"
+                        set {_6} to replacePlaceholders("gamemode_survival", {_5}, player)
+                        send {_6} to arg 2
+
+
+                        set player's gamemode to survival
+                else:
+                    send "{@PLAYER_NOT_ONLINE}"
+        else if arg 1 is "creative" or "1" or "c":
+            if arg 2 is not set:
+                if player's gamemode = creative:
+                    set {_q} to "{@ALREADY-HAVE}"
+                    set {_m} to replacePlaceholders("gamemode_creative", {_q}, player)
+                    send {_m}
+                    stop
+                else:
+                    set {_q} to "{@UPDATED}"
+                    set {_m} to replacePlaceholders("gamemode_creative", {_q}, player)
+                    send {_m}
+                    set player's gamemode to creative
+            else if arg 2 is set:
+                if arg 2 is online:
+                    if arg 2's gamemode = creative:
+                        set {_q} to "{@ALREADY-HAVE-OTHER}"
+                        set {_m} to replacePlaceholders("gamemode_creative", {_q}, arg 2)
+                        send {_m}
+                        stop
+                    else:
+                        set {_q} to "{@UPDATED-OTHER-SENDER}"
+                        set {_m} to replacePlaceholders("gamemode_creative", {_q}, arg 2)
+                        send {_m} to player
+
+                        set {_5} to "{@UPDATED-OTHER-TARGET}"
+                        set {_6} to replacePlaceholders("gamemode_creative", {_5}, player)
+                        send {_6} to arg 2
+
+
+                        set player's gamemode to creative
+                else:
+                    send "{@PLAYER_NOT_ONLINE}"
+        else if arg 1 is "adventure" or "2" or "a":
+            if arg 2 is not set:
+                if player's gamemode = adventure:
+                    set {_q} to "{@ALREADY-HAVE}"
+                    set {_m} to replacePlaceholders("gamemode_adventure", {_q}, player)
+                    send {_m}
+                    stop
+                else:
+                    set {_q} to "{@UPDATED}"
+                    set {_m} to replacePlaceholders("gamemode_adventure", {_q}, player)
+                    send {_m}
+                    set player's gamemode to adventure
+            else if arg 2 is set:
+                if arg 2 is online:
+                    if arg 2's gamemode = adventure:
+                        set {_q} to "{@ALREADY-HAVE-OTHER}"
+                        set {_m} to replacePlaceholders("gamemode_adventure", {_q}, arg 2)
+                        send {_m}
+                        stop
+                    else:
+                        set {_q} to "{@UPDATED-OTHER-SENDER}"
+                        set {_m} to replacePlaceholders("gamemode_adventure", {_q}, arg 2)
+                        send {_m} to player
+
+                        set {_5} to "{@UPDATED-OTHER-TARGET}"
+                        set {_6} to replacePlaceholders("gamemode_adventure", {_5}, player)
+                        send {_6} to arg 2
+
+
+                        set player's gamemode to adventure
+                else:
+                    send "{@PLAYER_NOT_ONLINE}"
+        else if arg 1 is "spectator" or "3" or "spec":
+            if arg 2 is not set:
+                if player's gamemode = spectator:
+                    set {_q} to "{@ALREADY-HAVE}"
+                    set {_m} to replacePlaceholders("gamemode_spectator", {_q}, player)
+                    send {_m}
+                    stop
+                else:
+                    set {_q} to "{@UPDATED}"
+                    set {_m} to replacePlaceholders("gamemode_spectator", {_q}, player)
+                    send {_m}
+                    set player's gamemode to spectator
+            else if arg 2 is set:
+                if arg 2 is online:
+                    if arg 2's gamemode = spectator:
+                        set {_q} to "{@ALREADY-HAVE-OTHER}"
+                        set {_m} to replacePlaceholders("gamemode_spectator", {_q}, arg 2)
+                        send {_m}
+                        stop
+                    else:
+                        set {_q} to "{@UPDATED-OTHER-SENDER}"
+                        set {_m} to replacePlaceholders("gamemode_spectator", {_q}, arg 2)
+                        send {_m} to player
+
+                        set {_5} to "{@UPDATED-OTHER-TARGET}"
+                        set {_6} to replacePlaceholders("gamemode_spectator", {_5}, player)
+                        send {_6} to arg 2
+
+
+                        set player's gamemode to spectator
+                else:
+                    send "{@PLAYER_NOT_ONLINE}"
+        else if arg 1 is not "survival" or "adventure" or "creative" or "spectator" or "0" or "1" or "2" or "3" or "c" or "a" or "spec" or "s":
+            send "{@WRONG}" to player
+
+command /gmc [<offline player>]:
+    permission: easycore.gamemode.creative
+    permission message: {@NO_PERMISSION}
+    aliases: easycore:gmc
+    trigger:
+        if arg 1 is not set:
+            if player's gamemode = creative:
+                set {_q} to "{@ALREADY-HAVE}"
+                set {_m} to replacePlaceholders("gamemode_creative", {_q}, player)
+                send {_m}
+                stop
+            else:
+                set {_q} to "{@UPDATED}"
+                set {_m} to replacePlaceholders("gamemode_creative", {_q}, player)
+                send {_m} to player
+                set player's gamemode to creative
+        else if arg 1 is set:
+            if arg 1 is online:
+                if arg 1's gamemode = creative:
+                    set {_q} to "{@ALREADY-HAVE-OTHER}"
+                    set {_m} to replacePlaceholders("gamemode_creative", {_q}, arg 1)
+                    send {_m}
+                    stop
+                    
+                else:
+                    set {_q} to "{@UPDATED-OTHER-SENDER}"
+                    set {_m} to replacePlaceholders("gamemode_creative", {_q}, arg 1)
+                    send {_m} to player
+
+                    set {_5} to "{@UPDATED-OTHER-TARGET}"
+                    set {_6} to replacePlaceholders("gamemode_creative", {_5}, player)
+                    send {_6} to arg 1
+
+
+                    set arg 1's gamemode to creative
+            else:
+                send "{@PLAYER_NOT_ONLINE}"
+
+command /gms [<offline player>]:
+    permission: easycore.gamemode.survival
+    permission message: {@NO_PERMISSION}
+    aliases: easycore:gms
+    trigger:
+        if arg 1 is not set:
+            if player's gamemode = survival:
+                set {_q} to "{@ALREADY-HAVE}"
+                set {_m} to replacePlaceholders("gamemode_survival", {_q}, player)
+                send {_m}
+                stop
+            else:
+                set {_q} to "{@UPDATED}"
+                set {_m} to replacePlaceholders("gamemode_survival", {_q}, player)
+                send {_m} to player
+                set player's gamemode to survival
+        else if arg 1 is set:
+            if arg 1 is online:
+                if arg 1's gamemode = survival:
+                    set {_q} to "{@ALREADY-HAVE-OTHER}"
+                    set {_m} to replacePlaceholders("gamemode_survival", {_q}, arg 1)
+                    send {_m}
+                    stop
+                else:
+                    set {_q} to "{@UPDATED-OTHER-SENDER}"
+                    set {_m} to replacePlaceholders("gamemode_survival", {_q}, arg 1)
+                    send {_m} to player
+
+                    set {_5} to "{@UPDATED-OTHER-TARGET}"
+                    set {_6} to replacePlaceholders("gamemode_survival", {_5}, player)
+                    send {_6} to arg 1
+
+
+                    set arg 1's gamemode to survival
+            else:
+                send "{@PLAYER_NOT_ONLINE}"
+
+command /gma [<offline player>]:
+    permission: easycore.gamemode.adventure
+    permission message: {@NO_PERMISSION}
+    aliases: easycore:gma
+    trigger:
+        if arg 1 is not set:
+            if player's gamemode = adventure:
+                set {_q} to "{@ALREADY-HAVE}"
+                set {_m} to replacePlaceholders("gamemode_adventure", {_q}, player)
+                send {_m}
+                stop
+            else:
+                set {_q} to "{@UPDATED}"
+                set {_m} to replacePlaceholders("gamemode_adventure", {_q}, player)
+                send {_m} to player
+                set player's gamemode to adventure
+        else if arg 1 is set:
+            if arg 1 is online:
+                if arg 1's gamemode = adventure:
+                    set {_q} to "{@ALREADY-HAVE-OTHER}"
+                    set {_m} to replacePlaceholders("gamemode_adventure", {_q}, arg 1)
+                    send {_m}
+                    stop
+                else:
+                    set {_q} to "{@UPDATED-OTHER-SENDER}"
+                    set {_m} to replacePlaceholders("gamemode_adventure", {_q}, arg 1)
+                    send {_m} to player
+
+                    set {_5} to "{@UPDATED-OTHER-TARGET}"
+                    set {_6} to replacePlaceholders("gamemode_adventure", {_5}, player)
+                    send {_6} to arg 1
+
+
+                    set arg 1's gamemode to adventure
+            else:
+                send "{@PLAYER_NOT_ONLINE}"
+
+command /gmsp [<offline player>]:
+    permission: easycore.gamemode.spectator
+    permission message: {@NO_PERMISSION}
+    aliases: easycore:gmsp
+    trigger:
+        if arg 1 is not set:
+            if player's gamemode = spectator:
+                set {_q} to "{@ALREADY-HAVE}"
+                set {_m} to replacePlaceholders("gamemode_spectator", {_q}, player)
+                send {_m}
+                stop
+            else:
+                set {_q} to "{@UPDATED}"
+                set {_m} to replacePlaceholders("gamemode_spectator", {_q}, player)
+                send {_m} to player
+                set player's gamemode to spectator
+        else if arg 1 is set:
+            if arg 1 is online:
+                if arg 1's gamemode = spectator:
+                    set {_q} to "{@ALREADY-HAVE-OTHER}"
+                    set {_m} to replacePlaceholders("gamemode_spectator", {_q}, arg 1)
+                    send {_m}
+                    stop
+                else:
+                    set {_q} to "{@UPDATED-OTHER-SENDER}"
+                    set {_m} to replacePlaceholders("gamemode_spectator", {_q}, arg 1)
+                    send {_m} to player
+
+                    set {_5} to "{@UPDATED-OTHER-TARGET}"
+                    set {_6} to replacePlaceholders("gamemode_spectator", {_5}, player)
+                    send {_6} to arg 1
+
+
+                    set arg 1's gamemode to spectator
+            else:
+                send "{@PLAYER_NOT_ONLINE}"
+
+
+command /godmode [<offline player>]:
+    permission: easycore.godmode
+    permission message: {@NO_PERMISSION}
+    aliases: god, easycore:god, easycore:godmode
+    trigger:
+        if arg 1 is not set:
+            if {godmode::%player%} is not set:
+                set {godmode::%player%} to true
+                set {_5} to "{@GOD-ENABLED}"
+                send {_5} to player
+                stop
+            else:
+                delete {godmode::%player%}
+                set {_5} to "{@GOD-DISABLED}"
+                send {_5} to player
+                stop
+        else:
+            if arg 1 is online:
+                if {godmode::%arg 1%} is not set:
+                    set {godmode::%arg 1%} to true
+                    set {_5} to "{@GOD-ENABLED-OTHER-SENDER}"
+                    set {_6} to replacePlaceholders("god_enable", {_5}, arg 1)
+                    send {_6} to player
+                    stop
+                else:
+                    delete {godmode::%arg 1%}
+                    set {_7} to "{@GOD-DISABLED-OTHER-SENDER}"
+                    set {_8} to replacePlaceholders("god_disable", {_7}, arg 1)
+                    send {_8} to player
+            else:
+                send "{@PLAYER_NOT_ONLINE}"
+
+
+on damage:
+    {godmode::%attacker%} is true
+    cancel event
+on damage:
+    {godmode::%victim%} is true
+    cancel event
+
+on join:
+    player has permission "easycore.staffmessages"
+    set {_7} to "{@STAFF-CONNECT}"
+    set {_8} to replacePlaceholders("staff_connect", {_7}, player)
+    send "%{_8}%" to all players where [input has permission "easycore.staffmessages"]
+    stop
+on quit:
+    player has permission "easycore.staffmessages"
+    set {_7} to "{@STAFF-DISCONNECT}"
+    set {_8} to replacePlaceholders("staff_disconnect", {_7}, player)
+    send "%{_8}%" to all players where [input has permission "easycore.staffmessages"]
+
+
+command /staffchat [<text>]:
+    aliases: sc, easycore:sc, easycore:staffchat
+    permission: easycore.staffchat
+    permission message: {@NO_PERMISSION}
+    trigger:
+        if arg 1 is not set:
+            if {staffchat::%player's uuid%} is not set:
+                set {staffchat::%player's uuid%} to true
+                set {_t} to "{@STAFF-CHAT-ENABLED}"
+                delete {adminchat::%player's uuid%}
+                send {_t}
+                stop
+            else:
+                delete {staffchat::%player's uuid%}
+                set {_t} to "{@STAFF-CHAT-DISABLED}"
+                send {_t}
+        else:
+            set {_m} to "{@STAFF-CHAT-FORMAT}"
+            set {_am} to replacePlaceholders("staff_chat_format", {_m}, player)
+            replace all "[message]" in {_am} with arg 1
+            send {_am} to all players where [input has permission "easycore.staffmessages"]
+command /adminchat [<text>]:
+    aliases: ac, easycore:ac, easycore:adminchat
+    permission: easycore.adminchat
+    permission message: {@NO_PERMISSION}
+    trigger:
+        if arg 1 is not set:
+            if {adminchat::%player's uuid%} is not set:
+                set {adminchat::%player's uuid%} to true
+                delete {staffchat::%player's uuid%}
+                set {_t} to "{@ADMIN-CHAT-ENABLED}"
+                send {_t}
+                stop
+            else:
+                delete {adminchat::%player's uuid%}
+                set {_t} to "{@ADMIN-CHAT-DISABLED}"
+                send {_t}
+        else:
+            set {_m} to "{@ADMIN-CHAT-FORMAT}"
+            set {_am} to replacePlaceholders("admin_chat_format", {_m}, player)
+            replace all "[message]" in {_am} with arg 1
+            send {_am} to all players where [input has permission "easycore.adminmessages"]
+
+
+
+
+on chat:
+    if {adminchat::%player's uuid%} is true:
+        cancel event
+        set {_m} to "{@ADMIN-CHAT-FORMAT}"
+        set {_am} to replacePlaceholders("ADMIN_chat_format", {_m}, player)
+        replace all "[message]" in {_am} with message
+        send {_am} to all players where [input has permission "easycore.adminmessages"]
+        stop
+    else if {staffchat::%player's uuid%} is true:
+        cancel event
+        set {_m} to "{@STAFF-CHAT-FORMAT}"
+        set {_am} to replacePlaceholders("staff_chat_format", {_m}, player)
+        replace all "[message]" in {_am} with message
+        send {_am} to all players where [input has permission "easycore.staffmessages"]
+        stop
+    else:
+        if isMuted(player) is true:
+            if {mute::%uuid of player%::duration} is "FOREVER":
+                cancel event
+                muteChatBlock(player, "forever")
+            else:
+                cancel event
+                muteChatBlock(player, "temp")
+        else:
+            uncancel event
+            set {_prefix} to getPlayerPrefix(player)
+            set the chat format to "%colored {_prefix}%%player%&7: &f%message%"
+
+
+command /broadcast <text>:
+    aliases: bc, easycore:bc, easycore:broadcast
+    permission: easycore.broadcast
+    permission message: {@NO_PERMISSION}
+    usage: &cMissing message to broadcast! /broadcast <message>
+    trigger:
+        set {_m} to "{@BROADCAST-FORMAT}"
+        replace all "[message]" in {_m} with colored arg 1
+        broadcast {_m}
+
+
+command /clear [<player>]:
+    aliases: clearinv, clearinventory, easycore:clearinv, easycore:clearinventory, easycore:clear, ci, easycore:ci
+    permission: easycore.broadcast
+    permission message: {@NO_PERMISSION}
+    trigger:
+        if arg 1 is not set:
+            set {_q} to amount of items in player's inventory
+            clear player's inventory
+            set {_m} to "{@CLEAR-SELF}"
+            replace all "[total]" in {_m} with "%{_q}%"
+            send {_m}
+            stop
+        else:
+            set {_q} to amount of items in arg 1's inventory
+            clear arg 1's inventory
+            set {_ms} to "{@CLEAR-OTHER-SENDER}"
+            set {_ams} to replacePlaceholders("clear-format", {_ms}, arg 1)
+            replace all "[total]" in {_ams} with "%{_q}%"
+            send {_ams} to player
+
+            set {_mt} to "{@CLEAR-OTHER-TARGET}"
+            set {_amt} to replacePlaceholders("clear-format", {_mt}, player)
+            replace all "[total]" in {_amt} with "%{_q}%"
+            send {_amt} to arg 1
+
+command /ping [<player>]:
+    aliases: easycore:ping, easycore:ms, ms
+    trigger:
+        if arg 1 is not set:
+            set {_m} to "{@PING-SELF}"
+            set {_m} to replacePlaceholders("ping", {_m}, player)
+            send {_m}
+        else:
+            set {_t} to "{@PING-OTHER}"
+            set {_t} to replacePlaceholders("ping", {_t}, arg 1)
+            send {_t}
+
+
+command /heal [<player>]:
+    permission: easycore.heal
+    permission message: {@NO_PERMISSION}
+    aliases: easycore:heal
+    trigger:
+        if arg 1 is not set:
+            heal player
+            set {_m} to "{@HEAL}"
+            set {_m} to replaceOtherPlaceholders("heal", {_m}, player, player)
+            send {_m}
+
+            set {_staff} to "{@HEAL-STAFF}"
+            set {_me} to replaceOtherPlaceholders("heal", {_staff}, player, player)
+            send {_me} to all players where [input has permission "easycore.staffmessages"]
+        else:
+            heal arg 1
+            set {_m} to "{@HEAL}"
+            set {_m} to replaceOtherPlaceholders("heal", {_m}, player, arg 1)
+            send {_m}
+
+            set {_staff} to "{@HEAL-STAFF}"
+            set {_me} to replaceOtherPlaceholders("heal", {_staff}, player, arg 1)
+            send {_me} to all players where [input has permission "easycore.staffmessages"]
+
+command /feed [<player>]:
+    permission: easycore.feed
+    permission message: {@NO_PERMISSION}
+    aliases: easycore:feed, saturate, easycore:saturate
+    trigger:
+        if arg 1 is not set:
+            feed player
+            set {_m} to "{@FEED}"
+            set {_m} to replaceOtherPlaceholders("feed", {_m}, player, player)
+            send {_m}
+
+            set {_staff} to "{@FEED-STAFF}"
+            set {_me} to replaceOtherPlaceholders("feed", {_staff}, player, player)
+            send {_me} to all players where [input has permission "easycore.staffmessages"]
+        else:
+            feed arg 1
+            set {_m} to "{@FEED}"
+            set {_m} to replaceOtherPlaceholders("feed", {_m}, player, arg 1)
+            send {_m}
+
+            set {_staff} to "{@FEED-STAFF}"
+            set {_me} to replaceOtherPlaceholders("feed", {_staff}, player, arg 1)
+            send {_me} to all players where [input has permission "easycore.staffmessages"]
+
+function replaceOtherPlaceholders(type: text, value: text, p: player, t: player) :: text:
+    if {_type} = "heal":
+        set {_c} to getPlayerColor({_p})
+        set {_ct} to getPlayerColor({_t})
+        replace all "[target-without]" in {_value} with "%{_t}%"
+        replace all "[target-with]" in {_value} with "%{_ct}%%{_t}%"
+        replace all "[player]" in {_value} with "%{_c}%&o%{_p}%"
+
+        return "%{_value}%"
+    if {_type} = "feed":
+        set {_c} to getPlayerColor({_p})
+        set {_ct} to getPlayerColor({_t})
+        replace all "[target-without]" in {_value} with "%{_t}%"
+        replace all "[target-with]" in {_value} with "%{_ct}%%{_t}%"
+        replace all "[player]" in {_value} with "%{_c}%&o%{_p}%"
+
+        return "%{_value}%"
+
+    if {_type} = "tp_staff_format":
+        set {_c} to getPlayerColor({_p})
+        set {_ct} to getPlayerColor({_t})
+        replace all "[target]" in {_value} with "%{_t}%"
+        replace all "[player]" in {_value} with "%{_ct}%&o%{_p}%"
+        replace all "[player-without]" in {_value} with "%{_p}%"
+
+        return "%{_value}%"
+
+
+function replacePlaceholders(type: text, value: text, p: player) :: text:
+    if {_type} = "report":
+        set {_c} to getPlayerColor({_p})
+        replace every "[reporter]" in {_value} with "%{report::reporter::%{_p}'s uuid%}%"
+        replace every "[reason]" in {_value} with "%{report::reason::%{_p}'s uuid%}%"
+        replace every "[reported]" in {_value} with "%{report::target::%{_p}'s uuid%}%"
+        replace every "[target]" in {_value} with "%{_c}%%{_p}%"
+        replace every "[date]" in {_value} with "%{report::date::%{_p}'s uuid%}%"
+
+        return "%{_value}%"
+    else if {_type} = "list":
+        replace every "[players]" in {_value} with "%number of all players%"
+        replace every "[max]" in {_value} with "%max players%"
+        loop all players:
+            set {_a} to getPlayerColor(loop-player)
+            replace every "[list]" in {_value} with "%{_a}%%Loop-player%"
+        return "%{_value}%"
+    else if {_type} = "gamemode_survival":
+        set {_ca} to getPlayerColor({_p})
+        replace every "[gamemode]" in {_value} with "Survival"
+        replace every "[other]" in {_value} with "%{_ca}%%{_p}%"
+        replace every "[player]" in {_value} with "%{_ca}%%{_p}%"
+        replace every "[sender]" in {_value} with "%{_ca}%%{_p}%"
+
+        return "%{_value}%"
+    else if {_type} = "gamemode_creative":
+        set {_ca} to getPlayerColor({_p})
+        replace every "[gamemode]" in {_value} with "Creative"
+        replace every "[other]" in {_value} with "%{_ca}%%{_p}%"
+        replace every "[player]" in {_value} with "%{_ca}%%{_p}%"
+        replace every "[sender]" in {_value} with "%{_ca}%%{_p}%"
+
+        return "%{_value}%"
+    else if {_type} = "gamemode_spectator":
+        set {_ca} to getPlayerColor({_p})
+        replace every "[gamemode]" in {_value} with "Spectator"
+        replace every "[other]" in {_value} with "%{_ca}%%{_p}%"
+        replace every "[player]" in {_value} with "%{_ca}%%{_p}%"
+        replace every "[sender]" in {_value} with "%{_ca}%%{_p}%"
+
+        return "%{_value}%"
+    else if {_type} = "gamemode_adventure":
+        set {_ca} to getPlayerColor({_p})
+        replace every "[gamemode]" in {_value} with "Adventure"
+        replace every "[other]" in {_value} with "%{_ca}%%{_p}%"
+        replace every "[player]" in {_value} with "%{_ca}%%{_p}%"
+        replace every "[sender]" in {_value} with "%{_ca}%%{_p}%"
+
+        return "%{_value}%"
+    else if {_type} = "god_enable":
+        set {_ca} to getPlayerColor({_p})
+        replace every "[player]" in {_value} with "%{_ca}%%{_p}%"
+        return "%{_value}%"
+    else if {_type} = "god_disable":
+        set {_ca} to getPlayerColor({_p})
+        replace every "[player]" in {_value} with "%{_ca}%%{_p}%"
+        return "%{_value}%"
+
+    else if {_type} = "staff_connect":
+        set {_ca} to getPlayerColor({_p})
+        replace every "[player]" in {_value} with "%{_ca}%%{_p}%"
+        return "%{_value}%"
+    else if {_type} = "staff_disconnect":
+        set {_ca} to getPlayerColor({_p})
+        replace every "[player]" in {_value} with "%{_ca}%%{_p}%"
+        return "%{_value}%"
+    else if {_type} = "staff_chat_format":
+        set {_ca} to getPlayerColor({_p})
+        replace every "[player]" in {_value} with "%{_ca}%%{_p}%"
+        return "%{_value}%"
+    else if {_type} = "admin_chat_format":
+        set {_ca} to getPlayerColor({_p})
+        replace every "[player]" in {_value} with "%{_ca}%%{_p}%"
+        return "%{_value}%"
+    else if {_type} = "clear-format":
+        set {_ca} to getPlayerColor({_p})
+        replace every "[target]" in {_value} with "%{_ca}%%{_p}%"
+        replace every "[player]" in {_value} with "%{_ca}%%{_p}%"
+        return "%{_value}%"
+        stop
+    else if {_type} = "ping":
+        set {_ca} to getPlayerColor({_p})
+        replace every "[target]" in {_value} with "%{_ca}%%{_p}%"
+        replace every "[ping]" in {_value} with "%{_p}'s ping%"
+        return "%{_value}%"
+    else if {_type} = "skull":
+        set {_ca} to getPlayerColor({_p})
+        replace every "[player]" in {_value} with "%{_p}%"
+        return "%{_value}%"
+    else if {_type} = "tp_target":
+        set {_ca} to getPlayerColor({_p})
+        replace every "[target]" in {_value} with "%{_ca}%%{_p}%"
+        return "%{_value}%"
+    else if {_type} = "tp_here_sender":
+        set {_ca} to getPlayerColor({_p})
+        replace every "[target]" in {_value} with "%{_ca}%%{_p}%"
+        return "%{_value}%"
+    
+        
+        
+
+    
+command /skull [<offline player>]:
+    permission: easycore.skull
+    permission message: {@NO_PERMISSION}
+    aliases: head, easycore:skull, easycore:head
+    trigger:
+        if arg 1 is not set:
+            set {_m} to "{@SKULL-GIVEN}"
+            set {_player} to replacePlaceholders("skull", {_m}, player)
+            give 1 of skull of "%player%" parsed as offline player named "&d%player%&d's Skull" to player
+            send {_player} to player
+            stop
+        else:
+            set {_m} to "{@SKULL-GIVEN}"
+            set {_player} to replacePlaceholders("skull", {_m}, arg 1)
+            give 1 of skull of "%arg 1%" parsed as offline player named "&d%arg 1%&d's Skull" to player
+            send {_player} to player
+
+command /more:
+    usage: &cToo many arguments detected! /more
+    aliases: max, easycore:max, easycore:more
+    permission: easycore.more
+    permission message: {@NO_PERMISSION}
+    trigger:
+        if player's held item is air:
+            send "{@INVALID-MORE-ITEM}"
+            stop
+        else:
+            set {_item} to player's held item
+            set player's held item to 64 of {_item}
+            send "{@MORE-SUCCESS}"
+
+
+
+
+command /teleport <player>:
+    aliases: easycore:teleport, tp, easycore:tp
+    permission: easycore.teleport
+    permission message: {@NO_PERMISSION}
+    usage: &cMissing a player! /teleport <player>
+    trigger:
+        teleport player to arg 1
+        set {_m} to "{@TP-TARGET}"
+        set {_am} to replacePlaceholders("tp_target", {_m}, arg 1)
+        send {_am}
+        # -----------
+        set {_mm} to "{@TP-PLAYER-STAFF-FORMAT}"
+        set {_staff} to replaceOtherPlaceholders("tp_staff_format", {_mm}, player, arg 1)
+        send {_staff} to all players where [input has permission "easycore.staffmessages"]
+
+command /tphere <player>:
+    aliases: easycore:tphere, teleporthere, easycore:teleporthere
+    permission: easycore.tphere
+    permission message: {@NO_PERMISSION}
+    usage: &cMissing a player! /tphere <player>
+    trigger:
+        teleport arg 1 to player
+        set {_m} to "{@TP-HERE-SENDER}"
+        set {_am} to replacePlaceholders("tp_here_sender", {_m}, arg 1)
+        send {_am}
+        # -----------
+        set {_mm} to "{@TP-HERE-STAFF-FORMAT}"
+        set {_staff} to replaceOtherPlaceholders("tp_staff_format", {_mm}, player, arg 1)
+        send {_staff} to all players where [input has permission "easycore.staffmessages"]
+
+command /teleportpos <number> <number> <number> [<player>]:
+    usage: &cImproper usage! Correct usage: /teleportpos <x> <y> <z> [player]
+    aliases: easycore:teleportpos, tppos, easycore:tppos, teleportposition, easycore:teleportposition, tpposition, easycore:tpposition
+    permission: easycore.teleportpos
+    permission message: {@NO_PERMISSION}
+    trigger:
+        if arg 4 is not set:
+            set {_m} to "{@TO-COORDS}"
+            replace all "[x]" in {_m} with "%arg 1%"
+            replace all "[y]" in {_m} with "%arg 2%"
+            replace all "[z]" in {_m} with "%arg 3%"
+            teleport player to location at arg 1, arg 2, arg 3 in world "%player's world%"
+            send {_m}
+            set {_sm} to "{@TO-COORDS-STAFF}"
+            set {_color} to getPlayerColor(player)
+            replace all "[x]" in {_sm} with "%arg 1%"
+            replace all "[y]" in {_sm} with "%arg 2%"
+            replace all "[z]" in {_sm} with "%arg 3%"
+            replace all "[player]" in {_sm} with "%{_color}%&o%player%"
+            send {_sm} to all players where [input has permission "easycore.staffmessages"]
+            stop
+        else:
+            set {_m} to "{@TO-COORDS-SENDER}"
+            replace all "[x]" in {_m} with "%arg 1%"
+            replace all "[y]" in {_m} with "%arg 2%"
+            replace all "[z]" in {_m} with "%arg 3%"
+            replace all "[target]" in {_m} with "%arg 4%"
+            teleport arg 4 to location at arg 1, arg 2, arg 3 in world "%player's world%"
+            send {_m}
+            set {_sm} to "{@TO-COORDS-STAFF-OTHER}"
+            set {_color} to getPlayerColor(player)
+            replace all "[x]" in {_sm} with "%arg 1%"
+            replace all "[y]" in {_sm} with "%arg 2%"
+            replace all "[z]" in {_sm} with "%arg 3%"
+            replace all "[player]" in {_sm} with "%{_color}%&o%player%"
+            replace all "[target]" in {_sm} with "%arg 4%"
+            send {_sm} to all players where [input has permission "easycore.staffmessages"]
+
+
+
+
+command /teleportoffline <offline player>:
+    usage: &cImproper usage! Correct usage: /teleportoffline <player>
+    aliases: tpoffline, teleportlastlocation, tplastlocation, easycore:tpoffline, easycore:teleportlastlocation, easycore:tplastlocation, easycore:teleportoffline
+    permission: easycore.teleportoffline
+    permission message: {@NO_PERMISSION} 
+    trigger:
+        if {lastloc::%arg 1's uuid%} is not set:
+            send "{@OFFLINE-PLAYER-FAILED}"
+            stop
+        else:
+            teleport player to {lastloc::%arg 1's uuid%}
+            set {_m} to "{@OFFLINE-PLAYER-SUCCESS}"
+            replace all "[player]" in {_m} with "%arg 1%"
+            send {_m}
+
+on quit:
+    set {lastloc::%player's uuid%} to player's location
+
+
+command /vanish [<player>]:
+    permission: easycore.vanish
+    permission message: {@NO_PERMISSION}
+    aliases: v, invis, easycore:v, easycore:invis, easycore:vanish
+    executable by: player
+    trigger:
+        if arg 1 is not set:
+            if {vanish::%player%} is not set:
+                hide the player from all players
+                set {prevPrefix::%player's uuid%} to getPlayerPrefix(player)
+                set {_tag} to "{@VANISH-TAG}"
+                replace all "[player]" in {_tag} with "%player%"
+                set player's tablist name to "%{_tag}%"
+                set player's default nametag to "%{_tag}%"
+                send "{@VANISH-SELF}"
+                set {vanish::%player%} to true
+                add player to {vanished::*}
+                set {_m} to "{@VANISH-SELF-STAFF}"
+                set {_color} to getPlayerColor(player)
+                replace all "[player]" in {_m} with "%{_color}%&o%player%"
+                send {_m} to all players where [input has permission "easycore.staffmessages"]
+                stop
+            else:
+                reveal the player from all players
+                send "{@UNVANISH-SELF}"
+                delete {vanish::%player%}			
+                set {_color} to getPlayerColor(player)
+                remove player from {vanished::*}
+
+                set player's tablist name to "%colored {_prefix}%%player%"
+                set player's default nametag to "%{_color}%%player%"
+
+                set {_m} to "{@UNVANISH-SELF-STAFF}"
+                set {_color} to getPlayerColor(player)
+                replace all "[player]" in {_m} with "%{_color}%&o%player%"
+                send {_m} to all players where [input has permission "easycore.staffmessages"]
+                stop
+        else:
+            if {vanish::%arg 1%} is not set:
+                hide the arg 1 from all players
+                set {prevPrefix::%arg 1's uuid%} to getPlayerPrefix(arg 1)
+                set {_tag} to "{@VANISH-TAG}"
+                replace all "[player]" in {_tag} with "%arg 1%"
+                set arg 1's tablist name to "%{_tag}%"
+                set arg 1's default nametag to "%{_tag}%"
+                set {_am} to "{@VANISH-OTHER}"
+                replace all "[target]" in {_am} with "%arg 1%"
+                send {_am} to player
+
+                send "{@VANISH-SELF}" to arg 1
+                set {vanish::%arg 1%} to true
+                add arg 1 to {vanished::*}
+                set {_m} to "{@VANISH-OTHER-STAFF}"
+                set {_color} to getPlayerColor(arg 1)
+                replace all "[player]" in {_m} with "%{_color}%&o%player%"
+                replace all "[target]" in {_m} with "%arg 1%"
+                send {_m} to all players where [input has permission "easycore.staffmessages"]
+                stop
+            else:
+                
+                reveal the arg 1 from all players
+                set {_am} to "{@UNVANISH-OTHER}"
+                replace all "[target]" in {_am} with "%arg 1%"
+                send {_am} to player
+                send "{@UNVANISH-SELF}" to arg 1
+                delete {vanish::%arg 1%}			
+                set {_color} to getPlayerColor(arg 1)
+                remove arg 1 from {vanished::*}
+
+                set arg 1's tablist name to "%colored {_prefix}%%arg 1%"
+                set arg 1's default nametag to "%{_color}%%arg 1%"
+
+                set {_m} to "{@UNVANISH-OTHER-STAFF}"
+                set {_color} to getPlayerColor(arg 1)
+                replace all "[player]" in {_m} with "%{_color}%&o%player%"
+                replace all "[target]" in {_m} with "%arg 1%"
+                send {_m} to all players where [input has permission "easycore.staffmessages"]
+
+on quit:
+    if {vanish::%player%} is set:
+        delete {vanish::%player%}
+        remove player from {vanished::*}
+
+on join:
+    if player has permission "easycore.vanish":
+        execute player command "vanish"
+every 1 second:
+	loop all players:
+		if {vanish::%loop-player%} is true:
+			loop all players:
+				if loop-player-2 is op:
+					reveal the loop-player-1 from loop-player-2
+
+
+command /addperm <player> <text>:
+    trigger:
+        add "%arg 2%" to permission of arg 1
+        set {_color} to getPlayerColor(arg 1)
+        send "&eAdded &d""%arg 2%"" &eto permissions of %{_color}%%arg 1%&e!"
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+on tab complete of "/gamemode":
+    set tab completions for position 1 to "creative", "spectator" and "adventure" and "survival"
+on tab complete of "/gm":
+    set tab completions for position 1 to "creative", "spectator" and "adventure" and "survival"
+on tab complete of "/easycore:gm":
+    set tab completions for position 1 to "creative", "spectator" and "adventure" and "survival"
+on tab complete of "/easycore:gamemode":
+    set tab completions for position 1 to "creative", "spectator" and "adventure" and "survival"
+on tab complete of "/tpoffline":
+    loop all offline players:
+        add loop-value to tab completions

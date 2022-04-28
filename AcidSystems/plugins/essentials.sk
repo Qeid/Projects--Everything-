@@ -1,0 +1,47 @@
+command /gmc [<player>]:
+    aliases: cloud:servers:gmc
+    trigger:
+        if arg 1 is not set:
+            if player's world is "%{data::worldName::%player's uuid%}%":
+                if {server::plugins::%{data::serverName::%player's uuid%}%::essentials::installed} is true:
+                    set player's gamemode to creative
+                    send "&6Set gamemode &ccreative &6for %colored {data::ranks::player::%player's uuid%::prefix}%%player%"
+                else:
+                    send "&3This command is not available on this server."
+            else:
+                send "&cInsufficient permissions!"
+        else:
+            set arg 1's gamemode to creative
+            send "&6Set gamemode &ccreative &6for %colored {data::ranks::player::%arg 1's uuid%::prefix}%%arg 1%"
+command /gms [<player>]:
+    aliases: cloud:servers:gms
+    trigger:
+        if arg 1 is not set:
+            if player's world is "%{data::worldName::%player's uuid%}%":
+                if {server::plugins::%{data::serverName::%player's uuid%}%::essentials::installed} is true:
+                    set player's gamemode to survival
+                    send "&6Set gamemode &csurvival &6for %colored {data::ranks::player::%player's uuid%::prefix}%%player%"
+                else:
+                    send "&3This command is not available on this server."
+            else:
+                send "&cInsufficient permissions!"
+        else:
+            set arg 1's gamemode to survival
+            send "&6Set gamemode &csurvival &6for %colored {data::ranks::player::%arg 1's uuid%::prefix}%%arg 1%"
+command /gamemode <gamemode> [<player>]:
+    usage: &c/gamemode <gamemode> [player]
+    aliases: gm, cloud:servers:gamemode
+    trigger:
+        if arg 2 is not set:
+            if player's world is "%{data::worldName::%player's uuid%}%":
+                if {server::plugins::%{data::serverName::%player's uuid%}%::essentials::installed} is true:
+                    set player's gamemode to arg 1
+                    send "&6Set gamemode &c%arg 1% &6for %colored {data::ranks::player::%player's uuid%::prefix}%%player%"
+                else:
+                    send "&3This command is not available on this server."
+            else:
+                send "&cInsufficient permissions!"
+        else:
+            set arg 2's gamemode to arg 1
+            send "&6Set gamemode &c%arg 1% &6for %colored {data::ranks::player::%arg 2's uuid%::prefix}%%arg 2%"
+

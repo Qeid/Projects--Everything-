@@ -1,0 +1,84 @@
+command /setupbw [<text>]:
+    trigger:
+        set {setup::part::1} to true
+        send "&e&l------------------------------------------"
+        send "                     &6&lSETUP"
+        send ""
+        send "&7In order to continue the setup process please type a bedwars server name in chat"
+        send "&8&o(( &8such as &nmini0001 &8or &8&nbw0001 &8or &8&ngame0001 &8&o))"
+        send "&cType CANCEL to cancel."
+        send ""
+        send "&e&l------------------------------------------"
+        stop
+        if arg 1 is "2-1":
+            send "&e&l------------------------------------------"
+            send "                     &6&lSETUP TEAMS"
+            send ""
+            send "&7You're now setting up teams, please look at the team bed for &cRED"
+            send "&7&oType DONE when you're finished."
+            send "&cType CANCEL to cancel."
+            send ""
+            send "&e&l------------------------------------------"
+            set {setup::part::2::1} to true
+            stop
+        if arg 1 is "2-2":
+            send "&e&l------------------------------------------"
+            send "                     &6&lSETUP TEAMS"
+            send ""
+            send "&7You're now setting up teams, please look at the team bed for &9BLUE"
+            send "&7&oType DONE when you're finished."
+            send "&cType CANCEL to cancel."
+            send ""
+            send "&e&l------------------------------------------"
+            set {setup::part::2::2} to true
+
+
+
+on chat:
+    if {setup::part::1} is true:
+        if message = "cancel":
+            cancel event
+            send "&aCancelled setup process."
+            set {setup::part::1} to false
+
+            stop
+        else:
+            cancel event
+            set {_w} to a world creator named "%message%"
+            load world from creator {_w}
+            set {_rgen1} to random integer between 10000 and 50000 
+            set {_rgen2} to random integer between 10000 and 50000 
+            set {_rgen3} to random integer between 10000 and 50000 
+            send "&e[SETUP] &aCreated game server with name &e%message% &aand ID: &e%{_rgen1}%&e-%{_rgen2}%&e-%{_rgen3}%"
+            execute console command "mv import %message%"
+            execute console command "mvtp %player% %message%"
+            set {setup::part::1} to false
+            execute player command "setupbw 2-1"
+on chat:
+    if {setup::part::2::1} is true:
+        if message = "cancel":
+            cancel event
+            send "&aCancelled setup process."
+            set {setup::part::2::*} to false
+
+            stop
+        if message = "done":
+            set {bw::bed::red::%world%} to target block
+            send "&e[SETUP] &aSetup bed for team &cRED &ato &e%target block%"
+            set {setup::part::2::1} to false
+            execute player command "setupbw 2-2"
+            
+on chat:
+    if {setup::part::2::2} is true:
+        if message = "cancel":
+            cancel event
+            send "&aCancelled setup process."
+            set {setup::part::2::*} to false
+
+            stop
+        if message = "done":
+            set {bw::bed::blue::%world%} to target block
+            send "&e[SETUP] &aSetup bed for team &9BLUE &ato &e%target block%"
+            set {setup::part::2::2} to false
+            execute player command "setupbw 2-3"
+

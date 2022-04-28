@@ -1,0 +1,13 @@
+command /idgenerator:
+    usage: &c1 or too many arguments! /idgenerator
+    trigger:
+        set {id::*} to "a321ec", "3784ba", "941cnx", "rbabx3", "942nrw", "lea3sx" and "0djnea"
+        set {id1::*} to "38baes", "e93nda", "8ieasn", "03edca", "n4ad34", "93nabe" and "v34nae"
+        set {id2::*} to "je371a3", "9b3ea3e", "08sab32", "z63bna3", "me0eas3", "ejn32sl" and "e7en2au"
+        set {_gen} to random element out of {id::*}
+        set {_gen1} to random element out of {id1::*}
+        set {_gen2} to random element out of {id2::*}
+        send "&aRandomly generated ID: &f%{_gen}%-%{_gen1}%-%{_gen2}%"
+        delete {id::*}
+        delete {id1::*}
+        delete {id2::*} 

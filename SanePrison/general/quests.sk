@@ -1,0 +1,133 @@
+every 12 minutes:
+    broadcast "&b&lTIP &8| &7Don't want the quest action bar? use &b&n/toggleactionbar&7."
+
+on first join:
+    set {complete::%uuid of player%} to "&c&lUNCOMPLETE"
+    set {completebar::%uuid of player%} to "&7|||||||||||"
+    set {q::blocks::%uuid of player%} to 0
+
+
+on break:
+    add 1 to {q::blocks::%uuid of player%}
+    if {q::blocks::%uuid of player%} < 1000:
+        set {completebar::%uuid of player%} to "&a|&7||||||||||"
+        if {q::ab::%uuid of player%} is true:
+            send action bar "&e&lQUEST: &8[%{completebar::%uuid of player%}%&8]" to player
+        else:
+        stop
+    if {q::blocks::%uuid of player%} < 3999:
+        set {completebar::%uuid of player%} to "&a|&a|&7|||||||||"
+        if {q::ab::%uuid of player%} is true:
+            send action bar "&e&lQUEST: &8[%{completebar::%uuid of player%}%&8]" to player
+        else:
+        stop
+    if {q::blocks::%uuid of player%} < 5000:
+        set {completebar::%uuid of player%} to "&a|&a|&a|&7||||||||"
+        if {q::ab::%uuid of player%} is true:
+            send action bar "&e&lQUEST: &8[%{completebar::%uuid of player%}%&8]" to player
+        else:
+        stop
+    if {q::blocks::%uuid of player%} < 9000:
+        set {completebar::%uuid of player%} to "&a|&a|&a|&a|&7|||||||"
+        if {q::ab::%uuid of player%} is true:
+            send action bar "&e&lQUEST: &8[%{completebar::%uuid of player%}%&8]" to player
+        else:
+        stop
+    if {q::blocks::%uuid of player%} < 11500:
+        set {completebar::%uuid of player%} to "&a|&a|&a|&a|&a|&7||||||"
+        if {q::ab::%uuid of player%} is true:
+            send action bar "&e&lQUEST: &8[%{completebar::%uuid of player%}%&8]" to player
+        else:
+        stop
+    if {q::blocks::%uuid of player%} < 13000:
+        set {completebar::%uuid of player%} to "&a|&a|&a|&a|&a|&a|&7|||||"
+        if {q::ab::%uuid of player%} is true:
+            send action bar "&e&lQUEST: &8[%{completebar::%uuid of player%}%&8]" to player
+        else:
+        stop
+    if {q::blocks::%uuid of player%} < 16000:
+        set {completebar::%uuid of player%} to "&a|&a|&a|&a|&a|&a|&a|&7||||"
+        if {q::ab::%uuid of player%} is true:
+            send action bar "&e&lQUEST: &8[%{completebar::%uuid of player%}%&8]" to player
+        else:
+        stop
+    if {q::blocks::%uuid of player%} < 18999:
+        set {completebar::%uuid of player%} to "&a|&a|&a|&a|&a|&a|&a|&a|&7|||"
+        if {q::ab::%uuid of player%} is true:
+            send action bar "&e&lQUEST: &8[%{completebar::%uuid of player%}%&8]" to player
+        else:
+        stop
+    if {q::blocks::%uuid of player%} < 22999:
+        set {completebar::%uuid of player%} to "&a|&a|&a|&a|&a|&a|&a|&a|&a|&7||"
+        if {q::ab::%uuid of player%} is true:
+            send action bar "&e&lQUEST: &8[%{completebar::%uuid of player%}%&8]" to player
+        else:
+        stop
+    if {q::blocks::%uuid of player%} < 24999:
+        set {completebar::%uuid of player%} to "&a|&a|&a|&a|&a|&a|&a|&a|&a|&a|&7|"
+        if {q::ab::%uuid of player%} is true:
+            send action bar "&e&lQUEST: &8[%{completebar::%uuid of player%}%&8]" to player
+        else:
+        stop
+    if {q::blocks::%uuid of player%} >= 25000:
+        if {complete::%uuid of player%} is "&c&lUNCOMPLETE":
+            set {complete::%uuid of player%} to "&a&lCOMPLETE"
+            set {completebar::%uuid of player%} to "&a|||||||||||"
+            execute console command "token give %player% 50000"
+            send title "&e&lQUEST COMPLETE" with subtitle "Mine 25,000 blocks" for 3 seconds
+            broadcast "%player% &7completed a quest!"
+            play sound "ui.toast.challenge_complete" at volume 1 to player
+            send ""
+            send "&e&lQUEST COMPLETE"
+            send " &fMine 25000 blocks"
+            send " &fReward: &d&n50,000 Tokens"
+            send ""
+        else:
+            #stop
+            stop
+    else:
+        add 1 to {q::blocks::%uuid of player%}
+
+command /quests:
+    aliases: q
+    trigger:
+        send ""
+        send "&7&oThese quests are in BETA, meaning there might be bugs, and is experimental."
+        send "&e&lQUESTS BETA"
+        send "&e&l* &fMine 25000 blocks. &8(&f%{q::blocks::%uuid of player%}%&f/25000&8)"
+        send "   &fReward: &d&n50,000 Tokens"
+        send "   &8[&7%{completebar::%uuid of player%}%&8] [%{complete::%uuid of player%}%&8]"
+        send ""
+command /resetquest [<player>]:
+    permission: op
+    permission message: &cThis command is not available on this server.
+    trigger:
+        if arg 1 is not set:
+            set {complete::%uuid of player%} to "&c&lUNCOMPLETE"
+            set {completebar::%uuid of player%} to "&7|||||||||||"
+            set {q::blocks::%uuid of player%} to 0
+        else:
+            set {complete::%uuid of arg 1%} to "&c&lUNCOMPLETE"
+            set {completebar::%uuid of arg 1%} to "&7|||||||||||"
+            set {q::blocks::%uuid of arg 1%} to 0
+
+
+command /giveblocks <player> <number>:
+    usage: &c&l(!) &7Usage: /giveblocks <player> <number>
+    permission: op
+    permission message: &cThis command is not accessible right now.
+    trigger:
+        add arg 2 to {q::blocks::%uuid of arg 1%}
+        send "&aAdded."
+
+command /toggleactionbar:
+    trigger:
+        if {q::ab::%uuid of player%} is false:
+            set {q::ab::%uuid of player%} to true
+            send ""
+            send "&aYou will now see the action bar for quests."
+            send ""
+        else:
+            set {q::ab::%uuid of player%} to false
+            send "&cYou will no longer see the action bar for quests."
+            send ""

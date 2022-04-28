@@ -1,0 +1,54 @@
+command /vape:
+	permission: vape.use
+	permission message: &c&l(!) &7You must be &4&lADMIN &7or higher to perform this.
+	trigger:
+		vapegui(player, "main")
+				
+
+
+function vapegui(p: player, page: text):
+	if {_page} is "main":
+		if {vapedisabled} is true:
+			open chest with 6 rows named "Vape Control Panel" to {_p}
+			format gui slot 0, 9, 18, 27, 36, 45, 54 of {_p} with black stained glass pane named " " to do nothing
+			format gui slot 1, 2, 3, 4, 5, 6, 7, 8 of {_p} with black stained glass pane named " " to do nothing
+			format gui slot 28, 37, 46, 55 of {_p} with black stained glass pane named " " to do nothing
+			format gui slot 38, 47, 48 of {_p} with black stained glass pane named " " to do nothing
+			format gui slot 17, 26, 35, 44, 53 of {_p} with black stained glass pane named " " to do nothing
+			format gui slot 34, 43, 51, 52, 50, 42 of {_p} with black stained glass pane named " " to do nothing
+			format gui slot 10, 11, 12, 13, 14, 15, 16, 19,  20, 21, 22, 23, 24, 25, 29, 30, 31, 32, 33, 39, 40, 41 of {_p} with glowing coal block named "&4&lVape is currently DISABLED!!!" with lore " &cVape is currently disabled, this action was done by %{disabler}%&c." and " &cIf you wish to reenable it, please" and " &cclick on a item.&c" and "&4&lWARNING" and " &cEnabling this might lag or worse, crash the" and " &cserver. Please use with caution" to run:
+				close {_p}'s inventory
+				send "&c&l(!) &7Enabling Vape Anticheat &7(ver, 1.0.0 &7&obeta&7) by Qeid" to op
+				wait 4 ticks
+				send "&a&l(!) &7Enable complete." to op
+				wait 10 ticks
+				execute player command "sk enable vape/"
+				set {vapedisabled} to false
+		else:
+			open chest with 6 rows named "Vape Control Panel" to {_p}
+			format gui slot 0, 9, 18, 27, 36, 45, 54 of {_p} with black stained glass pane named " " to do nothing
+			format gui slot 1, 2, 3, 4, 5, 6, 7, 8 of {_p} with black stained glass pane named " " to do nothing
+			format gui slot 28, 37, 46, 55 of {_p} with black stained glass pane named " " to do nothing
+			format gui slot 38, 47, 48 of {_p} with black stained glass pane named " " to do nothing
+			format gui slot 17, 26, 35, 44, 53 of {_p} with black stained glass pane named " " to do nothing
+			format gui slot 34, 43, 51, 52, 50, 42 of {_p} with black stained glass pane named " " to do nothing
+			format gui slot 49 of {_p} with barrier named "&c&lCLOSE" to run:
+				close {_p}'s inventory
+			format gui slot 10 of {_p} with glowing wooden sword named "&7Check a player &4violations&7." with lore "" and "&4Left-Click &7to manage a player's violations" and "&4Right-Click &7to reset all player violations." to run:
+			format gui slot 12 of {_p} with glowing redstone block named "&cDisable &7Vape Anticheat" with lore "" and "&cLeft-Click &7to disable Vape Anticheat" and "" and "&c&lWARNING" and " &7This may cause lag!!!" to run:
+				close {_p}'s inventory
+				set {disabler} to "&4%{_p}%"
+				execute console command "sk disable vape/"
+				send "&c&l(!) &7Disabling Vape Anticheat &7(ver, 1.0.0 &7&obeta&7) by Qeid" to op
+				wait 4 ticks
+				send "&a&l(!) &7Disable complete." to op
+				set {vapedisabled} to true
+on chat:
+	if {vlreset::q::%uuid of player%} is true:
+		set {m::%player%} to message
+		cancel event
+		play sound "entity.experience_orb.pickup" at volume 1 at player
+		vapegui({m::%player%}, "violation")
+		set {vlreset::q::%uuid of player%} to false
+	else:
+		stop

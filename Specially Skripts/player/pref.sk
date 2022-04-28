@@ -1,0 +1,75 @@
+command /glow:
+    aliases: preferences, pref, specially:glow, specially:pref, specially:preferences
+    trigger:
+        if {data::ranks::player::%player's uuid%::prefix} contains "admin":
+            set {pref::mycolor::%player's uuid%} to "&cRED"
+        else if {data::ranks::player::%player's uuid%::prefix} contains "mod":
+            set {pref::mycolor::%player's uuid%} to "&eYELLOW"
+        else if {data::ranks::player::%player's uuid%::prefix} contains "helper":
+            set {pref::mycolor::%player's uuid%} to "&9BLUE"
+        else if {data::ranks::player::%player's uuid%::prefix} contains "lord":
+            set {pref::mycolor::%player's uuid%} to "&2DARK GREEN"
+        else if {data::ranks::player::%player's uuid%::prefix} contains "pirate":
+            set {pref::mycolor::%player's uuid%} to "&3CYAN"
+        else if {data::ranks::player::%player's uuid%::prefix} contains "mvp":
+            set {pref::mycolor::%player's uuid%} to "&bAQUA"
+        else if {data::ranks::player::%player's uuid%::prefix} contains "vip":
+            set {pref::mycolor::%player's uuid%} to "&aGREEN"
+        set {_pr} to {data::ranks::player::%player's uuid%::prefix}
+        replace all "[" and "]" in {_pr} with ""
+        if {pref::glow::%player's uuid%} is false:
+            if {data::ranks::player::%player's uuid%::prefix} does not contain "admin" or "owner" or "lord" or "pirate" or "mvp" or "vip" or "mod" or "helper":
+                set metadata tag "pref" of player to chest inventory with 5 rows named "Preferences"
+                set slot 13 of metadata tag "pref" of player to player's skull named "%colored {data::ranks::player::%player's uuid%::prefix}%%player%" with lore "" and "&7Rank: Default" and "&7Inital Join: &fNone"
+                set slot 29 of metadata tag "pref" of player to coal block named "&7Glow Effect" with lore "" and "&b&nPuts a glow around your skin" and "" and "&7Because of your rank, you'll" and "&7have a GRAY &7glow." and "" and "&cThis option require VIP or higher."
+            else:
+                set metadata tag "pref" of player to chest inventory with 5 rows named "Preferences"
+                set slot 13 of metadata tag "pref" of player to player's skull named "%colored {data::ranks::player::%player's uuid%::prefix}%%player%" with lore "" and "&7Rank: %colored {_pr}%" and "&7Inital Join: &fNone"
+                set slot 29 of metadata tag "pref" of player to gray dye named "&7Glow Effect" with lore "" and "&b&nPuts a glow around your skin" and "" and "&7Because of your rank, you'll" and "&7have a %{pref::mycolor::%player's uuid%}% &7glow." and "" and "&7&oClick to enable"
+        else if {pref::glow::%player's uuid%} is true:
+            set metadata tag "pref" of player to chest inventory with 5 rows named "Preferences"
+            if {data::ranks::player::%player's uuid%::prefix} does not contain "admin" or "owner" or "lord" or "pirate" or "mvp" or "vip" or "mod" or "helper":
+                set metadata tag "pref" of player to chest inventory with 5 rows named "Preferences"
+                set slot 13 of metadata tag "pref" of player to player's skull named "%colored {data::ranks::player::%player's uuid%::prefix}%%player%" with lore "" and "&7Rank: Default" and "&7Inital Join: &fNone"
+                set slot 29 of metadata tag "pref" of player to coal block named "&7Glow Effect" with lore "" and "&b&nPuts a glow around your skin" and "" and "&7Because of your rank, you'll" and "&7have a GRAY &7glow." and "" and "&cThis option require VIP or higher."
+            else:
+                set slot 13 of metadata tag "pref" of player to player's skull named "%colored {data::ranks::player::%player's uuid%::prefix}%%player%" with lore "" and "&7Rank: %colored {_pr}%" and "&7Inital Join: &fNone"
+                set slot 29 of metadata tag "pref" of player to glowing lime dye named "&aGlow Effect" with lore "" and "&b&nPuts a glow around your skin" and "" and "&7Because of your rank, you'll" and "&7have a %{pref::mycolor::%player's uuid%}% &7glow." and "" and "&7&oClick to disable"
+        open (metadata tag "pref" of player) to player
+
+
+
+on inventory click:
+    if compare(metadata tag "pref" of player, event-inventory) = true:
+        cancel event
+        if index of event-slot = 29:
+            if {data::ranks::player::%player's uuid%::prefix} does not contain "admin" or "owner" or "lord" or "pirate" or "mvp" or "vip" or "mod" or "helper":
+                cancel event
+                send "&cThis option require VIP or higher!"
+            else:
+                if {pref::glow::%player's uuid%} is false:
+                    set {pref::glow::%player's uuid%} to true
+                    send "&8[&3Preferences&8] &7You've enabled &3GLOWING"
+                    play sound "ui.button.click" at volume 1
+                    set slot 29 of metadata tag "pref" of player to glowing lime dye named "&aGlow Effect" with lore "" and "&b&nPuts a glow around your skin" and "" and "&7Because of your rank, you'll" and "&7have a %{pref::mycolor::%player's uuid%}% &7glow." and "" and "&7&oClick to disable"
+                    apply glowing to the player for 100000 seconds
+                else:
+                    set {pref::glow::%player's uuid%} to false
+                    set slot 29 of metadata tag "pref" of player to gray dye named "&7Glow Effect" with lore "" and "&b&nPuts a glow around your skin" and "" and "&7Because of your rank, you'll" and "&7have a %{pref::mycolor::%player's uuid%}% &7glow." and "" and "&7&oClick to enable"
+                    play sound "ui.button.click" at volume 1
+                    send "&8[&3Preferences&8] &7You've disabled &3GLOWING"
+                    remove glowing from player's active potion effects
+
+
+on first join:
+    set {pref::glow::%player's uuid%} to false
+
+
+
+
+function compare(1: inventory, 2: inventory) :: boolean:
+	return false if (name of {_1}) != (name of {_2})
+	return false if (rows of {_1}) != (rows of {_2})
+	return false if type of {_1} != type of {_2}
+	return true
+

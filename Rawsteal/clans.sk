@@ -1,0 +1,817 @@
+command /clan [<text>] [<text>] [<text>]:
+    trigger:
+        if arg-1 is not set:
+            set {_clan} to getClan(player)
+            if ({_clan} is not set):
+                sendClansHelpMessage(player)        
+        if arg-1 is "create":
+            if arg-2 is not set:
+                sendClansHelpMessage(player)
+                stop
+            if arg-3 is not set:
+                sendClansHelpMessage(player)
+                stop
+            createClan(player, arg-2, arg-3)
+            stop
+        if arg-1 is "disband":
+            disbandClan(player)
+            stop
+        if arg-1 is "invite":
+            invitePlayerToClan(player, arg-2 parsed as a player)
+            stop
+        if arg-1 is "join":
+            joinClan(player, arg-2)
+            stop
+        if arg-1 is "leave":
+            set {_clan} to getClan(player)
+            leaveClan(player, {_clan})
+            stop
+        if arg-1 is "kick":
+            kickClanMember(player, arg-2 parsed as an offline player)
+            stop
+        if arg-1 is "chat":
+            toggleClanChat(player)
+            stop
+        if arg-1 is "promote":
+            promoteInClan(player, arg-2 parsed as an offline player)
+            stop
+        if arg-1 is "demote":
+            demoteInClan(player, arg-2 parsed as an offline player)
+            stop
+        if arg-1 is "color":
+            set {_clan} to getClan(player)
+            set {_clantag} to getRawClanTag(player)
+            set {_clanOwner} to getClanOwner({_clan})
+            if {_clan} is not set:
+                message "&cYou're not in a clan!" to player
+                stop
+            if {_clanOwner} = player's uuid:
+                set metadata tag "clancolor" of player to chest inventory with 4 rows named "Clan Colors"
+                set slot 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35 of metadata tag "clancolor" of player to gray stained glass pane named "&f"
+                set slot 10 of metadata tag "clancolor" of player to redstone block named "&4DARK_RED" with lore "" and "&7Your clan tag will look like this:" and " &8[&4%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 11 of metadata tag "clancolor" of player to red dye named "&cRED" with lore "" and "&7Your clan tag will look like this:" and " &8[&c%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 12 of metadata tag "clancolor" of player to gold ingot named "&6GOLD" with lore "" and "&7Your clan tag will look like this:" and " &8[&6%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 13 of metadata tag "clancolor" of player to yellow dye named "&eYELLOW" with lore "" and "&7Your clan tag will look like this:" and " &8[&e%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 14 of metadata tag "clancolor" of player to green dye named "&2DARK_GREEN" with lore "" and "&7Your clan tag will look like this:" and " &8[&2%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 15 of metadata tag "clancolor" of player to lime dye named "&aGREEN" with lore "" and "&7Your clan tag will look like this:" and " &8[&a%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 16 of metadata tag "clancolor" of player to light blue dye named "&bLIGHT_BLUE" with lore "" and "&7Your clan tag will look like this:" and " &8[&b%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 19 of metadata tag "clancolor" of player to cyan dye named "&3CYAN" with lore "" and "&7Your clan tag will look like this:" and " &8[&3%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 20 of metadata tag "clancolor" of player to blue dye named "&9BLUE" with lore "" and "&7Your clan tag will look like this:" and " &8[&9%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 21 of metadata tag "clancolor" of player to pink dye named "&dPINK" with lore "" and "&7Your clan tag will look like this:" and " &8[&d%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 22 of metadata tag "clancolor" of player to purple dye named "&5PURPLE" with lore "" and "&7Your clan tag will look like this:" and " &8[&5%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 23 of metadata tag "clancolor" of player to white dye named "&fWHITE" with lore "" and "&7Your clan tag will look like this:" and " &8[&f%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                open (metadata tag "clancolor" of player) to player
+            else if {clansData::%{_clan}%::admins::*} contains player's uuid:
+
+                set metadata tag "clancolor" of player to chest inventory with 4 rows named "Clan Colors"
+                set slot 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35 of metadata tag "clancolor" of player to gray stained glass pane named "&f"
+                set slot 10 of metadata tag "clancolor" of player to redstone block named "&4DARK_RED" with lore "" and "&7Your clan tag will look like this:" and " &8[&4%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 11 of metadata tag "clancolor" of player to red dye named "&cRED" with lore "" and "&7Your clan tag will look like this:" and " &8[&c%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 12 of metadata tag "clancolor" of player to gold ingot named "&6GOLD" with lore "" and "&7Your clan tag will look like this:" and " &8[&6%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 13 of metadata tag "clancolor" of player to yellow dye named "&eYELLOW" with lore "" and "&7Your clan tag will look like this:" and " &8[&e%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 14 of metadata tag "clancolor" of player to green dye named "&2DARK_GREEN" with lore "" and "&7Your clan tag will look like this:" and " &8[&2%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 15 of metadata tag "clancolor" of player to lime dye named "&aGREEN" with lore "" and "&7Your clan tag will look like this:" and " &8[&a%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 16 of metadata tag "clancolor" of player to light blue dye named "&bLIGHT_BLUE" with lore "" and "&7Your clan tag will look like this:" and " &8[&b%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 19 of metadata tag "clancolor" of player to cyan dye named "&3CYAN" with lore "" and "&7Your clan tag will look like this:" and " &8[&3%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 20 of metadata tag "clancolor" of player to blue dye named "&9BLUE" with lore "" and "&7Your clan tag will look like this:" and " &8[&9%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 21 of metadata tag "clancolor" of player to pink dye named "&dPINK" with lore "" and "&7Your clan tag will look like this:" and " &8[&d%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 22 of metadata tag "clancolor" of player to purple dye named "&5PURPLE" with lore "" and "&7Your clan tag will look like this:" and " &8[&5%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                set slot 23 of metadata tag "clancolor" of player to white dye named "&fWHITE" with lore "" and "&7Your clan tag will look like this:" and " &8[&f%{_clantag}%&8]" and "" and "&8&oClick to select!"
+                open (metadata tag "clancolor" of player) to player
+            else if {clansData::%{_clan}%::mods::*} contains player's uuid:
+                send "&cYou need admin or higher in your guild to change the tag color!"
+                stop
+            else if {clansData::%{_clan}%::members::*} contains player's uuid:
+                send "&cYou need admin or higher in your guild to change the tag color!"
+                stop
+        if arg-1 is "info":
+            if arg 2 is not set:
+                sendClansInfoMessage(player)
+                stop
+            else:
+                set {_arg2} to arg 2 parsed as a offline player
+                sendClansInfoOtherMessage(player, {_arg2})
+        if arg-1 is "transfer" or "transferownership":
+            if arg 2 is not set:
+                send "&cPlease supply a player!"
+                stop
+            else:
+                transferClanOwnership(player, arg-2 parsed as an offline player)
+        else if arg 1 != "info" or "help" or "promote" or "demote" or "color" or "kick" or "invite" or "create" or "join" or "leave" or "disband" or "chat" or "transfer" or "transferownership":
+            sendClansHelpMessage(player)
+            stop
+
+
+on chat:
+    if {data::%player's uuid%::clanChatEnabled} is set:
+        set {_clan} to getClan(player)
+        set {_clanOwner} to getClanOwner({_clan})
+        set {_clanOwner} to {_clanOwner} parsed as a offline player
+        if {clansData::%{_clan}%::admins::*} contains player's uuid:
+            messageClan({_clan}, "&bClan > &7%player's prefix%%player% &c[Admin]&7: &f%message%")
+            cancel event
+        else if {clansData::%{_clan}%::mods::*} contains player's uuid:
+            messageClan({_clan}, "&bClan > &7%player's prefix%%player% &e[Mod]&7: &f%message%")
+            cancel event
+        else if {clansData::%{_clan}%::members::*} contains player's uuid:
+            messageClan({_clan}, "&bClan > &7%player's prefix%%player% &7[Member]&7: &f%message%")
+            cancel event
+        else if {_clanOwner}'s uuid = player's uuid:
+            messageClan({_clan}, "&bClan > &7%player's prefix%%player% &4[Owner]&7: &f%message%")
+            cancel event
+
+on damage of a player:
+    attacker is player:
+        set {_same} to isInSameClan(attacker, victim)
+        if {_same} is true:
+            cancel event
+            send "&cYou cannot attack clan members." to attacker
+           
+function sendClansHelpMessage(p: player):
+    message "" to {_p}
+    message "&fClans &8| &7Listing help commands" to {_p}
+    message "" to {_p}
+    message "&8» &7/clan create &f<name> <tag> &8- &7&oCreate a clan" to {_p}
+    message "&8» &7/clan invite &f<player> &8- &7&oInvite someone into your clan &8[requires mod in clan]" to {_p}
+    message "&8» &7/clan kick &f<player> &8- &7&oKick someone from your clan &8[requires mod in clan]" to {_p}
+    message "&8» &7/clan join &f<clan> &8- &7&oJoin a clan" to {_p}
+    message "&8» &7/clan chat &8- &7&oToggle clan chat" to {_p}
+    message "&8» &7/clan leave &8- &7&oLeave your current clan" to {_p}
+    message "&8» &7/clan disband &8- &7&oDisband your clan [with confirmation]" to {_p}
+    message "&8» &7/clan info &f<player> &8- &7&oView yours or anothers clan information" to {_p}
+    message "&8» &7/clan transfer &f<player> &8- &7&oTransfer ownership to a clan member [with confirmation]" to {_p}
+    message "&8» &7/clan promote &f<player &8- &7&oPromotes a clan member to the next rank &8[requires admin in clan]" to {_p}
+    message "&8» &7/clan demote &f<player> &8- &7&oDemotes a clan member to the rank below them &8[requires admin in clan]" to {_p}
+    message "&8» &7/clan color &f<player> &8- &7&oSelect the clan tag color &8[requires admin in clan]" to {_p}
+    message "" to {_p}
+
+function createClan(p: player, n: text, t: text):
+    if length of {_n} is more than 10:
+        message "&cYour clan name needs to be less then 11 characters!" to {_p}
+        stop
+    if length of {_t} is more than 4:
+        message "&cYour clan tag needs to be less then 5 characters!" to {_p}
+        stop
+    if {_t} contains "+" or "-" or "*":
+        send "&cThese symbols are blacklisted!" to {_p}
+        stop
+   
+    set {_canCreateOwner} to true
+    set {_canCreateUUID} to true
+    set {_canCreateName} to true
+    set {_canCreateTag} to true
+    loop {clansData::*}:
+        if {clansData::%loop-value%::owner} is {_p}'s uuid:
+            set {_canCreateOwner} to false
+        loop {clansData::%loop-value%::members::*}:
+            if loop-value-2 is {_p}'s uuid:
+                set {_canCreateUUID} to false
+        if {clansData::%loop-value%::name} is {_n}:
+            set {_canCreateName} to false
+        if {clansData::%loop-value%::tag} is {_t}:
+            set {_canCreateTag} to false
+    if {_canCreateOwner} is false:
+        message "&cYou're already in a clan." to {_p}
+        stop
+    if {_canCreateName} is false:
+        message "&cThat clan name is already taken!" to {_p}
+        stop
+    if {_canCreateTag} is false:
+        message "&cThat clan tag is already taken!" to {_p}
+        stop
+    if {_canCreateUUID} is false:
+        message "&cYou're already in a clan." to {_p}
+        stop
+    add {_n} to {clansData::*}
+    set {clansData::%{_n}%::owner} to {_p}'s uuid
+    set {clansData::%{_n}%::name} to {_n}
+    set {clansData::%{_n}%::color} to "&f"
+    set {clansData::%{_n}%::tag} to "%{_t}%"
+    broadcast "&8» &7The clan &f%{_n}%&7 was created by &7&o%{_p}'s prefix%%{_p}%&7."
+function transferClanOwnership(p: player, t: player):
+    set {_clan} to getClan({_p})
+    set {_clant} to getClan({_t})
+    set {_clanOwner} to getClanOwner({_clan})
+    if {_clan} is not set:
+        send "&cYou're not in a clan!" to {_p}
+        stop
+    if {_clant} != {_clan}:
+        send "&cThat player is not in your clan!" to {_p}
+        stop
+    if {_clanOwner} != {_p}'s uuid:
+        send "&cYou need to be the owner of this clan to run this command!" to {_p}
+        stop
+    if {_t} = {_p}:
+        send "&cYou cannot transfer ownership to yourself!" to {_p}
+        stop
+    set {_uuid} to {_p}'s uuid
+    if {clansData::confirmOwnership::%{_uuid}%} isn't set:
+        message "&8» &fAre you sure you want to transfer clan ownership to %{_t}'s prefix%%{_t}%&f? &8(&710 seconds&8)" to {_p}
+        set {clansData::confirmOwnership::%{_uuid}%} to false
+        wait 10 seconds
+        if {clansData::confirmOwnership::%{_uuid}%} is set:
+            delete {clansData::confirmOwnership::%{_uuid}%}
+        stop
+    messageClan({_clan}, "&bClan > &7%{_p}'s prefix%%{_p}% transferred ownership of the clan to %{_t}'s prefix%%{_t}%&7.")
+    set {clansData::%{_clan}%::owner} to {_t}'s uuid
+    remove {_t}'s uuid from {clansData::%{_clan}%::members::*}
+    remove {_t}'s uuid from {clansData::%{_clan}%::admins::*}
+    remove {_t}'s uuid from {clansData::%{_clan}%::mods::*}
+    add {_p}'s uuid to {clansData::%{_clan}%::admins::*}
+    
+
+
+function disbandClan(p: player):
+    set {_clan} to getClan({_p})
+    if {_clan} is not set:
+        message "&You're already in a clan." to {_p}
+        stop
+    if {clansData::%{_clan}%::owner} is not {_p}'s uuid:
+        message "&cYou need to be the owner to disband this clan!" to {_p}
+        stop
+    set {_uuid} to {_p}'s uuid
+    if {clansData::confirmDisband::%{_uuid}%} isn't set:
+        message "&8» &fAre you sure you want to disband? &8(&710 seconds&8)" to {_p}
+        set {clansData::confirmDisband::%{_uuid}%} to false
+        wait 10 seconds
+        if {clansData::confirmDisband::%{_uuid}%} is set:
+            delete {clansData::confirmDisband::%{_uuid}%}
+        stop
+    messageClanWithoutOwner({_p}, "&bClan > &7Your clan was disbanded by &f%{_p}'s prefix%%{_p}%&7.")
+    
+    loop {clansData::%{_clan}%::members::*}:
+        if {data::%loop-value%::clanChatEnabled} is set:
+            delete {data::%loop-value%::clanChatEnabled}
+    delete {data::%{_uuid}%::clanChatEnabled}    
+    remove {_clan} from {clansData::*}
+    delete {clansData::%{_clan}%}
+    delete {clansData::%{_clan}%::members::*}
+    delete {clansData::%{_clan}%::mods::*}
+    delete {clansData::%{_clan}%::admins::*}
+    delete {clansData::%{_clan}%::tag}
+    delete {clansData::%{_clan}%::owner}
+    delete {clansData::%{_clan}%::name}
+    delete {clansData::%{_clan}%::color}
+    message "&cYou've disbanded your clan" to {_p}
+    
+function getClan(p: offline player) :: text:
+    loop {clansData::*}:
+        if {clansData::%loop-value%::owner} is {_p}'s uuid:
+            return "%loop-value%"
+            stop
+        loop {clansData::%loop-value%::members::*}:
+            if {_p}'s uuid is loop-value-2:
+                return "%loop-value-1%"
+                stop
+        loop {clansData::%loop-value%::mods::*}:
+            if {_p}'s uuid is loop-value-2:
+                return "%loop-value-1%"
+                stop
+        loop {clansData::%loop-value%::admins::*}:
+            if {_p}'s uuid is loop-value-2:
+                return "%loop-value-1%"
+                stop
+        
+function getClanOwner(c: text) :: text:
+    return {clansData::%{_c}%::owner}
+
+function messageClanWithoutOwner(p: player, s: text):
+    set {_clan} to getClan({_p})
+    loop {clansData::%{_clan}%::members::*}: 
+        if loop-value is {_p}'s uuid:
+            continue
+        message "%{_s}%" to loop-value parsed as a player
+    loop {clansData::%{_clan}%::mods::*}: 
+        if loop-value is {_p}'s uuid:
+            continue
+        message "%{_s}%" to loop-value parsed as a player
+    loop {clansData::%{_clan}%::admins::*}: 
+        if loop-value is {_p}'s uuid:
+            continue
+        message "%{_s}%" to loop-value parsed as a player
+
+function messageClan(c: text, s: text):
+    message "%{_s}%" to {clansData::%{_c}%::owner} parsed as a player
+    loop {clansData::%{_c}%::members::*}: 
+        message "%{_s}%" to loop-value parsed as a player
+    loop {clansData::%{_c}%::mods::*}:
+        message "%{_s}%" to loop-value parsed as a player
+    loop {clansData::%{_c}%::admins::*}:
+        message "%{_s}%" to loop-value parsed as a player
+
+
+function promoteInClan(p: player, target: player):
+    set {_clan} to getClan({_p})
+    if {_clan} is not set:
+        message "&cYou're not in a clan!" to {_p}
+        stop
+    set {_clant} to getClan({_target})
+    if {_clant} != {_clan}:
+        message "&cThat player is not in your clan!" to {_p}
+        stop
+    set {_clanOwner} to getClanOwner({_clan})
+    if {_clanOwner} is {_p}'s uuid:
+        if {_target} != {_p}:
+            if {clansData::%{_clan}%::admins::*} contains {_target}'s uuid:
+                send "&cThat player is already the highest rank they can be promoted to!" to {_p}
+                stop
+            else:
+                if {clansData::%{_clan}%::mods::*} contains {_target}'s uuid:
+                    add {_target}'s uuid to {clansData::%{_clan}%::admins::*}
+                    remove {_target}'s uuid from {clansData::%{_clan}%::mods::*}
+                    messageClan({_clan}, "&bClan > %{_target}'s prefix%%{_target}% &7was promoted by %{_p}'s prefix%%{_p}% &7to &cAdministrator&7.")
+                else if {clansData::%{_clan}%::mods::*} does not contain {_target}'s uuid:
+                    if {clansData::%{_clan}%::admins::*} does not contain {_target}'s uuid:
+                        if {clansData::%{_clan}%::members::*} contains {_target}'s uuid:
+                            remove {_target}'s uuid from {clansData::%{_clan}%::members::*}
+                            add {_target}'s uuid to {clansData::%{_clan}%::mods::*}
+                            messageClan({_clan}, "&bClan > %{_target}'s prefix%%{_target}% &7was promoted by %{_p}'s prefix%%{_p}% &7to &eModerator&7.")
+        else:
+            send "&cYou're already the owner of the clan! You cannot be promoted." to {_p}
+    else if {clansData::%{_clan}%::admins::*} contains {_p}'s uuid:
+        if {_clanOwner} = {_target}'s uuid:
+            send "&cYou cannot promote the owner!" to {_p}
+        else:
+            if {_target} != {_p}:
+                if {clansData::%{_clan}%::admins::*} contains {_target}'s uuid:
+                    send "&cThat player is already the highest rank they can be promoted to!" to {_p}
+                    stop
+                else:
+                    if {clansData::%{_clan}%::mods::*} contains {_target}'s uuid:
+                        add {_target}'s uuid to {clansData::%{_clan}%::admins::*}
+                        remove {_target}'s uuid from {clansData::%{_clan}%::mods::*}
+                        messageClan({_clan}, "&bClan > %{_target}'s prefix%%{_target}% &7was promoted by %{_p}'s prefix%%{_p}% &7to &cAdministrator&7.")
+
+                    else if {clansData::%{_clan}%::mods::*} does not contain {_target}'s uuid:
+                        if {clansData::%{_clan}%::admins::*} does not contain {_target}'s uuid:
+                            if {clansData::%{_clan}%::members::*} contains {_target}'s uuid:
+                                remove {_target}'s uuid from {clansData::%{_clan}%::members::*}
+                                add {_target}'s uuid to {clansData::%{_clan}%::mods::*}
+                                messageClan({_clan}, "&bClan > %{_target}'s prefix%%{_target}% &7was promoted by %{_p}'s prefix%%{_p}% &7to &eModerator&7.")
+            else:
+                send "&cYou cannot promote yourself!" to {_p}
+    else:
+        send "&cYou need admin in your clan or higher to promote people!" to {_p}
+
+function demoteInClan(p: player, target: player):
+    set {_clan} to getClan({_p})
+    if {_clan} is not set:
+        message "&cYou're not in a clan!" to {_p}
+        stop
+    set {_clant} to getClan({_target})
+    if {_clant} != {_clan}:
+        message "&cThat player is not in your clan!" to {_p}
+        stop
+    set {_clanOwner} to getClanOwner({_clan})
+    if {_clanOwner} is {_p}'s uuid:
+        if {_target} != {_p}:
+            if {clansData::%{_clan}%::admins::*} contains {_target}'s uuid:
+                remove {_target}'s uuid from {clansData::%{_clan}%::admins::*}
+                add {_target}'s uuid to {clansData::%{_clan}%::mods::*}
+                messageClan({_clan}, "&bClan > %{_target}'s prefix%%{_target}% &7was demoted by %{_p}'s prefix%%{_p}% &7to &eModerator&7.")
+            else if {clansData::%{_clan}%::mods::*} contains {_target}'s uuid:
+                remove {_target}'s uuid from {clansData::%{_clan}%::mods::*}
+                add {_target}'s uuid to {clansData::%{_clan}%::members::*}
+                messageClan({_clan}, "&bClan > %{_target}'s prefix%%{_target}% &7was demoted by %{_p}'s prefix%%{_p}% &7to &fMember&7.")
+            else if {clansData::%{_clan}%::members::*} contains {_target}'s uuid:
+                send "&cThat player is a member!" to {_p}
+                stop
+        else:
+            send "&cYou're the owner of the clan! You cannot be demoted." to {_p}
+            
+    else if {clansData::%{_clan}%::admins::*} contains {_p}'s uuid:
+        if {_clanOwner} = {_target}'s uuid:
+            send "&cYou cannot demote the owner!" to {_p}
+        else:
+            if {_target} != {_p}:
+                if {clansData::%{_clan}%::admins::*} contains {_target}'s uuid:
+                    send "&cYou cannot demote someone with the same rank as you!" to {_p}
+                    stop
+                else:
+                    if {clansData::%{_clan}%::mods::*} contains {_target}'s uuid:
+                        remove {_target}'s uuid from {clansData::%{_clan}%::mods::*}
+                        add {_target}'s uuid to {clansData::%{_clan}%::members::*}
+                        messageClan({_clan}, "&bClan > %{_target}'s prefix%%{_target}% &7was demoted by %{_p}'s prefix%%{_p}% &7to &fMember&7.")
+            else:
+                send "&cYou cannot demote yourself!" to {_p}
+    else:
+        send "&cYou need admin in your clan or higher to demote people!" to {_p}
+
+function invitePlayerToClan(p: player, t: player):
+    set {_clan} to getClan({_p})
+    set {_targetClan} to getClan({_t})
+    set {_clanOwner} to getClanOwner({_clan})
+    if {_clan} is not set:
+        send "&cYou're not in a clan!" to {_p}
+        stop
+
+    if {_clanOwner} = {_p}'s uuid:
+        if {_targetClan} is {_clan}:
+            message "&cThat player is in your clan already." to {_p}
+            stop
+        if {clansData::invites::%{_clan}%::*} contains {_t}'s uuid:
+            message "&cThat player has a active invite to this clan! Wait for them to accept it." to {_p}
+            stop
+        if {clansData::invites::%{_clan}%::*} does not contain {_t}'s uuid:
+            message "&bClan > &7You invited %{_t}'s prefix%%{_t}% &7to join your clan." to {_p}
+            add {_t}'s uuid to {clansData::invites::%{_clan}%::*}
+            messageClan({_clan}, "&bClan > &7%{_p}'s prefix%%{_p}% &7invited &f%{_t}'s prefix%%{_t}% &7to join the clan&7, They have 3 minutes to join.")
+            send formatted "" and "&7You were invited to join &f%{_clan}% &7by &7&o%{_p}'s prefix%%{_p}%&7" and "<run command:/clan join %{_clan}%>&f[Click here]<reset> &7or run /clan join %{_clan}% to join this clan." and "&7This invite will expire in &b3 minutes&7." and "" to {_t}
+            wait 3 minutes
+            if {clansData::invites::%{_clan}%::*} does not contain {_t}'s uuid:
+                stop
+            remove {_t}'s uuid from {clansData::invites::%{_clan}%::*}
+            message "&cYour invite from &e%{_clan}% &chas expired." to {_t}
+
+
+    else if {_clanOwner} is not {_p}'s uuid:
+        if {clansData::%{_clan}%::mods::*} contains {_p}'s uuid:
+            if {_targetClan} is {_clan}:
+                message "&cThat player is in your clan already." to {_p}
+                stop
+            else:
+                if {clansData::invites::%{_clan}%::*} contains {_t}'s uuid:
+                    message "&cThat player has a active invite to this clan! Wait for them to accept it." to {_p}
+                    stop
+                else:
+                    message "&bClan > &7You invited %{_t}'s prefix%%{_t}% &7to join your clan." to {_p}
+                    add {_t}'s uuid to {clansData::invites::%{_clan}%::*}
+                    messageClan({_clan}, "&bClan > &7%{_p}'s prefix%%{_p}% &7invited &f%{_t}'s prefix%%{_t}% &7to join the clan&7, They have 3 minutes to join.")
+                    send formatted "" and "&7You were invited to join &f%{_clan}% &7by &7&o%{_p}'s prefix%%{_p}%&7" and "<run command:/clan join %{_clan}%>&f[Click here]<reset> &7or run /clan join %{_clan}% to join this clan." and "&7This invite will expire in &b3 minutes&7." and "" to {_t}
+                    wait 3 minutes
+                    if {clansData::invites::%{_clan}%::*} does not contain {_t}'s uuid:
+                        stop
+                    remove {_t}'s uuid from {clansData::invites::%{_clan}%::*}
+                    message "&cYour invite from &e%{_clan}% &chas expired." to {_t}
+                    stop
+        else if {clansData::%{_clan}%::admins::*} contains {_p}'s uuid:
+            if {_targetClan} is {_clan}:
+                message "&cThat player is in your clan already." to {_p}
+                stop
+            else:
+                if {clansData::invites::%{_clan}%::*} contains {_t}'s uuid:
+                    message "&cThat player has a active invite to this clan! Wait for them to accept it." to {_p}
+                    stop
+                else:
+                    message "&bClan > &7You invited %{_t}'s prefix%%{_t}% &7to join your clan." to {_p}
+                    add {_t}'s uuid to {clansData::invites::%{_clan}%::*}
+                    messageClan({_clan}, "&bClan > &7%{_p}'s prefix%%{_p}% &7invited &f%{_t}'s prefix%%{_t}% &7to join the clan&7, They have 3 minutes to join.")
+                    send formatted "" and "&7You were invited to join &f%{_clan}% &7by &7&o%{_p}'s prefix%%{_p}%&7" and "<run command:/clan join %{_clan}%>&f[Click here]<reset> &7or run /clan join %{_clan}% to join this clan." and "&7This invite will expire in &b3 minutes&7." and "" to {_t}
+                    wait 3 minutes
+                    if {clansData::invites::%{_clan}%::*} does not contain {_t}'s uuid:
+                        stop
+                    remove {_t}'s uuid from {clansData::invites::%{_clan}%::*}
+                    message "&cYour invite from &e%{_clan}% &chas expired." to {_t}
+                    stop
+        else:
+            send "&cYou need mod or higher in your clan to invite people!" to {_p}
+
+function joinClan(p: player, c: text):
+    set {_clan} to getClan({_p})
+    if {_clan} is set:
+        message "&cYou're already in a clan!" to {_p}
+        stop
+    if {clansData::invites::%{_c}%::*} does not contain {_p}'s uuid:
+        message "&cYou do not have permission to join that clan." to {_p}
+        stop
+    remove {_p}'s uuid from {clansData::invites::%{_c}%::*}
+    add {_p}'s uuid to {clansData::%{_c}%::members::*}
+    set {_clan} to getClan({_p})
+    messageClan({_clan}, "&bClan > &a[+] &7&o%{_p}'s prefix%%{_p}% &7has joined your clan.")
+    message "&8» &aYou joined &f%{_c}%&8." to {_p}
+
+function leaveClan(p: player, c: text):
+    set {_clan} to getClan({_p})
+    if {_clan} is not set:
+        message "&cYou're not in a clan!" to {_p}
+        stop
+    set {_clanOwner} to getClanOwner({_clan})
+    if {_clanOwner} = {_p}'s uuid:
+        send "&cYou cannot leave your own clan! Use /clan disband first or /clan transfer [player]" to {_p}
+        stop
+    remove {_p}'s uuid from {clansData::%{_c}%::members::*}
+    remove {_p}'s uuid from {clansData::%{_c}%::mods::*}
+    remove {_p}'s uuid from {clansData::%{_c}%::admins::*}
+    messageClan({_clan}, "&bClan > &c[-] %{_p}'s prefix%%{_p}% &7left your clan.")
+    message "&bClan > &7You left &C%{_c}%&7." to {_p}
+    
+    set {_uuid} to {_p}'s uuid
+    if {data::%{_uuid}%::clanChatEnabled} is set:
+        delete {data::%{_uuid}%::clanChatEnabled}
+
+function kickClanMember(p: offline player, t: player):
+    set {_clan} to getClan({_p})
+    set {_clant} to getClan({_t})
+    if {_clan} is not set:
+        message "&cYou're not in a clan!" to {_p}
+        stop
+    if {_clant} != {_clan}:
+        message "&cThat player was not found in this clan." to {_p}
+        stop
+    set {_clanOwner} to getClanOwner({_clan})
+    if {_clanOwner} = {_t}'s uuid:
+        send "&cYou cannot kick this player." to {_p}
+        stop
+    if {_clanOwner} = {_p}'s uuid:
+        remove {_t}'s uuid from {clansData::%{_clan}%::members::*}
+        remove {_t}'s uuid from {clansData::%{_clan}%::mods::*}
+        remove {_t}'s uuid from {clansData::%{_clan}%::admins::*}
+        messageClan({_clan}, "&bClan > %{_t}'s prefix%%{_t}% &7was kicked from your clan by %{_p}'s prefix%%{_p}%&7.")
+        message "&8» &aYou have kicked &f%{_t}%&a from your clan." to {_p}
+        message "&8» &cYou have been kicked from &e%{_clan}%&8." to {_t}
+        set {_uuid} to {_t}'s uuid
+        if {data::%{_uuid}%::clanChatEnabled} is set:
+            delete {data::%{_uuid}%::clanChatEnabled}
+
+
+    else if {_clanOwner} is not {_p}'s uuid:
+        if {_t} != {_p}:
+            if {clansData::%{_clan}%::mods::*} contains {_p}'s uuid:
+                if {clansData::%{_clan}%::mods::*} contains {_t}'s uuid:
+                    send "&cYou cannot kick someone with the same clan rank as you!" to {_p}
+                    stop
+                else:
+                    remove {_t}'s uuid from {clansData::%{_clan}%::members::*}
+                    remove {_t}'s uuid from {clansData::%{_clan}%::mods::*}
+                    remove {_t}'s uuid from {clansData::%{_clan}%::admins::*}
+                    messageClan({_clan}, "&bClan > %{_t}'s prefix%%{_t}% &7was kicked from your clan by %{_p}'s prefix%%{_p}%&7.")
+                    message "&8» &aYou have kicked &f%{_t}%&a from your clan." to {_p}
+                    message "&8» &cYou have been kicked from &e%{_clan}%&8." to {_t}
+                    set {_uuid} to {_t}'s uuid
+                    if {data::%{_uuid}%::clanChatEnabled} is set:
+                        delete {data::%{_uuid}%::clanChatEnabled}
+            else if {clansData::%{_clan}%::admins::*} contains {_p}'s uuid:
+                if {clansData::%{_clan}%::admins::*} contains {_t}'s uuid:
+                    send "&cYou cannot kick someone with the same clan rank as you!" to {_p}
+                    stop
+                else:
+                    remove {_t}'s uuid from {clansData::%{_clan}%::members::*}
+                    remove {_t}'s uuid from {clansData::%{_clan}%::mods::*}
+                    remove {_t}'s uuid from {clansData::%{_clan}%::admins::*}
+                    messageClan({_clan}, "&bClan > %{_t}'s prefix%%{_t}% &7was kicked from your clan by %{_p}'s prefix%%{_p}%&7.")
+                    message "&8» &aYou have kicked &f%{_t}%&a from your clan." to {_p}
+                    message "&8» &cYou have been kicked from &e%{_clan}%&8." to {_t}
+                    set {_uuid} to {_t}'s uuid
+                    if {data::%{_uuid}%::clanChatEnabled} is set:
+                        delete {data::%{_uuid}%::clanChatEnabled}
+            else:
+                send "&cYou need mod or higher in your clan to kick people!" to {_p}
+        else:
+            send "&cYou cannot kick yourself!" to {_p}
+
+function getClanTag(p: player) :: text:
+    set {_clan} to getClan({_p})
+    if {_clan} is not set:
+        return "&7&o[&cNone&7&o] "
+        stop
+    if {clansData::%{_clan}%::mods::*} contains {_p}'s uuid:
+        return "&7&o[%{clansData::%{_clan}%::color}%-%{clansData::%{_clan}%::tag}%&7&o] "
+    else if {clansData::%{_clan}%::members::*} contains {_p}'s uuid:
+        return "&7&o[%{clansData::%{_clan}%::color}%%{clansData::%{_clan}%::tag}%&7&o] "
+    else if {clansData::%{_clan}%::admins::*} contains {_p}'s uuid:
+        return "&7&o[%{clansData::%{_clan}%::color}%+%{clansData::%{_clan}%::tag}%&7&o] "
+    else if {clansData::%{_clan}%::owner} = {_p}'s uuid:
+        return "&7&o[%{clansData::%{_clan}%::color}%*%{clansData::%{_clan}%::tag}%&7&o] "
+
+on load:
+	loop all players:
+		set {_clan} to getClan(loop-player)
+		if {clansData::%{_clan}%::color} is not set:
+			set {clansData::%{_clan}%::color} to "&c"
+			
+on join:
+	set {_clan} to getClan(player)
+	if {clansData::%{_clan}%::color} is not set:
+		set {clansData::%{_clan}%::color} to "&c"
+
+function getRawClanTag(p: player) :: text:
+    set {_clan} to getClan({_p})
+    if {_clan} is not set:
+        return "None"
+        stop
+    if {clansData::%{_clan}%::mods::*} contains {_p}'s uuid:
+        return "-%{clansData::%{_clan}%::tag}%"
+    else if {clansData::%{_clan}%::members::*} contains {_p}'s uuid:
+        return "%{clansData::%{_clan}%::tag}%"
+    else if {clansData::%{_clan}%::admins::*} contains {_p}'s uuid:
+        return "+%{clansData::%{_clan}%::tag}%"
+    else if {clansData::%{_clan}%::owner} = {_p}'s uuid:
+        return "*%{clansData::%{_clan}%::tag}%"
+
+
+function toggleClanChat(p: player):
+    set {_clan} to getClan({_p})
+    if {_clan} is not set:
+        message "&cYou're not in a clan!" to {_p}
+        stop
+    set {_uuid} to {_p}'s uuid
+    if {data::%{_uuid}%::clanChatEnabled} is not set:
+        set {data::%{_uuid}%::clanChatEnabled} to true
+        message "&aYou enabled clan chat." to {_p}
+    else: 
+        delete {data::%{_uuid}%::clanChatEnabled}
+        message "&cYou disabled clan chat." to {_p}
+
+
+function sendClansInfoMessage(p: player):
+    set {_clan} to getClan({_p})
+    if {_clan} is not set:
+        message "&cYou're not in a clan!" to {_p}
+        stop
+    message "" to {_p}
+    message "&7%{_clan}% &finformation: &7(%{clansData::%{_clan}%::tag}%&7)" to {_p}
+    message "" to {_p}
+    message "&7Owner: &f%{clansData::%{_clan}%::owner} parsed as a offline player%" to {_p}
+    message "&7Administrators:" to {_p}
+    if {clansData::%{_clan}%::admins::*} is not set:
+        message "&fNone" to {_p}
+    else:
+        loop {clansData::%{_clan}%::admins::*}:
+            message "&f%loop-value parsed as a offline player%" to {_p}
+    message "&7Moderators:" to {_p}
+    if {clansData::%{_clan}%::mods::*} is not set:
+        message "&fNone" to {_p}
+    else:
+        loop {clansData::%{_clan}%::mods::*}:
+            message "&f%loop-value parsed as a offline player%" to {_p}
+    message "" to {_p}
+    message "&7Members:" to {_p}
+    if {clansData::%{_clan}%::members::*} is not set:
+        message "&fNone" to {_p}
+    else:
+        loop {clansData::%{_clan}%::members::*}:
+            message "&f%loop-value parsed as a offline player%" to {_p}
+    message "" to {_p}
+function sendClansInfoOtherMessage(p: player, target: player):
+    set {_clan} to getClan({_target})
+    if {_clan} is not set:
+        message "&cThey're not in a clan!" to {_p}
+        stop
+    message "" to {_p}
+    message "&7%{_clan}% &finformation: &7(%{clansData::%{_clan}%::tag}%&7)" to {_p}
+    message "" to {_p}
+    message "&7Owner: &f%{clansData::%{_clan}%::owner} parsed as a offline player%" to {_p}
+    message "&7Administrators:" to {_p}
+    if {clansData::%{_clan}%::admins::*} is not set:
+        message "&fNone" to {_p}
+    else:
+        loop {clansData::%{_clan}%::admins::*}:
+            message "&f%loop-value parsed as a offline player%" to {_p}
+    message "&7Moderators:" to {_p}
+    if {clansData::%{_clan}%::mods::*} is not set:
+        message "&fNone" to {_p}
+    else:
+        loop {clansData::%{_clan}%::mods::*}:
+            message "&f%loop-value parsed as a offline player%" to {_p}
+    message "" to {_p}
+    message "&7Members:" to {_p}
+    if {clansData::%{_clan}%::members::*} is not set:
+        message "&fNone" to {_p}
+    else:
+        loop {clansData::%{_clan}%::members::*}:
+            message "&f%loop-value parsed as a offline player%" to {_p}
+    message "" to {_p}
+
+function isInSameClan(p: player, t: player) :: boolean:
+    set {_clan} to getClan({_p})
+    set {_targetsClan} to getClan({_t})
+
+    if {_clan} is {_targetsClan}:
+        return true
+        stop
+    return false
+
+
+command resetclans:
+    permission: op
+    permission message: &cYou do not have permission to use this command.
+    trigger:
+        set {_before} to unix timestamp of now
+        delete {clansData::*}
+        send "&a&lResetted all clans.  &8(&f%difference between unix timestamp of now and {_before}%&fms&8)"
+        
+        
+        
+command /getclantag:
+    permission: op
+    trigger:
+        loop all players:
+            set {_clan} to getClanTag(loop-player)
+        send "Done!"
+
+command /testcolor:
+    permission: op
+    trigger:
+        set {_clan} to getClan(player)
+        set {_clantag} to getRawClanTag(player)
+        if {_clan} is not set:
+            message "&cYou're not in a clan!" to player
+            stop
+
+        set metadata tag "clancolor" of player to chest inventory with 4 rows named "Clan Colors"
+        set slot 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35 of metadata tag "clancolor" of player to gray stained glass pane named "&f"
+        set slot 10 of metadata tag "clancolor" of player to redstone block named "&4DARK_RED" with lore "" and "&7Your clan tag will look like this:" and " &8[&4%{_clantag}%&8]" and "" and "&8&oClick to select!"
+        set slot 11 of metadata tag "clancolor" of player to red dye named "&cRED" with lore "" and "&7Your clan tag will look like this:" and " &8[&c%{_clantag}%&8]" and "" and "&8&oClick to select!"
+        set slot 12 of metadata tag "clancolor" of player to gold ingot named "&6GOLD" with lore "" and "&7Your clan tag will look like this:" and " &8[&6%{_clantag}%&8]" and "" and "&8&oClick to select!"
+        set slot 13 of metadata tag "clancolor" of player to yellow dye named "&eYELLOW" with lore "" and "&7Your clan tag will look like this:" and " &8[&e%{_clantag}%&8]" and "" and "&8&oClick to select!"
+        set slot 14 of metadata tag "clancolor" of player to green dye named "&2DARK_GREEN" with lore "" and "&7Your clan tag will look like this:" and " &8[&2%{_clantag}%&8]" and "" and "&8&oClick to select!"
+        set slot 15 of metadata tag "clancolor" of player to lime dye named "&aGREEN" with lore "" and "&7Your clan tag will look like this:" and " &8[&a%{_clantag}%&8]" and "" and "&8&oClick to select!"
+        set slot 16 of metadata tag "clancolor" of player to light blue dye named "&bLIGHT_BLUE" with lore "" and "&7Your clan tag will look like this:" and " &8[&2%{_clantag}%&8]" and "" and "&8&oClick to select!"
+        set slot 19 of metadata tag "clancolor" of player to cyan dye named "&3CYAN" with lore "" and "&7Your clan tag will look like this:" and " &8[&3%{_clantag}%&8]" and "" and "&8&oClick to select!"
+        set slot 20 of metadata tag "clancolor" of player to blue dye named "&9BLUE" with lore "" and "&7Your clan tag will look like this:" and " &8[&9%{_clantag}%&8]" and "" and "&8&oClick to select!"
+        set slot 21 of metadata tag "clancolor" of player to pink dye named "&dPINK" with lore "" and "&7Your clan tag will look like this:" and " &8[&d%{_clantag}%&8]" and "" and "&8&oClick to select!"
+        set slot 22 of metadata tag "clancolor" of player to purple dye named "&5PURPLE" with lore "" and "&7Your clan tag will look like this:" and " &8[&5%{_clantag}%&8]" and "" and "&8&oClick to select!"
+        set slot 23 of metadata tag "clancolor" of player to white dye named "&fWHITE" with lore "" and "&7Your clan tag will look like this:" and " &8[&f%{_clantag}%&8]" and "" and "&8&oClick to select!"
+        open (metadata tag "clancolor" of player) to player
+
+
+on inventory click:
+    set {_clan} to getClan(player)
+    if compare(metadata tag "clancolor" of player, event-inventory) = true:
+        cancel event
+        if index of event-slot = 10:
+            set {clansData::%{_clan}%::color} to "&4"
+            messageClan({_clan}, "&bClan > %player's prefix%%player% &7updated the clan color to &4DARK_RED&7.")
+            send "&aYou selected &4DARK RED &aas your clan color!"
+            close player's inventory
+            play sound "ui.button.click" at volume 1 to player
+        if index of event-slot = 11:
+            set {clansData::%{_clan}%::color} to "&c"
+            messageClan({_clan}, "&bClan > %player's prefix%%player% &7updated the clan color to &cRED&7.")
+            send "&aYou selected &cRED &aas your clan color!"
+            close player's inventory
+            play sound "ui.button.click" at volume 1 to player
+        if index of event-slot = 12:
+            set {clansData::%{_clan}%::color} to "&6"
+            send "&aYou selected &6GOLD &aas your clan color!"
+            messageClan({_clan}, "&bClan > %player's prefix%%player% &7updated the clan color to &6GOLD&7.")
+            play sound "ui.button.click" at volume 1 to player
+            close player's inventory
+        if index of event-slot = 13:
+            set {clansData::%{_clan}%::color} to "&e"
+            send "&aYou selected &eYELLOW &aas your clan color!"
+            messageClan({_clan}, "&bClan > %player's prefix%%player% &7updated the clan color to &eYELLOW&7.")
+            play sound "ui.button.click" at volume 1 to player
+            close player's inventory
+        if index of event-slot = 14:
+            set {clansData::%{_clan}%::color} to "&2"
+            play sound "ui.button.click" at volume 1 to player
+            send "&aYou selected &2DARK GREEN &aas your clan color!"
+            messageClan({_clan}, "&bClan > %player's prefix%%player% &7updated the clan color to &2DARK_GREEN&7.")
+            close player's inventory
+        if index of event-slot = 15:
+            set {clansData::%{_clan}%::color} to "&a"
+            play sound "ui.button.click" at volume 1 to player
+            send "&aYou selected &aGREEN &aas your clan color!"
+            messageClan({_clan}, "&bClan > %player's prefix%%player% &7updated the clan color to &aGREEN&7.")
+            close player's inventory
+        if index of event-slot = 16:
+            set {clansData::%{_clan}%::color} to "&b"
+            play sound "ui.button.click" at volume 1 to player
+            send "&aYou selected &bLIGHT BLUE &aas your clan color!"
+            messageClan({_clan}, "&bClan > %player's prefix%%player% &7updated the clan color to &bLIGHT_BLUE&7.")
+            close player's inventory
+        if index of event-slot = 19:
+            set {clansData::%{_clan}%::color} to "&3"
+            play sound "ui.button.click" at volume 1 to player
+            messageClan({_clan}, "&bClan > %player's prefix%%player% &7updated the clan color to &3CYAN&7.")
+            send "&aYou selected &3CYAN &aas your clan color!"
+            close player's inventory
+        if index of event-slot = 20:
+            set {clansData::%{_clan}%::color} to "&9"
+            play sound "ui.button.click" at volume 1 to player
+            messageClan({_clan}, "&bClan > %player's prefix%%player% &7updated the clan color to &9BLUE&7.")
+            send "&aYou selected &9BLUE &aas your clan color!"
+            close player's inventory
+        if index of event-slot = 21:
+            set {clansData::%{_clan}%::color} to "&d"
+            play sound "ui.button.click" at volume 1 to player
+            messageClan({_clan}, "&bClan > %player's prefix%%player% &7updated the clan color to &dPINK&7.")
+            send "&aYou selected &dPINK &aas your clan color!"
+            close player's inventory
+        if index of event-slot = 22:
+            set {clansData::%{_clan}%::color} to "&5"
+            play sound "ui.button.click" at volume 1 to player
+            send "&aYou selected &5PURPLE &aas your clan color!"
+            messageClan({_clan}, "&bClan > %player's prefix%%player% &7updated the clan color to &5PURPLE&7.")
+            close player's inventory
+        if index of event-slot = 23:
+            set {clansData::%{_clan}%::color} to "&f"
+            send "&aYou selected &fWHITE &aas your clan color!"
+            messageClan({_clan}, "&bClan > %player's prefix%%player% &7updated the clan color to &fWHITE&7.")
+            close player's inventory
+            play sound "ui.button.click" at volume 1 to player
+
+command /updateallclancolors:
+    permission: op
+    trigger:
+        loop all players:
+            updateClanColor(loop-player)
+        send "&aUpdated everyones clan colors!"
+
+function updateClanColor(p: player):
+    set {_clan} to getClan({_p})
+    if {clansData::%{_clan}%::color} is not set:
+        set {clansData::%{_clan}%::color} to "&f"
+    else:
+        stop

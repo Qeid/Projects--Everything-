@@ -1,0 +1,16 @@
+on chat:
+    if message contains "nig":
+        cancel event
+        send formatted "&7&lFILTER &8> &f%player% said a blacklisted word &7&o<tooltip:&f&m---------------------------%nl%&7Blacklisted word: &cNig%nl%&7Message said: &c%message%%nl%&f&m--------------------------->[HOVER]" to all players where [input has permission "mod.filter"]
+        send "&c[FILTER] &cBad word found: ""%message%"" "
+        send "&c[FILTER] Word blocked."
+    if message contains "slut":
+        cancel event
+        send formatted "&7&lFILTER &8> &f%player% said a blacklisted word &7&o<tooltip:&f&m---------------------------%nl%&7Blacklisted word: &cSlut%nl%&7Message said: &c%message%%nl%&f&m--------------------------->[HOVER]" to all players where [input has permission "mod.filter"]
+        send "&c[FILTER] &cBad word found: ""%message%"" "
+        send "&c[FILTER] Word blocked."
+    if message contains "cunt":
+        cancel event
+        send formatted "&7&lFILTER &8> &f%player% said a blacklisted word &7&o<tooltip:&f&m---------------------------%nl%&7Blacklisted word: &cCunt%nl%&7Message said: &c%message%%nl%&f&m--------------------------->[HOVER]" to all players where [input has permission "mod.filter"]
+        send "&c[FILTER] &cBad word found: ""%message%"" "
+        send "&c[FILTER] Word blocked."

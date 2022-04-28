@@ -1,0 +1,145 @@
+
+        #set {_timespan} to toTimespan(arg 1)
+options:
+    appeal: discord.gg/
+    no-reason: No provided reason
+    permission-msg: &cInsufficient permissions!
+
+command /tempban [<offline player>] [<text>] [<string>]:
+    permission: punish.tempban
+    permission message: {@permission-msg}
+    aliases: tb, tban
+    trigger:
+        if arg 1 is set:
+            if arg 2 is set:
+                if arg 2 contains "d" or "m" or "s" or "h":
+                    if arg 3 is set:
+                        if first 3 characters of arg 3 is "-s ":
+                            if length of arg 3 < 2:
+                                send "&cPlease provide a reason"
+                                stop
+                            else:
+                                if {punish::true::%uuid of arg 1%} is true:
+                                    if player has permission "punish.replacePunishments":
+                                        set {_timespan} to toTimespan(arg 2)
+                                        set {_reason} to arg 3
+                                        set {_reason} to last (length of {_reason} - 2) characters of {_reason}
+                                        send "&8[Previous punishment removed] &7You temporarily banned &3%arg 1% &7for&c%{_reason}%&7."
+                                        send "&7[Silent] &3%player% &7banned &3%arg 1% &7for&c%{_reason}%&7. [%{_timespan}%&7]" to all players where [input has permission "punish.notify"]
+
+                                        set {punish::duration::%uuid of arg 1%} to {_timespan}
+                                        set {punish::date::%uuid of arg 1%} to now
+                                        set {punish::reason::%uuid of arg 1%} to {_reason}
+                                        set {punish::executor::%uuid of arg 1%} to player
+                                        set {punish::target::%uuid of arg 1%} to arg 1
+                                        set {punish::true::%uuid of arg 1%} to true
+                                        set {punish_temp::true::%uuid of arg 1%} to true
+
+
+
+                                        kick arg 1 due to "&7You have been banned for &c%{_timespan}% &7for&c%{punish::reason::%uuid of arg 1%}%&7.%nl%&7If you think you were &3unfairly &7punished, appeal at &c{@appeal}&7."
+                                        add "&8[Previous punishment removed] &7[%{punish::date::%uuid of arg 1%}%&7] &3%{punish::executor::%uuid of arg 1%}% &7temporarily &fbanned &3%arg 1% &7for &c%{punish::duration::%uuid of arg 1%}% &7for&c%{punish::reason::%uuid of arg 1%}%" to {history::%uuid of arg 1%::*}
+                                        stop
+                                    else:
+                                        send "&c%arg 1% &cis already banned and you don't have permission to replace existing punishments!"
+                                else:
+                                    set {_timespan} to toTimespan(arg 2)
+                                    set {_reason} to arg 3
+                                    set {_reason} to last (length of {_reason} - 2) characters of {_reason}
+
+                                    send "&7You temporarily banned &3%arg 1% &7for&c%{_reason}%&7."
+                                    send "&7[Silent] &3%player% &7banned &3%arg 1% &7for&c%{_reason}%&7. [%{_timespan}%&7]" to all players where [input has permission "punish.notify"]
+
+                                    set {punish::duration::%uuid of arg 1%} to {_timespan}
+                                    set {punish::date::%uuid of arg 1%} to now
+                                    set {punish::reason::%uuid of arg 1%} to {_reason}
+                                    set {punish::executor::%uuid of arg 1%} to player
+                                    set {punish::target::%uuid of arg 1%} to arg 1
+                                    set {punish::true::%uuid of arg 1%} to true
+                                    set {punish_temp::true::%uuid of arg 1%} to true
+
+
+
+                                    kick arg 1 due to "&7You have been banned for &c%{_timespan}% &7for&c%{punish::reason::%uuid of arg 1%}%&7.%nl%&7If you think you were &3unfairly &7punished, appeal at &c{@appeal}&7."
+                                    add "&7[%{punish::date::%uuid of arg 1%}%&7] &3%{punish::executor::%uuid of arg 1%}% &7temporarily &fbanned &3%arg 1% &7for &c%{punish::duration::%uuid of arg 1%}% &7for&c%{punish::reason::%uuid of arg 1%}%" to {history::%uuid of arg 1%::*}
+                                    stop
+
+                        else:
+                            if {punish::true::%uuid of arg 1%} is true:
+                                if player has permission "punish.replacePunishments":
+                                    set {_timespan} to toTimespan(arg 2)
+
+
+                                    set {_reason} to arg 3
+                                    set {punish::duration::%uuid of arg 1%} to {_timespan}
+                                    set {punish::date::%uuid of arg 1%} to now
+                                    set {punish::reason::%uuid of arg 1%} to {_reason}
+                                    set {punish::executor::%uuid of arg 1%} to player
+                                    set {punish::target::%uuid of arg 1%} to arg 1
+                                    set {punish::true::%uuid of arg 1%} to true
+                                    set {punish_temp::true::%uuid of arg 1%} to true
+
+                                    kick arg 1 due to "&7You have been banned for &c%{_timespan}% &7for &c%{punish::reason::%uuid of arg 1%}%&7.%nl%&7If you think you were &3unfairly &7punished, appeal at &c{@appeal}&7."
+                            
+                                    add "&8[Previous punishment removed] &7[%{punish::date::%uuid of arg 1%}%&7] &3%{punish::executor::%uuid of arg 1%}% &7temporarily &fbanned &3%arg 1% &7for &c%{punish::duration::%uuid of arg 1%}% &7for &c%{punish::reason::%uuid of arg 1%}%" to {history::%uuid of arg 1%::*}
+                            
+                                    send "&8[Previous punishment removed] &7You temporarily banned &3%arg 1% &7for &c%arg 3%&7."
+                                    broadcast "&3%player% &7banned &3%arg 1% &7for &c%arg 3%&7. [%{_timespan}%&7]"
+                                else:
+                                    send "&c%arg 1% &cis already banned and you don't have permission to replace existing punishments!"
+
+                            else:
+                                set {_timespan} to toTimespan(arg 2)
+
+
+                                set {_reason} to arg 3
+                                set {punish::duration::%uuid of arg 1%} to {_timespan}
+                                set {punish::date::%uuid of arg 1%} to now
+                                set {punish::reason::%uuid of arg 1%} to {_reason}
+                                set {punish::executor::%uuid of arg 1%} to player
+                                set {punish::target::%uuid of arg 1%} to arg 1
+                                set {punish::true::%uuid of arg 1%} to true
+                                set {punish_temp::true::%uuid of arg 1%} to true
+
+                                kick arg 1 due to "&7You have been banned for &c%{_timespan}% &7for &c%{punish::reason::%uuid of arg 1%}%&7.%nl%&7If you think you were &3unfairly &7punished, appeal at &c{@appeal}&7."
+                            
+                                add "&7[%{punish::date::%uuid of arg 1%}%&7] &3%{punish::executor::%uuid of arg 1%}% &7temporarily &fbanned &3%arg 1% &7for &c%{punish::duration::%uuid of arg 1%}% &7for &c%{punish::reason::%uuid of arg 1%}%" to {history::%uuid of arg 1%::*}
+                            
+                                send "&7You temporarily banned &3%arg 1% &7for &c%arg 3%&7."
+                                broadcast "&3%player% &7banned &3%arg 1% &7for &c%arg 3%&7. [%{_timespan}%&7]"
+
+                    else:
+                        send "&cPlease provide a reason! - /tempban (player) (duration) [-s] (reason)"
+                        send "&c                                                                ^"
+                else:
+                    send "&cPlease enter a valid duration, 1d, 1s , 1h. - /tempban (player) (duration) [-s] (reason)"
+                    send "&c                                                                    ^"
+            else:
+                send "&cPlease enter a duration! - /tempban (player) (duration) [-s] (reason)"
+                send "&c                                                 ^"
+        else:
+            send "&cPlease enter a valid player. - /tempban (player) (duration) [-s] (reason)"
+            send "&c  ^"
+
+
+on join:
+    if {punish_temp::true::%uuid of player%} is true:
+        set {_waited} to difference between {punish::date::%uuid of player%} and now
+        if {_waited} < {punish::duration::%uuid of player%}:
+            set {_expire} to difference between {punish::duration::%uuid of player%} and {_waited}
+            send formatted "&3%player% &7tried to join whilst punished. <run command:/checkpuns %player%>&7[Click to view history]" to all players where [input has permission "punish.notify"]
+            kick player due to "&7You have been banned for &c%{_expire}% &7for &c%{punish::reason::%uuid of player%}%&7.%nl%&7If you think you were &3unfairly &7punished, appeal at &c{@appeal}&7."
+            stop
+        else:
+            set {_now} to now
+            add "&7[%{_now}%&7] &3Automatic unban. &c[EXPIRED]" to {history::%uuid of player%::*}
+            delete {punish::duration::%uuid of player%}	
+            delete {punish::date::%uuid of player%}	
+            delete {punish::reason::%uuid of player%}
+            delete {punish::executor::%uuid of player%}
+            delete {punish::true::%uuid of player%}
+            delete {punish::target::%uuid of player%}
+            delete {punish_temp::true::%uuid of player%}
+            delete {punish_perm::true::%uuid of player%}
+    else:
+        stop

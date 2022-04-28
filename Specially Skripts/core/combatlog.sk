@@ -1,0 +1,63 @@
+#on break:
+	#if "%region at event-block%" contains "spawn":
+		#player isn't op
+		#cancel event
+ 
+#on place:
+	#if "%region at event-block%" contains "spawn":
+		#player isn't op
+		#cancel event
+ 
+ 
+on command:
+	if metadata "combattag" of player is set:
+		player isn't op
+		message "&cYou cannot run commands whilst in combat"
+		cancel event
+ 
+#on damage:
+	#"%region at victim%" contains "spawn"
+	#attacker isn't op
+	#cancel event
+ 
+on damage:
+	#"%region at victim%" doesn't contain "spawn"
+	attacker is a player
+	victim is a player
+	set metadata "combattag" of victim to true
+	set metadata "combattag" of attacker to true
+	set metadata "combattagtime" of victim to 16 seconds from now
+	set metadata "combattagtime" of attacker to 16 seconds from now
+ 
+on disconnect:
+    (metadata "combattag" of player) is set
+    loop player's inventory:
+        drop loop-value
+    clear player's inventory
+    broadcast "" and "&8[&c&lC&8] %colored {data::ranks::player::%player's uuid%::prefix}%%player% &7was killed for combat logging" and ""
+    delete (metadata "combattag" of player)
+    delete (metadata "combattagtime" of player)
+ 
+on join:
+	delete (metadata "combattag" of player)
+	delete (metadata "combattagtime" of player)
+ 
+every 15 tick:
+	loop all players:
+		if (metadata "combattag" of loop-player) is set:
+			combattimer(loop-player)
+ 
+on death:
+	delete metadata "combattag" of victim
+	delete metadata "combattagtime" of victim
+ 
+function combattimer(p: player):
+	set {_time} to difference between now and metadata "combattagtime" of {_p}
+	set {_time::*} to "%{_time}%" split at " "
+	set {_time} to floor({_time::1} parsed as number)
+	set {_l} to {_p}'s health
+	set {_m} to {_p}'s max health
+	send action bar "&c%round {_l}%&c/%round {_m}%❤ &7In combat &f(%{_time}%s)" to {_p}
+	if {_time} <= 0:
+		delete (metadata "combattag" of {_p})
+		delete (metadata "combattagtime" of {_p})

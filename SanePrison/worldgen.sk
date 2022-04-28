@@ -1,0 +1,101 @@
+on load:
+    set {lobbies::*} to "lobby-1" and "lobby-2"
+
+function createServer(p: player, n: string):
+    set {data::worldName::%{_p}'s uuid%} to "%{_p}%-%{_n}%"
+    set {data::serverName::%{_p}'s uuid%} to "%{_n}%"
+    set {data::name2::%{_n}%} to "%{_n}%"
+    set {data::hasServer::%{_p}'s uuid%} to true
+    set {data::serverOwner::%{_p}%} to "%{_p}%"
+    execute console command "mv create %{data::worldName::%{_p}'s uuid%}% normal -t flat"
+    add {_n} to {server::servers::*}
+    add 1 to {server::serversAmount}
+
+
+command /create [<text>]:
+    aliases: cloud:lobby:create
+    trigger:
+        if {server::servers::*} contains arg 1:
+            send "&cThat server name is already in use."
+            stop
+        if arg 1 is not set:
+            send "&cYou need to supply a argument"
+            stop
+        else:
+            if length of arg 1 > 10:
+                send "&cYour server name cannot be longer then 10 characters"
+                stop
+            else:
+                if {data::serverAmount::%player's uuid%} >= 1:
+                    send "&cYou've reached your max server limit."
+                    stop
+                else:
+                    add 1 to {data::serverAmount::%player's uuid%}   
+                    createServer(player, arg 1)
+                    send action bar "&bCreating..." to player
+                    wait 1 second
+                    play sound "ui.button.click" at volume 1 to player
+                    wait 1 seconds
+                    play sound "ui.button.click" at volume 1 to player
+                    wait 1 second
+                    play sound "ui.button.click" at volume 1 to player
+                    wait 1 second
+                    play sound "ui.button.click" at volume 1 to player
+                    wait 1 seconds
+                    play sound "entity.player.levelup" at volume 1 to player
+                    send action bar "&bCreated!" to player
+                    send "&3You created &b%arg 1%&3! Use /join %arg 1% &3to start playing!"
+                
+command /cloud:panel:deleteserver:
+    trigger:
+        if {data::serverAmount::%player's uuid%} <= 0:
+            send "&cYou don't have a server to delete!"
+            stop
+        else:
+            set {_p} to player
+            set {data::serverAmount::%player's uuid%} to 0
+            execute console command "mv delete %{data::worldName::%player's uuid%}%"
+            execute console command "mvconfirm"
+            send "&cYou deleted %{data::serverName::%player's uuid%}%" 
+            delete {data::worldName::%{_p}'s uuid%}
+            delete {data::serverName::%{_p}'s uuid%}
+            set {data::hasServer::%{_p}'s uuid%} to false
+            remove "%{data::serverName::%{_p}'s uuid%}%" from {server::servers::*}
+
+command /join <text>:
+    usage: &cUsage: /join (name)
+    aliases: cloud:lobby:join
+    trigger:
+        joinServer(player, arg 1)
+
+
+
+command /servers:
+    aliases: cloud:lobby:servers
+    trigger:
+        send "&b%size of all players% &3players &3and &b%{server::serversAmount}% &3servers across the AcidNet"
+        loop {server::servers::*}:
+            send "&3- &b%loop-value%"
+
+function joinServer(p: player, s: string):
+    loop all players:
+        if {_p}'s world = "%loop-player%-%{_s}%":
+            send "&cYou are already connected to this server!" to {_p}
+            stop
+    if {_s} is "Lobby":
+        set {_l} to random element out of {lobbies::*}
+        send "&3Sending you to &b%{_l}%&3!" to {_p}
+        loop all players:
+            if loop-player is in world "lobby-1" or "lobby-2" or "world":
+                send "%colored {data::ranks::player::%{_p}'s uuid%::prefix}%%{_p}% &3left your lobby." to loop-player
+        execute console command "mv tp %{_p}% %{_l}%" 
+        stop
+    if {server::servers::*} contains {_s}:
+        send "&3Sending you to &b%{_s}%&3!" to {_p}
+        loop all players:
+            execute console command "mv tp %{_p}% %loop-player%-%{_s}%"
+            if loop-player is in world "lobby-1" or "lobby-2" or "world":
+                send "%colored {data::ranks::player::%{_p}'s uuid%::prefix}%%{_p}% &3left your lobby." to loop-player
+    else:
+        send "&cServer not found: %{_s}%" to {_p}
+        stop

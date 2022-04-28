@@ -1,0 +1,89 @@
+function resetObsidian():
+	if {obbybound2} is set:
+		if {obbybound1} is set:
+			loop all blocks within {obbybound1} and {obbybound2}:
+				loop-block = obsidian
+				set {_now} to now
+				set loop-block to air
+				add 1 to {_amount}
+			
+			#send "&7You performed a obsidian reset across &c%{obbybound1}% &8[bound 1] &7and &c%{obbybound1}% &8[bound 2] &7(%{_amount}% &7obsidian deleted]" to {_p}
+			
+			
+			broadcast "" 
+			broadcast "&7[Obsidian Reset] &8> &fAll obsidian on the map is being reset!" 
+			broadcast ""
+			set {_diff} to difference between now and {_now}
+			broadcast "&aTask completed in &e%{_diff}% &7[%{_amount}% &7obsidian deleted]" 
+			
+		else:
+			send "&cCould not perform a obsidian reset! One of the bounds aren't set." to console
+	else:
+		send "&cCould not perform a obsidian reset! One of the bounds aren't set." to console
+		
+		
+	
+command /resetobby:
+	permission: op
+	trigger:
+		resetObsidian()
+		
+command /obbybound-1:
+	permission: op
+	trigger:
+		set {obbybound1} to location of player
+		send "&7Created position 1 for bound &c`Obby Deletion`&7."
+
+command /obbybound-2:
+	permission: op
+	trigger:
+		if {obbybound1} is not set:
+			send "&cYou need to set the first bound first! (/obbybound-1)"
+			stop
+		else:
+			create full bound with id "obbydeletion" between {obbybound1} and location of player
+			set {obbybound2} to location of player
+			send "&7Created bound &c`Obby Deletion`&7. &8[Bound-ID: %random integer between 1 and 10000%&8]"
+			
+			
+on place:
+	if event-block is obsidian or end crystal:
+		if "%region at player%" = "afk2":
+			send "&cYou cannot place this block here!"
+			stop
+		else:
+			stop
+	else:
+		if player is not op:
+			cancel event
+			send "&cYou can only place blocks that are in the shop!"
+		else:
+			if {build::%player%} is not set:
+				cancel event
+				send "&cYou cannot place blocks as your build mode is disabled!"
+			else:
+				uncancel event
+				
+on break:
+	player is op
+	"%region at player%" doesn't contain "coal" or "cobble" or "cobb1" or "diamond" or "iron" or "netherite"
+	if {build::%player%} is not set:
+		cancel event
+		send "&cYou cannot break blocks as your build mode is disabled!"
+	else:
+		uncancel event
+				
+command /build:
+	permission: op
+	permission message: &cInsufficient permissions!
+	trigger:
+		if {build::%player%} is not set:
+			set {build::%player%} to true
+			send "&aYou can now build!"
+		else:
+			delete {build::%player%}
+			send "&cYou disabled your build mode."
+			
+			
+every 5 minutes:
+	resetObsidian()

@@ -1,0 +1,8 @@
+on papi request with prefix "rank":
+    if the identifier is "displayname":
+        set the result to "%colored {data::ranks::player::%player's uuid%::prefix}%%player%"
+		
+		
+#on chat:
+	#set chat format to "%colored {data::ranks::player::%player's uuid%::prefix}%%player% &8» &f%formatted message%"
+

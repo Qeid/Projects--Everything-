@@ -1,0 +1,48 @@
+command /bedwars:shop:
+    trigger:
+        set metadata tag "shop_quickbuy" of player to chest inventory with 6 rows named "Quick Buy"
+        set slot 0 of metadata tag "shop_quickbuy" of player to nether star named "&bQuick Buy"
+        set slot 1 of metadata tag "shop_quickbuy" of player to hardened clay named "&aBlocks" with lore "&eClick to view!"
+        set slot 2 of metadata tag "shop_quickbuy" of player to gold sword named "&aMelee" with lore "&eClick to view!"
+        set slot 3 of metadata tag "shop_quickbuy" of player to chainmail boots named "&aArmor" with lore "&eClick to view!"
+        set slot 4 of metadata tag "shop_quickbuy" of player to stone pickaxe named "&aTools" with lore "&eClick to view!"
+        set slot 5 of metadata tag "shop_quickbuy" of player to bow named "&aRanged" with lore "&eClick to view!"
+        set slot 6 of metadata tag "shop_quickbuy" of player to brewing stand named "&aPotions" with lore "&eClick to view!"
+        set slot 7 of metadata tag "shop_quickbuy" of player to tnt named "&aUtility" with lore "&eClick to view!"
+        set slot 9 of metadata tag "shop_quickbuy" of player to green stained glass pane named "&f" with lore "&7Catagories" and "&7Items" 
+        set slot 10 of metadata tag "shop_quickbuy" of player to gray stained glass pane named "&f" with lore "&7Catagories" and "&7Items"   
+        set slot 11 of metadata tag "shop_quickbuy" of player to gray stained glass pane named "&f" with lore "&7Catagories" and "&7Items"   
+        set slot 12 of metadata tag "shop_quickbuy" of player to gray stained glass pane named "&f" with lore "&7Catagories" and "&7Items"   
+        set slot 13 of metadata tag "shop_quickbuy" of player to gray stained glass pane named "&f" with lore "&7Catagories" and "&7Items"   
+        set slot 14 of metadata tag "shop_quickbuy" of player to gray stained glass pane named "&f" with lore "&7Catagories" and "&7Items"   
+        set slot 15 of metadata tag "shop_quickbuy" of player to gray stained glass pane named "&f" with lore "&7Catagories" and "&7Items"   
+        set slot 16 of metadata tag "shop_quickbuy" of player to gray stained glass pane named "&f" with lore "&7Catagories" and "&7Items"
+        set slot 17 of metadata tag "shop_quickbuy" of player to gray stained glass pane named "&f" with lore "&7Catagories" and "&7Items"      
+        set slot 19 of metadata tag "shop_quickbuy" of player to black stained glass pane named "&cQuick buy coming soon"    
+        set slot 20 of metadata tag "shop_quickbuy" of player to black stained glass pane named "&cQuick buy coming soon"  
+        set slot 21 of metadata tag "shop_quickbuy" of player to black stained glass pane named "&cQuick buy coming soon"      
+        set slot 22 of metadata tag "shop_quickbuy" of player to black stained glass pane named "&cQuick buy coming soon"    
+        set slot 23 of metadata tag "shop_quickbuy" of player to black stained glass pane named "&cQuick buy coming soon"  
+        set slot 24 of metadata tag "shop_quickbuy" of player to black stained glass pane named "&cQuick buy coming soon" 
+        set slot 25 of metadata tag "shop_quickbuy" of player to black stained glass pane named "&cQuick buy coming soon"    
+        set slot 28 of metadata tag "shop_quickbuy" of player to black stained glass pane named "&cQuick buy coming soon"  
+        set slot 29 of metadata tag "shop_quickbuy" of player to black stained glass pane named "&cQuick buy coming soon" 
+        set slot 30 of metadata tag "shop_quickbuy" of player to black stained glass pane named "&cQuick buy coming soon"  
+        set slot 31 of metadata tag "shop_quickbuy" of player to black stained glass pane named "&cQuick buy coming soon"  
+        set slot 32 of metadata tag "shop_quickbuy" of player to black stained glass pane named "&cQuick buy coming soon" 
+        set slot 33 of metadata tag "shop_quickbuy" of player to black stained glass pane named "&cQuick buy coming soon"    
+        set slot 34 of metadata tag "shop_quickbuy" of player to black stained glass pane named "&cQuick buy coming soon"
+        set slot 37 of metadata tag "shop_quickbuy" of player to black stained glass pane named "&cQuick buy coming soon" 
+        set slot 38 of metadata tag "shop_quickbuy" of player to black stained glass pane named "&cQuick buy coming soon"  
+        set slot 39 of metadata tag "shop_quickbuy" of player to black stained glass pane named "&cQuick buy coming soon"  
+        set slot 40 of metadata tag "shop_quickbuy" of player to black stained glass pane named "&cQuick buy coming soon" 
+        set slot 41 of metadata tag "shop_quickbuy" of player to black stained glass pane named "&cQuick buy coming soon"    
+        set slot 42 of metadata tag "shop_quickbuy" of player to black stained glass pane named "&cQuick buy coming soon"
+        set slot 43 of metadata tag "shop_quickbuy" of player to black stained glass pane named "&cQuick buy coming soon"        
+     
+    
+
+        open metadata tag "shop_quickbuy" of player to player
+
+
+

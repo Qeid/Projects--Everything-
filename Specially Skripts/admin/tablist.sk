@@ -1,0 +1,21 @@
+function debug(t: text, max: number):
+    broadcast "&5[Debug] &7%{_t}% %{_max}%"
+
+#on damage:
+    #set {_pastLocVictim} to victim's location
+    #set {_pastLocAttackerXZ} to 
+    #set {_pastLocVictimXZ} to x-coordinate, z-coordinate of {_pastLocVictim}
+    #victim is on ground
+    #attacker is on ground
+    #set {_attackerPing} to attacker's ping 
+    #if {_attackerPing} < 100:
+        #set {_minDistance} to {_pastLocAttacker} - {_pastLocVictim}
+        #debug("(Reach) hit [%victim%] with min distance %{_minDistance}% max distance:", 5)
+        #if distance between {_pastLocAttacker} and {_pastLocVictim} > 3.01:
+
+
+on damage:
+    if attacker is facing victim:
+        debug("Aim", 1)
+
+"setprefix", "setsuffix", "setcolor", "setbold", "setitalic", "delete", "create", "list", "setdefault", "info"

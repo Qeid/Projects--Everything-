@@ -1,0 +1,20 @@
+on tab complete of "/rank":
+	set tab completions for position 1 to "addgroup", "setprefix", "list", "help"
+	if tab arg-1 = "setrank" or "addgroup":
+		set tab completions for position 3 to "owner", "co-owner", "admin", "developer", "mod", "jrmod", "builder", "ultra", "obsidian", "emerald", "diamond", "gold", "iron", "coal", "default"
+	if tab arg-1 = "list":
+		stop
+	if tab arg-1 = "setprefix":
+		set tab completions for position 3 to "Owner", "Admin"
+		
+		
+on tab complete of "/keyall":
+	set tab completions for position 1 to "COMMON", "BASIC", "UNCOMMON", "RARE", "LEGENDARY"
+	if tab arg-1 = "COMMON", "BASIC", "UNCOMMON", "RARE", "LEGENDARY":
+		set tab completions for position 2 to "1", "32", "64"
+on tab complete of "/skr":
+	set tab completions for position 1 to "z_completer.sk" and "vapegui.sk", "general/donor_perks.sk", "general/main.sk", "general/quests.sk", "general/vouchers.sk", "staff/spg.sk", "staff/staff.sk", "utilites/skr.sk", "utilites/genid.sk", "utilites/debug.sk"
+	if tab arg-1 = "z_completer.sk", "vapegui.sk", "general/donor_perks.sk", "general/main.sk", "general/quests.sk", "general/vouchers.sk", "staff/spg.sk", "staff/staff.sk", "utilites/skr.sk":
+		set tab completions for position 2 to ""
+on tab complete of "/debug":
+	set tab completions for position 1 to "true" and "false"

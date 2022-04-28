@@ -1,0 +1,760 @@
+function durationFormat(value: timespan, type: text) :: text:
+    if {_type} is "fullcase":
+        set {_str} to "%{_value}%"
+        set {_l::*} to split {_str} at " "
+        loop {_l::*}:
+            delete {_i}
+            set {_i} to loop-value parsed as a number
+            {_i} is set
+            set {_i} to round({_i})
+            replace every "%loop-value%" in {_str} with "%{_i}%"
+
+            replace every " seconds" in {_str} with " SECONDS"
+            replace every " second" in {_str} with " SECOND"
+
+            replace every " minutes" in {_str} with " MINUTES"
+            replace every " minute" in {_str} with " MINUTE"
+
+            replace every " hours" in {_str} with " HOURS"
+            replace every " hour" in {_str} with " HOUR"
+
+            replace every " days" in {_str} with " DAYS"
+            replace every " day" in {_str} with " DAY"
+    
+        return "%{_str}%"
+    else if {_type} is "propercase":
+        set {_str} to "%{_value}%"
+        set {_l::*} to split {_str} at " "
+        loop {_l::*}:
+            delete {_i}
+            set {_i} to loop-value parsed as a number
+            {_i} is set
+            set {_i} to round({_i})
+            replace every "%loop-value%" in {_str} with "%{_i}%"
+
+            replace every " seconds" in {_str} with " Seconds"
+            replace every " second" in {_str} with " Second"
+
+            replace every " minutes" in {_str} with " Minutes"
+            replace every " minute" in {_str} with " Minute"
+
+            replace every " hours" in {_str} with " Hours"
+            replace every " hour" in {_str} with " Hour"
+
+            replace every " days" in {_str} with " Days"
+            replace every " day" in {_str} with " Day"
+    
+        return "%{_str}%"
+    else if {_type} is "hypixel":
+        set {_str} to "%{_value}%"
+        set {_l::*} to split {_str} at " "
+        loop {_l::*}:
+            delete {_i}
+            set {_i} to loop-value parsed as a number
+            {_i} is set
+            set {_i} to round({_i})
+            replace every "%loop-value%" in {_str} with "%{_i}%"
+
+            replace every " seconds" in {_str} with "s"
+            replace every " second" in {_str} with "s"
+
+            replace every " minutes" in {_str} with "m"
+            replace every " minute" in {_str} with "m"
+
+            replace every " hours" in {_str} with "h"
+            replace every " hour" in {_str} with "h"
+
+            replace every " days" in {_str} with "d"
+            replace every " day" in {_str} with "d"
+            replace every " and" in {_str} with ""
+    
+        return "%{_str}%"
+function toTimespan(t: text) :: timespan:
+    set {_conversion::s} to "SECONDS"
+    set {_conversion::m} to "MINUTES"
+    set {_conversion::h} to "HOURS"
+    set {_conversion::d} to "DAYS"
+    set {_l} to length of {_t}
+    set {_a} to {_l} - 1
+    set {_l::1} to first {_a} characters of {_t}
+    set {_l::2} to last character of {_t}
+    set {_t} to "%{_l::1}% %{_conversion::%{_l::2}%}%"
+    return ({_t} parsed as timespan)
+
+command /tempban <offline player> <text> <string>:
+    executable by: console and players
+    usage: &cInvalid arguments! (&c/tempban <player> <duration> [-s] <reason>)
+    permission: easypunish.tempban
+    permission message: &cYou don't have access to use this command!
+    trigger:
+        if arg 2 contains "d" or "m" or "s" or "h" or "forever":
+            if arg 3 contains "-s":
+                if length of arg 3 = 2:
+                    banPlayer(player, arg-1, arg 2, " No reason provided", true)
+                    stop
+                else:
+                    set {_reason} to arg 3
+                    set {_duration} to arg 2
+                    replace all "-s" in {_reason} with ""
+
+                    banPlayer(player, arg-1, {_duration}, {_reason}, true)
+            else:
+                if arg 2 contains "d" or "m" or "s" or "h" or "forever":
+                    banPlayer(player, arg-1, arg 2, " %arg 3%", false)
+                    stop
+                else:
+                    send "&cYou need to enter a valid duration! e.g: 1d, 1h, 1s, forever"
+
+        else:
+            send "&cYou need to enter a valid duration! e.g: 1d, 1h, 1s, forever"
+command /tempmute <offline player> <text> <string>:
+    executable by: console and players
+    usage: &cInvalid arguments! (&c/tempmute <player> <duration> [-s] <reason>)
+    permission: easypunish.tempmute
+    permission message: &cYou don't have access to use this command!
+    trigger:
+        if arg 2 contains "d" or "m" or "s" or "h" or "forever":
+            if arg 3 contains "-s":
+                if length of arg 3 = 2:
+                    mutePlayer(player, arg-1, arg 2, " No reason provided", true)
+                    stop
+                else:
+                    set {_reason} to arg 3
+                    set {_duration} to arg 2
+                    replace all "-s" in {_reason} with ""
+
+                    mutePlayer(player, arg-1, {_duration}, {_reason}, true)
+            else:
+                if arg 2 contains "d" or "m" or "s" or "h" or "forever":
+                    mutePlayer(player, arg-1, arg 2, " %arg 3%", false)
+                    stop
+                else:
+                    send "&cYou need to enter a valid duration! e.g: 1d, 1h, 1s, forever"
+
+        else:
+            send "&cYou need to enter a valid duration! e.g: 1d, 1h, 1s, forever"
+            
+command /ban <offline player> <string>:
+    executable by: console and players
+    usage: &cInvalid arguments! (&c/ban <player> [-s] <reason>)
+    permission: easypunish.ban
+    permission message: &cYou don't have access to use this command!
+    trigger:
+        if arg 2 contains "-s":
+            if length of arg 2 = 2:
+                banPlayer(player, arg-1, "FOREVER", " No reason provided", true)
+                stop
+            else:
+                set {_reason} to arg 2
+                replace all "-s" in {_reason} with ""
+
+                banPlayer(player, arg-1, "FOREVER", {_reason}, true)
+        else:
+            banPlayer(player, arg-1, "FOREVER", " %arg 2%", false)
+            stop
+
+command /mute <offline player> <string>:
+    executable by: console and players
+    usage: &cInvalid arguments! (&c/mute <player> [-p] <reason>)
+    permission: easypunish.mute
+    permission message: &cYou don't have access to use this command!
+    trigger:
+        if arg 2 contains "-p":
+            if length of arg 2 = 2:
+                mutePlayer(player, arg-1, "permanent", " No reason provided", false)
+                stop
+            else:
+                set {_reason} to arg 2
+                replace all "-p" in {_reason} with ""
+
+                mutePlayer(player, arg-1, "permanent", {_reason}, false)
+        else:
+            mutePlayer(player, arg-1, "permanent", " %arg 2%", true)
+            stop
+
+function idGenerate(length: number) :: text:
+    if {_length} > 10000:
+        return "&cA value that large will crash the server!"
+    else:
+        set {_return} to random {_length} char string from `a-c-g-h-j-k-l-t-q-a-g-y-1-6-8-1-9-6`
+        set {_return} to {_return} in uppercase
+        return "%{_return}%"
+
+
+
+
+function banPlayer(p: player, t: offline player, duration: text, reason: text, silent: boolean):
+    if {_silent} = true:
+        if {_duration} is "FOREVER":
+            set {ban::%{_t}'s uuid%::duration} to "FOREVER"
+
+            set {_banlength} to "FOREVER"
+
+            add 1 to {bans::%{_t}'s uuid%::*}
+            set {ban::%{_t}'s uuid%::reason} to {_reason}
+            set {ban::%{_t}'s uuid%::executor} to {_p}
+            set {ban::%{_t}'s uuid%::date} to now
+            set {ban::%{_t}'s uuid%::banned} to true
+            set {ban::%{_t}'s uuid%::futureDate} to "NEVER"
+
+            set {ban::%{_t}'s uuid%::target} to {_t}
+            kick {_t} due to "&7You have been banned for&c%{_reason}% &7for &4%{_banlength}%&7.%nl%&7Your ban will not expire&7. %nl%&7Is this ban incorrect? Appeal at discord.gg/123"
+
+            set {_prefix} to getPlayerPrefix({_t})
+            send "&7You've banned %colored {_prefix}%%{_t}% &7for&c%{_reason}% &7for &4%{_banlength}%&7." to {_p}
+            send "&7[Silent] &3%{_p}% &7banned &3%{_t}% &7for&c%{_reason}%&7. &7[%{_banlength}%]" to all players where [input has permission "easypunish.notify"]
+            stop
+        else:    
+            set {_number} to toTimespan({_duration})
+            set {ban::%{_t}'s uuid%::duration} to {_number}
+
+            set {_banlength} to durationFormat({_number}, "fullcase")
+
+            add 1 to {bans::%{_t}'s uuid%::*}
+            set {ban::%{_t}'s uuid%::reason} to {_reason}
+            set {ban::%{_t}'s uuid%::executor} to {_p}
+            set {ban::%{_t}'s uuid%::date} to now
+            set {ban::%{_t}'s uuid%::banned} to true
+            set {_now} to now
+            add {_number} to {_now}
+            set {ban::%{_t}'s uuid%::futureDate} to {_now}
+
+            set {ban::%{_t}'s uuid%::target} to {_t}
+            kick {_t} due to "&7You have been banned for&c%{_reason}% &7for &4%{_banlength}%&7.%nl%&7Your ban will expire on &c%{_now}%&7. %nl%&7Is this ban incorrect? Appeal at discord.gg/123"
+
+            set {_prefix} to getPlayerPrefix({_t})
+            send "&7You've banned %colored {_prefix}%%{_t}% &7for&c%{_reason}% &7for &4%{_banlength}%&7." to {_p}
+            send "&7[Silent] &3%{_p}% &7banned &3%{_t}% &7for&c%{_reason}%&7. &7[%{_banlength}%]" to all players where [input has permission "easypunish.notify"]
+            stop
+    else:
+        if {_duration} is "FOREVER":
+            set {ban::%{_t}'s uuid%::duration} to "FOREVER"
+
+            set {_banlength} to "FOREVER"
+
+            add 1 to {bans::%{_t}'s uuid%::*}
+            set {ban::%{_t}'s uuid%::reason} to {_reason}
+            set {ban::%{_t}'s uuid%::executor} to {_p}
+            set {ban::%{_t}'s uuid%::date} to now
+            set {ban::%{_t}'s uuid%::banned} to true
+            set {ban::%{_t}'s uuid%::futureDate} to "NEVER"
+
+            set {ban::%{_t}'s uuid%::target} to {_t}
+            kick {_t} due to "&7You have been banned for&c%{_reason}% &7for &4%{_banlength}%&7.%nl%&7Your ban will not expire&7. %nl%&7Is this ban incorrect? Appeal at discord.gg/123"
+
+            set {_prefix} to getPlayerPrefix({_t})
+            send "&7You've banned %colored {_prefix}%%{_t}% &7for&c%{_reason}% &7for &4%{_banlength}%&7." to {_p}
+            broadcast "&3%{_p}% &7banned &3%{_t}% &7for&c%{_reason}%&7. &7[%{_banlength}%]"
+            stop
+        else:    
+            set {_number} to toTimespan({_duration})
+            set {ban::%{_t}'s uuid%::duration} to {_number}
+
+            set {_banlength} to durationFormat({_number}, "fullcase")
+
+            add 1 to {bans::%{_t}'s uuid%::*}
+            set {ban::%{_t}'s uuid%::reason} to {_reason}
+            set {ban::%{_t}'s uuid%::executor} to {_p}
+            set {ban::%{_t}'s uuid%::date} to now
+            set {ban::%{_t}'s uuid%::banned} to true
+            set {_now} to now
+            add {_number} to {_now}
+            set {ban::%{_t}'s uuid%::futureDate} to {_now}
+
+            set {ban::%{_t}'s uuid%::target} to {_t}
+            kick {_t} due to "&7You have been banned for&c%{_reason}% &7for &4%{_banlength}%&7.%nl%&7Your ban will expire on &c%{_now}%&7. %nl%&7Is this ban incorrect? Appeal at discord.gg/123"
+
+            set {_prefix} to getPlayerPrefix({_t})
+            send "&7You've banned %colored {_prefix}%%{_t}% &7for&c%{_reason}% &7for &4%{_banlength}%&7." to {_p}
+            broadcast "&3%{_p}% &7banned &3%{_t}% &7for&c%{_reason}%&7. &7[%{_banlength}%]"
+
+function mutePlayer(p: player, t: offline player, duration: text, reason: text, silent: boolean):
+    if {_silent} = true:
+        if {_duration} is "FOREVER" or "permanent":
+            set {mute::%{_t}'s uuid%::duration} to "Permanent"
+
+            set {_banlength} to "Permanent"
+            set {_selflength} to "Permanent"
+            set {_id} to idGenerate(8)
+
+            set {id::%{_t}'s uuid%::%{_id}%::duration} to "Permanent"
+            set {id::%{_t}'s uuid%::%{_id}%} to {_id}
+            set {id::%{_t}'s uuid%::%{_id}%::reason} to {_reason}
+            set {id::%{_t}'s uuid%::%{_id}%::executor} to {_p}
+            set {id::%{_t}'s uuid%::%{_id}%::target} to {_t}
+            set {id::%{_t}'s uuid%::%{_id}%::date} to now
+            set {id::%{_t}'s uuid%::%{_id}%::muted} to true
+
+            set {mute::%{_t}'s uuid%::id} to {_id}
+            set {mute::%{_t}'s uuid%::reason} to {_reason}
+            set {mute::%{_t}'s uuid%::executor} to {_p}
+            set {mute::%{_t}'s uuid%::date} to now
+            set {mute::%{_t}'s uuid%::muted} to true
+
+            set {history::mutes::%{_t}'s uuid%::%{_id}%} to "&ePermaMute - &e%{id::%{_t}'s uuid%::%{_id}%::date}% &f&o%{id::%{_t}'s uuid%::%{_id}%::reason}% &eby %{id::%{_t}'s uuid%::%{_id}%::executor}% &efor %{id::%{_t}'s uuid%::%{_id}%::duration}%"
+            set {history::selfmutes::%{_t}'s uuid%::%{_id}%} to "&ePermaMute - &e%{id::%{_t}'s uuid%::%{_id}%::date}% &f&o%{id::%{_t}'s uuid%::%{_id}%::reason}% &efor %{id::%{_t}'s uuid%::%{_id}%::duration}%"
+
+            send "&c&m------------------------------------------%nl%&cYou have been permanently muted for&c%{_reason}%&c.%nl%&7Your mute will not expire.%Nl%&7Any further mutes will result in a ban.%nl%&f%nl%&7Find out more here: &ediscord.gg/boxcombat7%nl%&7Mute ID: &f##%{_id}%%nl%&c&m------------------------------------------" to {_t}
+
+            set {_prefix} to getPlayerPrefix({_t})
+            set {_tr} to getPlayerPrefix({_p})
+            send "&b[STAFF] %colored {_prefix}%%{_t}% &ewas permanently muted for&f&o%{_reason}% &eby %colored {_tr}%%{_p}%&e for %{_selflength}%." to all players where [input has permission "easypunish.notify"]
+        else:    
+
+            set {_number} to toTimespan({_duration})
+            set {mute::%{_t}'s uuid%::duration} to {_number}
+
+            set {_banlength} to durationFormat({_number}, "hypixel")
+            set {_selflength} to durationFormat({_number}, "propercase")
+
+            set {_id} to idGenerate(8)
+
+            set {id::%{_t}'s uuid%::%{_id}%::duration} to {_number}
+            set {id::%{_t}'s uuid%::%{_id}%} to {_id}
+            set {id::%{_t}'s uuid%::%{_id}%::reason} to {_reason}
+            set {id::%{_t}'s uuid%::%{_id}%::executor} to {_p}
+            set {id::%{_t}'s uuid%::%{_id}%::target} to {_t}
+            set {id::%{_t}'s uuid%::%{_id}%::date} to now
+            set {id::%{_t}'s uuid%::%{_id}%::muted} to true
+
+            set {mute::%{_t}'s uuid%::id} to {_id}
+            set {mute::%{_t}'s uuid%::reason} to {_reason}
+            set {mute::%{_t}'s uuid%::executor} to {_p}
+            set {mute::%{_t}'s uuid%::date} to now
+            set {mute::%{_t}'s uuid%::muted} to true
+
+            set {mute::%{_t}'s uuid%::target} to {_t}
+
+            set {history::mutes::%{_t}'s uuid%::%{_id}%} to "&eTempMute - &e%{id::%{_t}'s uuid%::%{_id}%::date}% &f&o%{id::%{_t}'s uuid%::%{_id}%::reason}% &eby %{id::%{_t}'s uuid%::%{_id}%::executor}% &efor %{id::%{_t}'s uuid%::%{_id}%::duration}%"
+            set {history::selfmutes::%{_t}'s uuid%::%{_id}%} to "&eTempMute - &e%{id::%{_t}'s uuid%::%{_id}%::date}% &f&o%{id::%{_t}'s uuid%::%{_id}%::reason}% &efor %{id::%{_t}'s uuid%::%{_id}%::duration}%"
+
+            send "&c&m------------------------------------------%nl%&cYou have been muted for&c%{_reason}%&c.%nl%&7Your mute will expire in: &c%{_banlength}%%nl%&f%nl%&7Find out more here: &ediscord.gg/boxcombat7%nl%&7Mute ID: &f##%{_id}%%nl%&c&m------------------------------------------" to {_t}
+
+            set {_prefix} to getPlayerPrefix({_t})
+            set {_tr} to getPlayerPrefix({_p})
+            send "&b[STAFF] %colored {_prefix}%%{_t}% &ewas tempmuted for&f&o%{_reason}% &eby %colored {_tr}%%{_p}%&e for %{_selflength}%." to all players where [input has permission "easypunish.notify"]
+            stop
+    else:
+        if {_duration} is "FOREVER" or "permanently" or "permanent":
+            set {mute::%{_t}'s uuid%::duration} to "Permanent"
+
+            set {_banlength} to "Permanent"
+            set {_selflength} to "Permanent"
+            set {_id} to idGenerate(8)
+
+            set {id::%{_t}'s uuid%::%{_id}%::duration} to "Permanent"
+            set {id::%{_t}'s uuid%::%{_id}%} to {_id}
+            set {id::%{_t}'s uuid%::%{_id}%::reason} to {_reason}
+            set {id::%{_t}'s uuid%::%{_id}%::executor} to {_p}
+            set {id::%{_t}'s uuid%::%{_id}%::target} to {_t}
+            set {id::%{_t}'s uuid%::%{_id}%::date} to now
+            set {id::%{_t}'s uuid%::%{_id}%::muted} to true
+
+            set {mute::%{_t}'s uuid%::id} to {_id}
+            set {mute::%{_t}'s uuid%::reason} to {_reason}
+            set {mute::%{_t}'s uuid%::executor} to {_p}
+            set {mute::%{_t}'s uuid%::date} to now
+            set {mute::%{_t}'s uuid%::muted} to true
+
+            set {history::mutes::%{_t}'s uuid%::%{_id}%} to "&ePermaMute - &e%{id::%{_t}'s uuid%::%{_id}%::date}% &f&o%{id::%{_t}'s uuid%::%{_id}%::reason}% &eby %{id::%{_t}'s uuid%::%{_id}%::executor}% &efor %{id::%{_t}'s uuid%::%{_id}%::duration}%"
+            set {history::selfmutes::%{_t}'s uuid%::%{_id}%} to "&ePermaMute - &e%{id::%{_t}'s uuid%::%{_id}%::date}% &f&o%{id::%{_t}'s uuid%::%{_id}%::reason}% &efor %{id::%{_t}'s uuid%::%{_id}%::duration}%"
+
+            send "&c&m------------------------------------------%nl%&cYou have been permanently muted for&c%{_reason}%&c.%nl%&7Your mute will not expire.%Nl%&7Any further mutes will result in a ban.%nl%&f%nl%&7Find out more here: &ediscord.gg/boxcombat7%nl%&7Mute ID: &f##%{_id}%%nl%&c&m------------------------------------------" to {_t}
+
+            set {_prefix} to getPlayerPrefix({_t})
+            set {_tr} to getPlayerPrefix({_p})
+            broadcast "&c&lA player in your server was muted accordingly. &bThanks for reporting it!"
+            stop
+        else:    
+            set {_number} to toTimespan({_duration})
+            set {mute::%{_t}'s uuid%::duration} to {_number}
+
+            set {_banlength} to durationFormat({_number}, "hypixel")
+            set {_selflength} to durationFormat({_number}, "propercase")
+
+            set {_id} to idGenerate(8)
+
+            set {id::%{_t}'s uuid%::%{_id}%::duration} to {_number}
+            set {id::%{_t}'s uuid%::%{_id}%} to {_id}
+            set {id::%{_t}'s uuid%::%{_id}%::reason} to {_reason}
+            set {id::%{_t}'s uuid%::%{_id}%::executor} to {_p}
+            set {id::%{_t}'s uuid%::%{_id}%::target} to {_t}
+            set {id::%{_t}'s uuid%::%{_id}%::date} to now
+            set {id::%{_t}'s uuid%::%{_id}%::muted} to true
+
+            set {mute::%{_t}'s uuid%::id} to {_id}
+            set {mute::%{_t}'s uuid%::reason} to {_reason}
+            set {mute::%{_t}'s uuid%::executor} to {_p}
+            set {mute::%{_t}'s uuid%::date} to now
+            set {mute::%{_t}'s uuid%::muted} to true
+
+            set {mute::%{_t}'s uuid%::target} to {_t}
+
+            set {history::mutes::%{_t}'s uuid%::%{_id}%} to "&eTempMute - &e%{id::%{_t}'s uuid%::%{_id}%::date}% &f&o%{id::%{_t}'s uuid%::%{_id}%::reason}% &eby %{id::%{_t}'s uuid%::%{_id}%::executor}% &efor %{id::%{_t}'s uuid%::%{_id}%::duration}%"
+            set {history::selfmutes::%{_t}'s uuid%::%{_id}%} to "&eTempMute - &e%{id::%{_t}'s uuid%::%{_id}%::date}% &f&o%{id::%{_t}'s uuid%::%{_id}%::reason}% &efor %{id::%{_t}'s uuid%::%{_id}%::duration}%"
+
+            send "&c&m------------------------------------------%nl%&cYou have been muted for&c%{_reason}%&c.%nl%&7Your mute will expire in: &c%{_banlength}%%nl%&f%nl%&7Find out more here: &ediscord.gg/boxcombat7%nl%&7Mute ID: &f##%{_id}%%nl%&c&m------------------------------------------" to {_t}
+
+            set {_prefix} to getPlayerPrefix({_t})
+            set {_tr} to getPlayerPrefix({_p})
+            broadcast "&c&lA player in your server was muted accordingly. &bThanks for reporting it!"
+            stop
+
+command /puns [<player>] <text> [<number>]:
+    trigger:
+        if arg 1 is not set:
+            if arg 2 is "mutes" or "mute":
+                if arg 3 is not set:
+                    set {_Pr} to getPlayerPrefix(player)
+                    send "&6- - - Your mutes &6(Total: %size of {history::mutes::%player's uuid%::*}%) (Entries: 10) - - - "
+                    set {_n} to 0
+                    loop {history::selfmutes::%player's uuid%::*}:
+                        add 1 to {_n}
+                        if {_n} > 10:
+                            stop loop
+                        else:
+                            send "&6%{_n}%. &e%loop-value%"
+                    stop
+                else:
+                    set {_Pr} to getPlayerPrefix(player)
+                    send "&6- - - Your mutes &6(Total: %size of {history::mutes::%player's uuid%::*}%) (Entries: %arg 3%) - - - "
+                    set {_n} to 0
+                    loop {history::selfmutes::%player's uuid%::*}:
+                        add 1 to {_n}
+                        if {_n} > arg 3:
+                            stop loop
+                        else:
+                            send "&6%{_n}%. &e%loop-value%"
+        else:
+            if arg 2 is "mutes" or "mute":
+                if arg 3 is not set:
+                    set {_Pr} to getPlayerPrefix(arg 1)
+                    send "&6- - - Mutes for %colored {_Pr}%%arg 1% &6(Total: %size of {history::mutes::%arg 1's uuid%::*}%) (Entries: 10) - - - "
+                    set {_n} to 0
+                    loop {history::mutes::%arg 1's uuid%::*}:
+                        add 1 to {_n}
+                        if {_n} > 10:
+                            stop loop
+                        else:
+                            send "&6%{_n}%. &e%loop-value%"
+                    stop
+                else:
+                    set {_Pr} to getPlayerPrefix(player)
+                    send "&6- - - Mutes for %colored {_Pr}%%arg 1% &6(Total: %size of {history::mutes::%arg 1's uuid%::*}%) (Entries: %arg 3%) - - - "
+                    set {_n} to 0
+                    loop {history::mutes::%arg 1's uuid%::*}:
+                        add 1 to {_n}
+                        if {_n} > arg 3:
+                            stop loop
+                        else:
+                            send "&6%{_n}%. &e%loop-value%"
+
+
+on join:
+    if {ban::%uuid of player%::banned} is true:
+        if {ban::%uuid of player%::duration} is "FOREVER":
+            joinWhilstBanned(player, "forever")
+            stop
+        else:
+            joinWhilstBanned(player, "temp")
+    else:
+        stop
+
+function getBanDate(p: player) :: text:
+    return {ban::%{_p}'s uuid%::date}
+function getBanReason(p: player) :: text:
+    return {ban::%{_p}'s uuid%::reason}
+function getBanFutureDate(p: player) :: text:
+    return "%{ban::%{_p}'s uuid%::futureDate}%"
+function getBanExecutor(p: player) :: text:
+    return {ban::%{_p}'s uuid%::executor}
+
+function getMuteDate(p: player) :: text:
+    return {mute::%{_p}'s uuid%::date}
+function getMuteReason(p: player) :: text:
+    return {mute::%{_p}'s uuid%::reason}
+function getMuteFutureDate(p: player) :: text:
+    return "%{mute::%{_p}'s uuid%::futureDate}%"
+function getMuteExecutor(p: player) :: text:
+    return {mute::%{_p}'s uuid%::executor}
+
+on quit:
+    set quit message to ""
+
+function joinWhilstBanned(p: player, type: text):
+    if {_type} is "temp":
+        set {_waited} to difference between {ban::%uuid of {_p}%::date} and now
+
+        if {_waited} < {ban::%uuid of {_p}%::duration}:
+
+            set {_expire} to difference between {ban::%uuid of {_p}%::duration} and {_waited}
+            set {_expired} to durationFormat({_expire}, "propercase")
+            set {_reason} to getBanReason({_p})
+            set {_fd} to getBanFutureDate({_p})
+
+            send "&c%{_p}% tried to join while banned. &c(&f%{_expired}%&c)" to all players where [input has permission "easypunish.notify"]
+
+            kick {_p} due to "&7You have been banned for&c%{_reason}%&7. &7Your ban will expire in &4%{_expired}%&7.%nl%&7Your ban will expire on &c%{_fd}%&7. %nl%&7Is this ban incorrect? Appeal at discord.gg/123"
+            stop
+        else:
+            checkBan({_p})
+    else if {_type} is "forever":
+        send "&c%{_p}% tried to join while banned. &c(&fFOREVER&c)" to all players where [input has permission "easypunish.notify"]
+        set {_reason} to getBanReason({_p})
+
+        kick {_p} due to "&7You have been banned for&c%{_reason}% &7for &4FOREVER&7.%nl%&7Your ban will not expire&7. %nl%&7Is this ban incorrect? Appeal at discord.gg/123"
+
+command /revertban <offline player> [<string>]:
+    executable by: console and players
+    usage: &cMissing arguments (/revertban <player> [-s])
+    aliases: pardon, unban
+    permission: easypunish.revertban
+    permission message: &cYou don't have access to use this command!
+    trigger:
+        if {ban::%uuid of arg 1%::banned} is true:
+            if arg 2 is set:
+                if arg 2 contains "-s":
+                    unbanPlayer(player, arg 1, true)
+                    stop
+                else:
+                    unbanPlayer(player, arg 1, false)
+            else:
+                unbanPlayer(player, arg 1, false)
+        else:
+            send "&c%arg 1% &cis not currently banned!"
+
+command /unmute <offline player> <string>:
+    executable by: console and players
+    usage: &cInvalid arguments! (&c/unmute <player> [-p] <reason>)
+    permission: easypunish.unmute
+    permission message: &cYou don't have access to use this command!
+    trigger:
+        if {mute::%uuid of arg 1%::muted} is true:
+            if arg 2 contains "-p":
+                if {mute::%uuid of arg 1%::duration} is "Permanent":
+                    if length of arg 2 = 2:
+                        unmutePlayer(player, arg-1, " Undefined reason", false, "perm")
+                        stop
+                    else:
+                        set {_reason} to arg 2
+                        replace all "-p" in {_reason} with ""
+
+                        unmutePlayer(player, arg-1, {_reason}, false, "perm")
+                else:
+                    set {_reason} to arg 2
+                    replace all "-p" in {_reason} with ""
+
+                    unmutePlayer(player, arg-1, {_reason}, false, "temp")
+            else:
+                if {mute::%uuid of arg 1%::duration} is "Permanent":
+                    unmutePlayer(player, arg-1, " %arg 2%", true, "perm")
+                    stop
+                else:
+                    unmutePlayer(player, arg-1, " %arg 2%", true, "temp")
+                    stop
+        else:
+            set {_pr} to getPlayerPrefix(arg 1)
+            send "%colored {_pr}%%arg 1% &eis not currently muted."
+
+
+
+
+
+
+
+
+function isMuted(p: player) :: boolean:
+    if {mute::%uuid of {_p}%::muted} is true:
+        return true
+    else:
+        return false
+
+function muteChatBlock(p: player, type: text):
+    #send "test 0" to {_p}
+    if {_type} is "temp":
+        set {_waited} to difference between {mute::%uuid of {_p}%::date} and now
+
+        #send "test 1" to {_p}
+        if {_waited} < {mute::%uuid of {_p}%::duration}:
+
+            set {_expire} to difference between {mute::%uuid of {_p}%::duration} and {_waited}
+
+
+            # set {_123} to "%{_expire}%"
+
+            #replace all "hours" in {_123} with ""
+            #broadcast "%{_123}%"
+
+            #set {_reason} to getMuteReason({_p})
+            #set {_id} to {mute::%{_p}'s uuid%::id}
+
+            # replace all "hours" in {_123} with ""
+            # broadcast "%{_123}%"
+
+            # set {_s} to the last 4 characters of {_123}
+            # set {_s} to "0%{_s}%"
+            # broadcast "%{_s}%"
+
+            # set {_minutes} to {_s} * 60
+            # set {_minutes} to round({_minutes})
+
+            # broadcast "%{_minutes}%"
+
+            set {_expired} to durationFormat({_expire}, "hypixel")
+            set {_reason} to getMuteReason({_p})
+            set {_pr} to getPlayerPrefix({_p})
+            set {_id} to {mute::%{_p}'s uuid%::id}
+
+
+            set {_test} to "%{_expire}%"
+            set {_s} to the last 11 characters of {_test}
+            broadcast "%{_s}%"
+            set {_min} to getHours({_s} parsed as a timespan)
+
+            set {_sec2} to getHours({_min} parsed as a timespan)
+            set {_sec} to getSeconds({_min})
+            broadcast "%{_min}%"
+            broadcast "%{_sec}%"
+            broadcast "%{_sec2}%"
+
+            send "&e%colored {_pr}%%{_p}% &e&otried to speak while they're muted. &f&o%{_expired}% %round({_min})%m %round({_sec})%s" to all players where [input has permission "easypunish.notify"]
+
+            send "&c&m------------------------------------------%nl%&cYou are currently muted for&c%{_reason}%&c.%nl%&7Your mute will expire in: &c%{_expired}% %round({_min})%m %{_sec}%s%nl%&f%nl%&7Find out more here: &ediscord.gg/boxcombat7%nl%&7Mute ID: &f##%{_id}%%nl%&c&m------------------------------------------" to {_p}
+            #send "test 2" to {_p}
+            stop
+            
+        else:
+            #send "test 3" to {_p}
+            checkMute({_p})
+
+    else if {_type} is "forever" or "permanent" or "permanently":
+        broadcast "test"
+        set {_pr} to getPlayerPrefix({_p})
+        set {_id} to {mute::%{_p}'s uuid%::id}
+        send "&e%colored {_pr}%%{_p}% &e&otried to speak while they're muted. &f&oPermanent" to all players where [input has permission "easypunish.notify"]
+        set {_reason} to getMuteReason({_p})
+
+        send "&c&m------------------------------------------%nl%&cYou are currently muted permanently for&c%{_reason}%&c.%nl%&7Your mute will not expire.%nl%&7Any further mutes will result in a ban.%nl%&f%nl%&7Find out more here: &ediscord.gg/boxcombat7%nl%&7Mute ID: &f##%{_id}%%nl%&c&m------------------------------------------" to {_p}
+
+
+
+
+function checkBan(p: player):
+    set {_waited} to difference between {ban::%uuid of {_p}%::date} and now
+
+    if {_waited} > {ban::%uuid of {_p}%::duration}:
+        delete {ban::%{_p}'s uuid%::reason}
+        delete {ban::%{_p}'s uuid%::executor}
+        delete {ban::%{_p}'s uuid%::date}
+        delete {ban::%{_p}'s uuid%::banned}
+        delete {ban::%{_p}'s uuid%::futureDate}
+        delete {ban::%{_p}'s uuid%::target}
+function checkMute(p: player):
+    set {_waited} to difference between {mute::%uuid of {_p}%::date} and now
+
+    if {_waited} > {mute::%uuid of {_p}%::duration}:
+        delete {mute::%{_p}'s uuid%::reason}
+        delete {mute::%{_p}'s uuid%::executor}
+        delete {mute::%{_p}'s uuid%::date}
+        delete {mute::%{_p}'s uuid%::muted}
+        delete {mute::%{_p}'s uuid%::futureDate}
+        delete {mute::%{_p}'s uuid%::target}
+        delete {mute::%{_p}'s uuid%::id}
+
+
+function unbanPlayer(e: player, p: offline player, silent: boolean):
+    if {_silent} is true:
+
+        set {_e} to "&c&lConsole" if {_e} is "<none>"
+        send "&7[Silent] &3%{_e}% &7reverted a ban from &3%{_p}% &7for&c%{ban::%{_p}'s uuid%::reason}%&7." to all players where [input has permission "easypunish.notify"]
+        delete {ban::%{_p}'s uuid%::reason}
+        delete {ban::%{_p}'s uuid%::executor}
+        delete {ban::%{_p}'s uuid%::date}
+        delete {ban::%{_p}'s uuid%::banned}
+        delete {ban::%{_p}'s uuid%::futureDate}
+        delete {ban::%{_p}'s uuid%::target}
+    else:
+        set {_e} to "&c&lConsole" if {_e} is "<none>"
+        broadcast "&3%{_e}% &7reverted a ban from &3%{_p}% &7for&c%{ban::%{_p}'s uuid%::reason}%&7."
+        delete {ban::%{_p}'s uuid%::reason}
+        delete {ban::%{_p}'s uuid%::executor}
+        delete {ban::%{_p}'s uuid%::date}
+        delete {ban::%{_p}'s uuid%::banned}
+        delete {ban::%{_p}'s uuid%::futureDate}
+        delete {ban::%{_p}'s uuid%::target}
+
+function unmutePlayer(e: player, p: offline player, r: text, silent: boolean, type: text):
+    if {_silent} is true:
+        if {_type} is "temp":
+            set {_id} to {mute::%{_p}'s uuid%::id}
+            set {history::mutes::%{_p}'s uuid%::%{_id}%} to "&eTempMute - &e%{id::%{_p}'s uuid%::%{_id}%::date}% &f&o%{id::%{_p}'s uuid%::%{_id}%::reason}% &eby %{id::%{_p}'s uuid%::%{_id}%::executor}% &efor %{id::%{_p}'s uuid%::%{_id}%::duration}% unmuted %now% &efor&f&o%{_r}% &eby %{_e}%"
+
+            set {history::selfmutes::%{_p}'s uuid%::%{_id}%} to "&eTempMute - &e%{id::%{_p}'s uuid%::%{_id}%::date}% &f&o%{id::%{_p}'s uuid%::%{_id}%::reason}% &efor %{id::%{_p}'s uuid%::%{_id}%::duration}% unmuted %now% &efor&f&o%{_r}%"
+            set {_pr} to getPlayerPrefix({_p})
+            set {_tr} to getPlayerPrefix({_e})
+
+            send "&b[STAFF] %colored {_pr}%%{_p}% &ewas unmuted for&f&o%{_r}% &eby %colored {_tr}%%{_e}%&e." to all players where [input has permission "easypunish.notify"]
+
+            delete {mute::%{_p}'s uuid%::reason}
+            delete {mute::%{_p}'s uuid%::executor}
+            delete {mute::%{_p}'s uuid%::date}
+            delete {mute::%{_p}'s uuid%::muted}
+            delete {mute::%{_p}'s uuid%::futureDate}
+            delete {mute::%{_p}'s uuid%::target}
+            delete {mute::%{_p}'s uuid%::id}
+        else if {_type} is "perm":
+            set {_id} to {mute::%{_p}'s uuid%::id}
+            set {history::mutes::%{_p}'s uuid%::%{_id}%} to "&ePermaMute - &e%{id::%{_p}'s uuid%::%{_id}%::date}% &f&o%{id::%{_p}'s uuid%::%{_id}%::reason}% &eby %{id::%{_p}'s uuid%::%{_id}%::executor}% &efor %{id::%{_p}'s uuid%::%{_id}%::duration}% unmuted %now% &efor&f&o%{_r}% &eby %{_e}%"
+
+            set {history::selfmutes::%{_p}'s uuid%::%{_id}%} to "&ePermaMute - &e%{id::%{_p}'s uuid%::%{_id}%::date}% &f&o%{id::%{_p}'s uuid%::%{_id}%::reason}% &efor %{id::%{_p}'s uuid%::%{_id}%::duration}% unmuted %now% &efor&f&o%{_r}%"
+            set {_pr} to getPlayerPrefix({_p})
+            set {_tr} to getPlayerPrefix({_e})
+
+            send "&b[STAFF] %colored {_pr}%%{_p}% &ewas unmuted for&f&o%{_r}% &eby %colored {_tr}%%{_e}%&e." to all players where [input has permission "easypunish.notify"]
+
+            delete {mute::%{_p}'s uuid%::reason}
+            delete {mute::%{_p}'s uuid%::executor}
+            delete {mute::%{_p}'s uuid%::date}
+            delete {mute::%{_p}'s uuid%::muted}
+            delete {mute::%{_p}'s uuid%::futureDate}
+            delete {mute::%{_p}'s uuid%::target}
+            delete {mute::%{_p}'s uuid%::id}
+
+
+    else:
+
+        if {_type} is "temp":
+            set {_id} to {mute::%{_p}'s uuid%::id}
+            set {history::mutes::%{_p}'s uuid%::%{_id}%} to "&eTempMute - &e%{id::%{_p}'s uuid%::%{_id}%::date}% &f&o%{id::%{_p}'s uuid%::%{_id}%::reason}% &eby %{id::%{_p}'s uuid%::%{_id}%::executor}% &efor %{id::%{_p}'s uuid%::%{_id}%::duration}% unmuted %now% &efor&f&o%{_r}% &eby %{_e}%"
+
+            set {history::selfmutes::%{_p}'s uuid%::%{_id}%} to "&eTempMute - &e%{id::%{_p}'s uuid%::%{_id}%::date}% &f&o%{id::%{_p}'s uuid%::%{_id}%::reason}% &efor %{id::%{_p}'s uuid%::%{_id}%::duration}% unmuted %now% &efor&f&o%{_r}%"
+            set {_pr} to getPlayerPrefix({_p})
+            set {_tr} to getPlayerPrefix({_e})
+
+            broadcast "%colored {_pr}%%{_p}% &ewas unmuted for&f&o%{_r}% &eby %colored {_tr}%%{_e}%&e."
+
+            delete {mute::%{_p}'s uuid%::reason}
+            delete {mute::%{_p}'s uuid%::executor}
+            delete {mute::%{_p}'s uuid%::date}
+            delete {mute::%{_p}'s uuid%::muted}
+            delete {mute::%{_p}'s uuid%::futureDate}
+            delete {mute::%{_p}'s uuid%::target}
+            delete {mute::%{_p}'s uuid%::id}
+        else if {_type} is "perm":
+            set {_id} to {mute::%{_p}'s uuid%::id}
+            set {history::mutes::%{_p}'s uuid%::%{_id}%} to "&ePermaMute - &e%{id::%{_p}'s uuid%::%{_id}%::date}% &f&o%{id::%{_p}'s uuid%::%{_id}%::reason}% &eby %{id::%{_p}'s uuid%::%{_id}%::executor}% &efor %{id::%{_p}'s uuid%::%{_id}%::duration}% unmuted %now% &efor&f&o%{_r}% &eby %{_e}%"
+
+            set {history::selfmutes::%{_p}'s uuid%::%{_id}%} to "&ePermaMute - &e%{id::%{_p}'s uuid%::%{_id}%::date}% &f&o%{id::%{_p}'s uuid%::%{_id}%::reason}% &efor %{id::%{_p}'s uuid%::%{_id}%::duration}% unmuted %now% &efor&f&o%{_r}%"
+            set {_pr} to getPlayerPrefix({_p})
+            set {_tr} to getPlayerPrefix({_e})
+
+            broadcast "%colored {_pr}%%{_p}% &ewas unmuted for&f&o%{_r}% &eby %colored {_tr}%%{_e}%&e."
+
+            delete {mute::%{_p}'s uuid%::reason}
+            delete {mute::%{_p}'s uuid%::executor}
+            delete {mute::%{_p}'s uuid%::date}
+            delete {mute::%{_p}'s uuid%::muted}
+            delete {mute::%{_p}'s uuid%::futureDate}
+            delete {mute::%{_p}'s uuid%::target}
+            delete {mute::%{_p}'s uuid%::id}
+

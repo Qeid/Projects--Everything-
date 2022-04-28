@@ -1,0 +1,32 @@
+command /fly [<player>]:
+	aliases: wings
+	permission: donor.fly
+	permission message: &c&l(!) &7You must be &a&lEMERALD &7or higher to perform this.
+	trigger:
+		if arg 1 is not set:
+			if {fly::%uuid of player%} is false:
+				set player's flight mode to true
+				play sound "entity.experience_orb.pickup" at volume 1 to player
+				send title "&b&lWINGS" with subtitle "&7You enabled flight mode" for 2 seconds
+				set {fly::%uuid of player%} to true
+			else:
+				play sound "entity.experience_orb.pickup" at volume 1 to player
+				set player's flight mode to false
+				send title "&b&lWINGS" with subtitle "&7You disabled flight mode" for 2 seconds
+				set {fly::%uuid of player%} to false
+		else:
+			if player has permission "donor.fly.others":
+				if {fly::%uuid of arg 1%} is false:
+					set arg 1's flight mode to true
+					play sound "entity.experience_orb.pickup" at volume 1 to player
+					send "&b&lWINGS &8| &7You enabled %arg 1%&7's flight mode."
+					send arg 1 title "&b&lWINGS" with subtitle "&7Your flight mode was enabled by %player%" for 2 seconds
+					set {fly::%uuid of arg 1%} to true
+				else:
+					play sound "entity.experience_orb.pickup" at volume 1 to arg 1
+					set arg 1's flight mode to false
+					send "&b&lWINGS &8| &7You disabled %arg 1%&7's flight mode."
+					send arg 1 title "&b&lWINGS" with subtitle "&7You Your flight mode was disabled by %player%" for 2 seconds
+					set {fly::%uuid of arg 1%} to false
+			else:
+				send "&c&l(!) &7You do not have permission to perform this argument."

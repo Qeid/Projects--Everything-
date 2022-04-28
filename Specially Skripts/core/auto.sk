@@ -1,0 +1,48 @@
+every 3.5 minutes:
+    broadcast "&3&lPERK > &fPeople that are &a[VIP] &fand higher get &7&o/glow&f! Use &7&o/buy&f."
+
+every 5.5 minutes:
+    broadcast "&3&lPERK > &fWant to shout something? &3[PIRATE] &fand higher get &7&o/shout&f! Use &7&o/buy&7."
+every 10 minutes:
+    broadcast "&a&lHELP > &7&o/kit &fand &7&o/rtp &fcan be useful."
+every 7 minutes:
+    broadcast "&a&lHELP &8> &fJoin our discord for support! &7&o/discord&f."
+every 30 minutes:
+    execute console command "/save"
+command /save:
+    permission: admin.save
+    permission message: &cYou must be pirate or higher to use this command!
+    trigger:
+        set {_then} to now
+        execute console command "save-all"
+
+        send title "&7&o= &6&lAUTO SAVE&7&o=" with subtitle "&7Saving server, expect lag." to all players for 1 seconds
+        set {_diff} to difference between now and {_then}
+        broadcast "&6&lAUTO SAVE &8> &aSuccessfully saved server. &6(%{_diff}%&6)"
+
+
+on command "sk reload":
+    if player has permission "skript.reload":
+        cancel event
+        set {_args::*} to split complete command at " "
+        if {_args::3} is set:
+            broadcast ""
+            broadcast "&e&lRELOAD &8> &fA skript is being reloaded, Expect lag"
+            broadcast ""
+            set {_now} to now
+            replace all ".sk" with "" in {_args::3}
+            execute player command "skript reload %{_args::3}%"
+            set {_diff} to difference between now and {_now}
+            send ""
+            send "&e&lRELOAD &8> &fYou reloaded &e&n%{_args::3}%.sk &7(%{_diff}%&7)"
+            broadcast "&e&lRELOAD &8> &aSkript successfully reloaded. &e(%{_diff}%&e)"
+        else:
+            send "&6Missing arguments - &f/sk reload <skript>"
+    else:
+        send "&cYou do not have permission to use this command."
+		
+
+
+
+
+/

@@ -1,0 +1,137 @@
+on inventory click:
+    if compare(metadata tag "shop_quickbuy" of player, event-inventory) = true:
+        cancel event
+        if index of event-slot = 1:
+            createBlockGui(player)
+        if index of event-slot = 2:
+            createMeleeGui(player)
+        if index of event-slot = 3:
+            createArmorGui(player)
+        if index of event-slot = 4:
+            createToolsGui(player)
+        if index of event-slot = 5:
+            createRangedGui(player)
+        if index of event-slot = 6:
+            createPotionsGui(player)
+        if index of event-slot = 7:
+            createUtilityGui(player)
+on inventory click:
+    if compare(metadata tag "shop_melee" of player, event-inventory) = true:
+        cancel event
+        if index of event-slot = 1:
+            createBlockGui(player)
+        if index of event-slot = 0:
+            open metadata tag "shop_quickbuy" of player to player
+        if index of event-slot = 3:
+            createArmorGui(player)
+        if index of event-slot = 4:
+            createToolsGui(player)
+        if index of event-slot = 5:
+            createRangedGui(player)
+        if index of event-slot = 6:
+            createPotionsGui(player)
+        if index of event-slot = 7:
+            createUtilityGui(player)
+on inventory click:
+    if compare(metadata tag "shop_armor" of player, event-inventory) = true:
+        cancel event
+        if index of event-slot = 1:
+            createBlockGui(player)
+        if index of event-slot = 2:
+            createMeleeGui(player)
+        if index of event-slot = 0:
+            open metadata tag "shop_quickbuy" of player to player
+        if index of event-slot = 4:
+            createToolsGui(player)
+        if index of event-slot = 5:
+            createRangedGui(player)
+        if index of event-slot = 6:
+            createPotionsGui(player)
+        if index of event-slot = 7:
+            createUtilityGui(player)
+on inventory click:
+    if compare(metadata tag "shop_tools" of player, event-inventory) = true:
+        cancel event
+        if index of event-slot = 0:
+            open metadata tag "shop_quickbuy" of player to player
+        if index of event-slot = 1:
+            createBlockGui(player)
+        if index of event-slot = 2:
+            createMeleeGui(player)
+        if index of event-slot = 3:
+            createArmorGui(player)
+        if index of event-slot = 4:
+            createToolsGui(player)
+        if index of event-slot = 5:
+            createRangedGui(player)
+        if index of event-slot = 6:
+            createPotionsGui(player)
+        if index of event-slot = 7:
+            createUtilityGui(player)
+on inventory click:
+    if compare(metadata tag "shop_ranged" of player, event-inventory) = true:
+        cancel event
+        if index of event-slot = 0:
+            open metadata tag "shop_quickbuy" of player to player
+        if index of event-slot = 1:
+            createBlockGui(player)
+        if index of event-slot = 2:
+            createMeleeGui(player)
+        if index of event-slot = 3:
+            createArmorGui(player)
+        if index of event-slot = 4:
+            createToolsGui(player)
+        if index of event-slot = 6:
+            createPotionsGui(player)
+        if index of event-slot = 7:
+            createUtilityGui(player)
+on inventory click:
+    if compare(metadata tag "shop_potions" of player, event-inventory) = true:
+        cancel event
+        if index of event-slot = 0:
+            open metadata tag "shop_quickbuy" of player to player
+        if index of event-slot = 1:
+            createBlockGui(player)
+        if index of event-slot = 2:
+            createMeleeGui(player)
+        if index of event-slot = 3:
+            createArmorGui(player)
+        if index of event-slot = 4:
+            createToolsGui(player)
+        if index of event-slot = 5:
+            createRangedGui(player)
+        if index of event-slot = 7:
+            createUtilityGui(player)
+on inventory click:
+    if compare(metadata tag "shop_utility" of player, event-inventory) = true:
+        cancel event
+        if index of event-slot = 0:
+            open metadata tag "shop_quickbuy" of player to player
+        if index of event-slot = 1:
+            createBlockGui(player)
+        if index of event-slot = 2:
+            createMeleeGui(player)
+        if index of event-slot = 3:
+            createArmorGui(player)
+        if index of event-slot = 4:
+            createToolsGui(player)
+        if index of event-slot = 5:
+            createRangedGui(player)
+        if index of event-slot = 6:
+            createPotionsGui(player)
+
+on inventory click:
+    if compare(metadata tag "shop_blocks" of player, event-inventory) = true:
+        cancel event
+        if index of event-slot = 0:
+            open metadata tag "shop_quickbuy" of player to player
+        if index of event-slot = 2:
+            createMeleeGui(player)
+        if index of event-slot = 3:
+            createArmorGui(player)
+        if index of event-slot = 4:
+            createToolsGui(player)
+        if index of event-slot = 5:
+            createRangedGui(player)
+        if index of event-slot = 6:
+            createPotionsGui(player)

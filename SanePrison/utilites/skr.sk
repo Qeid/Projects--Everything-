@@ -1,0 +1,41 @@
+command /skr <text>:
+    usage: &cMissing arguments. /skr <skript>
+    permission: skript.reload
+    permission message: &c&l(!) &7You must be &9&lDEVELOPER &7or higher to perform this.
+    trigger:
+        if arg 1 is not "z_completer" or "z_completer.sk" or "vapegui" or "vapegui.sk" or "general/donor_perks" or "general/donor_perks.sk" or "general/main" or "general/main.sk" or "general/quests" or "general/quests.sk" or "general/vouchers" or "general/vouchers.sk" or "staff/spg" or "staff/spg.sk" or "staff/staff" or "staff/staff.sk" or "utilites/skr" or "utilites/skr.sk" or "utilites/genid" or "utilites/genid.sk" or "utilites/debug" or "utilites/debug.sk":
+            send "&cSkript does not exist. /skr <skript>"
+            stop
+        if arg 1 is "z_completer" or "z_completer.sk":
+            execute player command "sk reload z_completer"
+            stop
+        if arg 1 is "vapegui" or "vapegui.sk":
+            execute player command "sk reload vape"
+            stop
+        if arg 1 is "general/donor_perks" or "general/donor_perks.sk":
+            execute player command "sk reload general/donor_perks"
+            stop
+        if arg 1 is "general/main" or "general/main.sk":
+            execute player command "sk reload general/main"
+            stop
+        if arg 1 is "general/vouchers" or "general/vouchers.sk":
+            execute player command "sk reload general/vouchers"
+            stop
+        if arg 1 is "general/quests" or "general/quests.sk":
+            execute player command "sk reload general/quests"
+            stop
+        if arg 1 is "staff/spg" or "staff/spg.sk":
+            execute player command "sk reload staff/spg"
+            stop
+        if arg 1 is "staff/staff" or "staff/staff":
+            execute player command "sk reload staff/staff"
+            stop
+        if arg 1 is "utilites/skr" or "utilites/skr.sk":
+            execute player command "sk reload utilites/skr"
+            stop
+        if arg 1 is "utilites/idgen" or "utilites/idgen.sk":
+            execute player command "sk reload utilites/idgen"
+            stop
+        if arg 1 is "utilites/debug" or "utilites/debug.sk":
+            execute player command "sk reload utilites/debug"
+            stop

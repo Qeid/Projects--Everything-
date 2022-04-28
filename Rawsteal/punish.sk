@@ -1,0 +1,450 @@
+command /punish <offline player>:
+    aliases: p
+    usage: &8» &7/punish &f(player)
+    permission: staff
+    permission message: &cYou need junior mod or higher to use this command!
+    trigger:
+        set metadata tag "punish_gui" of player to chest inventory with 5 rows named "Punishing %arg 1%"
+
+        set {arg1} to arg 1
+        set slot 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44 of metadata tag "punish_gui" of player to gray stained glass pane named "&f"
+        set slot 10 of metadata tag "punish_gui" of player to chain helmet named "&bSpam / Flood" with lore "" and "&7Left click to punish publicly" and "&7Right click to punish silently" and "" and "&8Required: JMOD+"
+        set slot 11, 13, 15, 20, 22, 24, 29, 31, 33 of metadata tag "punish_gui" of player to iron bars named "&7Seperator"
+        set slot 19 of metadata tag "punish_gui" of player to paper named "&bSlurs / Discrimination" with lore "" and "&7Left click to punish publicly" and "&7Right click to punish silently" and "" and "&8Required: JMOD+"
+        set slot 28 of metadata tag "punish_gui" of player to bone named "&bSuicidal Encourgement / Threatening" with lore "" and "&7Left click to punish publicly" and "&7Right click to punish silently" and "" and "&8Required: JMOD+"
+        set slot 12 of metadata tag "punish_gui" of player to diamond sword named "&bCheating" with lore "" and "&7Left click to punish publicly" and "&7Right click to punish silently" and "" and "&8Required: JMOD+"
+        set slot 21 of metadata tag "punish_gui" of player to iron axe named "&bCombat Logging / Pushing out of spawn" with lore "" and "&7Left click to punish publicly" and "&7Right click to punish silently" and "" and "&8Required: JMOD+"
+        set slot 30 of metadata tag "punish_gui" of player to golden hoe named "&bAlt Farming / Spawn Abuse" with lore "" and "&7Left click to punish publicly" and "&7Right click to punish silently" and "" and "&8Required: JMOD+"
+        
+        open metadata tag "punish_gui" of player to player
+        #punishSeverity(arg 1, arg 2, arg 3)
+
+
+on inventory click:
+    if compare(metadata tag "punish_gui" of player, event-inventory) = true:
+        cancel event
+        if index of event-slot = 10:
+            if event-click type is left mouse button:
+                punishSeverity(player, {arg1}, "Spam / Flood", false)
+                close player's inventory
+            else if event-click type is right mouse button:
+                punishSeverity(player, {arg1}, "Spam / Flood", true)
+                close player's inventory
+        if index of event-slot = 19:
+            if event-click type is left mouse button:
+                punishSeverity(player, {arg1}, "Slurs / Discrimination", false)
+                close player's inventory
+            else if event-click type is right mouse button:
+                punishSeverity(player, {arg1}, "Slurs / Discrimination", true)
+                close player's inventory
+        if index of event-slot = 28:
+            if event-click type is left mouse button:
+                punishSeverity(player, {arg1}, "Suicidal Encourgement / Threatening", false)
+                close player's inventory
+            else if event-click type is right mouse button:
+                punishSeverity(player, {arg1}, "Suicidal Encourgement / Threatening", true)
+
+                close player's inventory
+        if index of event-slot = 12:
+            if event-click type is left mouse button:
+                punishSeverity(player, {arg1}, "Cheating", false)
+                close player's inventory
+            else if event-click type is right mouse button:
+                punishSeverity(player, {arg1}, "Cheating", true)
+
+                close player's inventory
+        if index of event-slot = 21:
+            if event-click type is left mouse button:
+                punishSeverity(player, {arg1}, "Combat Logging / Pushing out of spawn", false)
+                close player's inventory
+            else if event-click type is right mouse button:
+                punishSeverity(player, {arg1}, "Combat Logging / Pushing out of spawn", true)
+
+                close player's inventory
+        if index of event-slot = 30:
+            if event-click type is left mouse button:
+                punishSeverity(player, {arg1}, "Alt Farming / Spawn Abuse", false)
+                close player's inventory
+            else if event-click type is right mouse button:
+                punishSeverity(player, {arg1}, "Alt Farming / Spawn Abuse", true)
+
+                close player's inventory
+
+function punishSeverity(executor: player, p: player, reason: text, silent: boolean):
+    if {_reason} = "Spam / Flood":
+        if {_silent} = false:
+            if {severity::spamflood::%{_p}'s uuid%} is not set:
+                add 1 to {severity::spamflood::%{_p}'s uuid%}
+                set {_duration} to "30 MINUTES"
+                execute {_executor} command "tempmute %{_p}% 30m Spam / Flood"
+            else if {severity::spamflood::%{_p}'s uuid%} = 1:
+                add 1 to {severity::spamflood::%{_p}'s uuid%}
+                set {_duration} to "1 HOUR"
+                execute {_executor} command "tempmute %{_p}% 1h Spam / Flood"
+            else if {severity::spamflood::%{_p}'s uuid%} = 2:
+                add 1 to {severity::spamflood::%{_p}'s uuid%}
+                set {_duration} to "3 HOURS"
+                execute {_executor} command "tempmute %{_p}% 3h Spam / Flood"
+            else if {severity::spamflood::%{_p}'s uuid%} = 3:
+                add 1 to {severity::spamflood::%{_p}'s uuid%}
+                set {_duration} to "6 HOURS"
+                execute {_executor} command "tempmute %{_p}% 6h Spam / Flood"
+            else if {severity::spamflood::%{_p}'s uuid%} = 4:
+                add 1 to {severity::spamflood::%{_p}'s uuid%}
+                set {_duration} to "12 HOURS"
+                execute {_executor} command "tempmute %{_p}% 12h Spam / Flood"
+            else if {severity::spamflood::%{_p}'s uuid%} = 5:
+                add 1 to {severity::spamflood::%{_p}'s uuid%}
+                set {_duration} to "3 DAYS"
+                execute {_executor} command "tempmute %{_p}% 3d Spam / Flood"
+            else if {severity::spamflood::%{_p}'s uuid%} = 6:
+                if {_executor}'s prefix contains "&8(<##2FC313>&lJUNIOR MOD&8)":
+                    send "&cYou need mod or higher to issue this severity!" to {_executor}
+                    stop
+                else:
+                    add 1 to {severity::spamflood::%{_p}'s uuid%}
+                    set {_duration} to "FOREVER"
+                    execute {_executor} command "mute %{_p}% Spam / Flood"
+                    delete {severity::spamflood::%{_p}'s uuid%}
+        if {_silent} = true:
+            if {severity::spamflood::%{_p}'s uuid%} is not set:
+                add 1 to {severity::spamflood::%{_p}'s uuid%}
+                set {_duration} to "30 MINUTES"
+                execute {_executor} command "tempmute %{_p}% -s 30m Spam / Flood"
+            else if {severity::spamflood::%{_p}'s uuid%} = 1:
+                add 1 to {severity::spamflood::%{_p}'s uuid%}
+                set {_duration} to "1 HOUR"
+                execute {_executor} command "tempmute %{_p}% -s 1h Spam / Flood"
+            else if {severity::spamflood::%{_p}'s uuid%} = 2:
+                add 1 to {severity::spamflood::%{_p}'s uuid%}
+                set {_duration} to "3 HOURS"
+                execute {_executor} command "tempmute %{_p}% -s 3h Spam / Flood"
+            else if {severity::spamflood::%{_p}'s uuid%} = 3:
+                add 1 to {severity::spamflood::%{_p}'s uuid%}
+                set {_duration} to "6 HOURS"
+                execute {_executor} command "tempmute %{_p}% -s 6h Spam / Flood"
+            else if {severity::spamflood::%{_p}'s uuid%} = 4:
+                add 1 to {severity::spamflood::%{_p}'s uuid%}
+                set {_duration} to "12 HOURS"
+                execute {_executor} command "tempmute %{_p}% 12h -s Spam / Flood"
+            else if {severity::spamflood::%{_p}'s uuid%} = 5:
+                add 1 to {severity::spamflood::%{_p}'s uuid%}
+                set {_duration} to "3 DAYS"
+                execute {_executor} command "tempmute %{_p}% 7d -s Spam / Flood"
+            else if {severity::spamflood::%{_p}'s uuid%} = 6:
+                if {_executor}'s prefix contains "&8(<##2FC313>&lJUNIOR MOD&8)":
+                    send "&cYou need mod or higher to issue this severity!" to {_executor}
+                    stop
+                else:
+                    add 1 to {severity::spamflood::%{_p}'s uuid%}
+                    set {_duration} to "FOREVER"
+                    execute {_executor} command "mute %{_p}% -s Spam / Flood"
+                    delete {severity::spamflood::%{_p}'s uuid%}
+    if {_reason} = "Slurs / Discrimination":
+        if {_silent} = false:
+            if {severity::slurs::%{_p}'s uuid%} is not set:
+                add 1 to {severity::slurs::%{_p}'s uuid%}
+                set {_duration} to "14 DAYS"
+                execute {_executor} command "tempmute %{_p}% 14d Slurs / Discrimination"
+            else if {severity::slurs::%{_p}'s uuid%} = 1:
+                add 1 to {severity::slurs::%{_p}'s uuid%}
+                set {_duration} to "30 DAYS"
+                execute {_executor} command "tempmute %{_p}% 30d Slurs / Discrimination"
+            else if {severity::slurs::%{_p}'s uuid%} = 2:
+                add 1 to {severity::slurs::%{_p}'s uuid%}
+                set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempmute %{_p}% 3mo Slurs / Discrimination"
+            else if {severity::slurs::%{_p}'s uuid%} = 3:
+                if {_executor}'s prefix contains "&8(<##2FC313>&lJUNIOR MOD&8)":
+                    send "&cYou need mod or higher to issue this severity!" to {_executor}
+                    stop
+                else:
+                    add 1 to {severity::slurs::%{_p}'s uuid%}
+                    set {_duration} to "FOREVER"
+                    execute {_executor} command "mute %{_p}% Slurs / Discrimination"
+                    delete {severity::slurs::%{_p}'s uuid%}
+    
+        if {_silent} = true:
+            if {severity::slurs::%{_p}'s uuid%} is not set:
+                add 1 to {severity::slurs::%{_p}'s uuid%}
+                set {_duration} to "14 DAYS"
+                execute {_executor} command "tempmute %{_p}% 14d -s Slurs / Discrimination"
+            else if {severity::slurs::%{_p}'s uuid%} = 1:
+                add 1 to {severity::slurs::%{_p}'s uuid%}
+                set {_duration} to "30 DAYS"
+                execute {_executor} command "tempmute %{_p}% 30d -s Slurs / Discrimination"
+            else if {severity::slurs::%{_p}'s uuid%} = 2:
+                add 1 to {severity::slurs::%{_p}'s uuid%}
+                set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempmute %{_p}% 3mo -s Slurs / Discrimination"
+            else if {severity::slurs::%{_p}'s uuid%} = 3:
+                if {_executor}'s prefix contains "&8(<##2FC313>&lJUNIOR MOD&8)":
+                    send "&cYou need mod or higher to issue this severity!" to {_executor}
+                    stop
+                else:
+                    add 1 to {severity::slurs::%{_p}'s uuid%}
+                    set {_duration} to "FOREVER"
+                    execute {_executor} command "mute %{_p}% -s Slurs / Discrimination"
+                    delete {severity::slurs::%{_p}'s uuid%}
+
+    if {_reason} = "Suicidal Encourgement / Threatening":
+        if {_silent} = false:
+            if {severity::threat::%{_p}'s uuid%} is not set:
+                add 1 to {severity::threat::%{_p}'s uuid%}
+                #set {_duration} to "14 DAYS"
+                execute {_executor} command "tempmute %{_p}% 7d Suicidal Encourgement / Threatening"
+            else if {severity::threat::%{_p}'s uuid%} = 1:
+                add 1 to {severity::threat::%{_p}'s uuid%}
+                #set {_duration} to "30 DAYS"
+                execute {_executor} command "tempmute %{_p}% 14d Suicidal Encourgement / Threatening"
+            else if {severity::threat::%{_p}'s uuid%} = 2:
+                add 1 to {severity::threat::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempmute %{_p}% 30d Suicidal Encourgement / Threatening"
+            else if {severity::threat::%{_p}'s uuid%} = 3:
+                if {_executor}'s prefix contains "&8(<##2FC313>&lJUNIOR MOD&8)":
+                    send "&cYou need mod or higher to issue this severity!" to {_executor}
+                    stop
+                else:
+                    add 1 to {severity::threat::%{_p}'s uuid%}
+                    #set {_duration} to "FOREVER"
+                    execute {_executor} command "mute %{_p}% Suicidal Encourgement / Threatening"
+                    delete {severity::threat::%{_p}'s uuid%}
+        if {_silent} = true:
+            if {severity::threat::%{_p}'s uuid%} is not set:
+                add 1 to {severity::threat::%{_p}'s uuid%}
+                #set {_duration} to "14 DAYS"
+                execute {_executor} command "tempmute %{_p}% 7d -s Suicidal Encourgement / Threatening"
+            else if {severity::threat::%{_p}'s uuid%} = 1:
+                add 1 to {severity::threat::%{_p}'s uuid%}
+                #set {_duration} to "30 DAYS"
+                execute {_executor} command "tempmute %{_p}% 14d -s Suicidal Encourgement / Threatening"
+            else if {severity::threat::%{_p}'s uuid%} = 2:
+                add 1 to {severity::threat::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempmute %{_p}% 30d -s Suicidal Encourgement / Threatening"
+            else if {severity::threat::%{_p}'s uuid%} = 3:
+                if {_executor}'s prefix contains "&8(<##2FC313>&lJUNIOR MOD&8)":
+                    send "&cYou need mod or higher to issue this severity!" to {_executor}
+                else:
+                    add 1 to {severity::threat::%{_p}'s uuid%}
+                    #set {_duration} to "FOREVER"
+                    execute {_executor} command "mute %{_p}% -s Suicidal Encourgement / Threatening"
+                    delete {severity::threat::%{_p}'s uuid%}
+    if {_reason} = "Cheating":
+        if {_silent} = false:
+            if {severity::cheat::%{_p}'s uuid%} is not set:
+                add 1 to {severity::cheat::%{_p}'s uuid%}
+                #set {_duration} to "14 DAYS"
+                execute {_executor} command "tempban %{_p}% 7d Cheating"
+            else if {severity::cheat::%{_p}'s uuid%} = 1:
+                add 1 to {severity::cheat::%{_p}'s uuid%}
+                #set {_duration} to "30 DAYS"
+                execute {_executor} command "tempban %{_p}% 14d Cheating"
+            else if {severity::cheat::%{_p}'s uuid%} = 2:
+                add 1 to {severity::cheat::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% 30d Cheating"
+            else if {severity::cheat::%{_p}'s uuid%} = 3:
+                if {_executor}'s prefix contains "&8(<##2FC313>&lJUNIOR MOD&8)":
+                    send "&cYou need mod or higher to issue this severity!" to {_executor}
+                    stop
+                else:
+                    add 1 to {severity::cheat::%{_p}'s uuid%}
+                    #set {_duration} to "FOREVER"
+                    execute {_executor} command "ban %{_p}% Cheating"
+                    delete {severity::cheat::%{_p}'s uuid%}
+        if {_silent} = true:
+            if {severity::cheat::%{_p}'s uuid%} is not set:
+                add 1 to {severity::cheat::%{_p}'s uuid%}
+                #set {_duration} to "14 DAYS"
+                execute {_executor} command "tempban %{_p}% -s 7d Cheating"
+            else if {severity::cheat::%{_p}'s uuid%} = 1:
+                add 1 to {severity::cheat::%{_p}'s uuid%}
+                #set {_duration} to "30 DAYS"
+                execute {_executor} command "tempban %{_p}% -s 14d Cheating"
+            else if {severity::cheat::%{_p}'s uuid%} = 2:
+                add 1 to {severity::cheat::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% -s 30d Cheating"
+            else if {severity::cheat::%{_p}'s uuid%} = 3:
+                if {_executor}'s prefix contains "&8(<##2FC313>&lJUNIOR MOD&8)":
+                    send "&cYou need mod or higher to issue this severity!" to {_executor}
+                    stop
+                else:
+                    add 1 to {severity::cheat::%{_p}'s uuid%}
+                    #set {_duration} to "FOREVER"
+                    execute {_executor} command "ban %{_p}% -s Cheating"
+                    delete {severity::cheat::%{_p}'s uuid%}
+    if {_reason} = "Combat Logging / Pushing out of spawn":
+        if {_silent} = false:
+            if {severity::combat::%{_p}'s uuid%} is not set:
+                add 1 to {severity::combat::%{_p}'s uuid%}
+                #set {_duration} to "14 DAYS"
+                execute {_executor} command "warn %{_p}% Combat Logging / Pushing out of spawn"
+            else if {severity::combat::%{_p}'s uuid%} = 1:
+                add 1 to {severity::combat::%{_p}'s uuid%}
+                #set {_duration} to "30 DAYS"
+                execute {_executor} command "tempban %{_p}% 1h Combat Logging / Pushing out of spawn"
+            else if {severity::combat::%{_p}'s uuid%} = 2:
+                add 1 to {severity::combat::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% 3h Combat Logging / Pushing out of spawn"
+            else if {severity::combat::%{_p}'s uuid%} = 3:
+                add 1 to {severity::combat::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% 6h Combat Logging / Pushing out of spawn"
+            else if {severity::combat::%{_p}'s uuid%} = 4:
+                add 1 to {severity::combat::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% 12h Combat Logging / Pushing out of spawn"
+            else if {severity::combat::%{_p}'s uuid%} = 5:
+                add 1 to {severity::combat::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% 3d Combat Logging / Pushing out of spawn"
+            else if {severity::combat::%{_p}'s uuid%} = 6:
+                add 1 to {severity::combat::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% 7d Combat Logging / Pushing out of spawn"
+            else if {severity::combat::%{_p}'s uuid%} = 7:
+                add 1 to {severity::combat::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% 14d Combat Logging / Pushing out of spawn"
+            else if {severity::cheat::%{_p}'s uuid%} = 8:
+                if {_executor}'s prefix contains "&8(<##2FC313>&lJUNIOR MOD&8)":
+                    send "&cYou need mod or higher to issue this severity!" to {_executor}
+                    stop
+                else:
+                    add 1 to {severity::combat::%{_p}'s uuid%}
+                    #set {_duration} to "FOREVER"
+                    execute {_executor} command "ban %{_p}% Combat Logging / Pushing out of spawn"
+                    delete {severity::combat::%{_p}'s uuid%}
+        if {_silent} = true:
+            if {severity::combat::%{_p}'s uuid%} is not set:
+                add 1 to {severity::combat::%{_p}'s uuid%}
+                #set {_duration} to "14 DAYS"
+                execute {_executor} command "warn %{_p}% -s Combat Logging / Pushing out of spawn"
+            else if {severity::combat::%{_p}'s uuid%} = 1:
+                add 1 to {severity::combat::%{_p}'s uuid%}
+                #set {_duration} to "30 DAYS"
+                execute {_executor} command "tempban %{_p}% 1h -s Combat Logging / Pushing out of spawn"
+            else if {severity::combat::%{_p}'s uuid%} = 2:
+                add 1 to {severity::combat::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% 3h -s Combat Logging / Pushing out of spawn"
+            else if {severity::combat::%{_p}'s uuid%} = 3:
+                add 1 to {severity::combat::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% 6h -s Combat Logging / Pushing out of spawn"
+            else if {severity::combat::%{_p}'s uuid%} = 4:
+                add 1 to {severity::combat::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% 12h -s Combat Logging / Pushing out of spawn"
+            else if {severity::combat::%{_p}'s uuid%} = 5:
+                add 1 to {severity::combat::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% 3d -s Combat Logging / Pushing out of spawn"
+            else if {severity::combat::%{_p}'s uuid%} = 6:
+                add 1 to {severity::combat::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% 7d -s Combat Logging / Pushing out of spawn"
+            else if {severity::combat::%{_p}'s uuid%} = 7:
+                add 1 to {severity::combat::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% 14d -s Combat Logging / Pushing out of spawn"
+            else if {severity::cheat::%{_p}'s uuid%} = 8:
+                if {_executor}'s prefix contains "&8(<##2FC313>&lJUNIOR MOD&8)":
+                    send "&cYou need mod or higher to issue this severity!" to {_executor}
+                    stop
+                else:
+                    add 1 to {severity::combat::%{_p}'s uuid%}
+                    #set {_duration} to "FOREVER"
+                    execute {_executor} command "ban %{_p}% -s Combat Logging / Pushing out of spawn"
+                    delete {severity::combat::%{_p}'s uuid%}
+
+
+    if {_reason} = "Alt Farming / Spawn Abuse":
+        if {_silent} = false:
+            if {severity::farming::%{_p}'s uuid%} is not set:
+                add 1 to {severity::farming::%{_p}'s uuid%}
+                #set {_duration} to "14 DAYS"
+                execute {_executor} command "warn %{_p}% Alt Farming / Spawn Abuse"
+            else if {severity::farming::%{_p}'s uuid%} = 1:
+                add 1 to {severity::farming::%{_p}'s uuid%}
+                #set {_duration} to "30 DAYS"
+                execute {_executor} command "tempban %{_p}% 1h Alt Farming / Spawn Abuse"
+            else if {severity::farming::%{_p}'s uuid%} = 2:
+                add 1 to {severity::farming::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% 3h Alt Farming / Spawn Abuse"
+            else if {severity::farming::%{_p}'s uuid%} = 3:
+                add 1 to {severity::farming::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% 6h Alt Farming / Spawn Abuse"
+            else if {severity::farming::%{_p}'s uuid%} = 4:
+                add 1 to {severity::farming::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% 12h Alt Farming / Spawn Abuse"
+            else if {severity::farming::%{_p}'s uuid%} = 5:
+                add 1 to {severity::farming::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% 3d Alt Farming / Spawn Abuse"
+            else if {severity::farming::%{_p}'s uuid%} = 6:
+                add 1 to {severity::farming::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% 7d Alt Farming / Spawn Abuse"
+            else if {severity::farming::%{_p}'s uuid%} = 7:
+                add 1 to {severity::farming::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% 14d Alt Farming / Spawn Abuse"
+            else if {severity::farming::%{_p}'s uuid%} = 8:
+                if {_executor}'s prefix contains "&8(<##2FC313>&lJUNIOR MOD&8)":
+                    send "&cYou need mod or higher to issue this severity!" to {_executor}
+                    stop
+                else:
+                    add 1 to {severity::farming::%{_p}'s uuid%}
+                    #set {_duration} to "FOREVER"
+                    execute {_executor} command "ban %{_p}% Alt Farming / Spawn Abuse"
+                    delete {severity::farming::%{_p}'s uuid%}
+        if {_silent} = true:
+            if {severity::farming::%{_p}'s uuid%} is not set:
+                add 1 to {severity::farming::%{_p}'s uuid%}
+                #set {_duration} to "14 DAYS"
+                execute {_executor} command "warn %{_p}% -s Alt Farming / Spawn Abuse"
+            else if {severity::farming::%{_p}'s uuid%} = 1:
+                add 1 to {severity::farming::%{_p}'s uuid%}
+                #set {_duration} to "30 DAYS"
+                execute {_executor} command "tempban %{_p}% -s 1h Alt Farming / Spawn Abuse"
+            else if {severity::farming::%{_p}'s uuid%} = 2:
+                add 1 to {severity::farming::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% -s 3h Alt Farming / Spawn Abuse"
+            else if {severity::farming::%{_p}'s uuid%} = 3:
+                add 1 to {severity::farming::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% -s 6h Alt Farming / Spawn Abuse"
+            else if {severity::farming::%{_p}'s uuid%} = 4:
+                add 1 to {severity::farming::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% -s 12h Alt Farming / Spawn Abuse"
+            else if {severity::farming::%{_p}'s uuid%} = 5:
+                add 1 to {severity::farming::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% -s 3d Alt Farming / Spawn Abuse"
+            else if {severity::farming::%{_p}'s uuid%} = 6:
+                add 1 to {severity::farming::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% -s 7d Alt Farming / Spawn Abuse"
+            else if {severity::farming::%{_p}'s uuid%} = 7:
+                add 1 to {severity::farming::%{_p}'s uuid%}
+                #set {_duration} to "3 MONTHS"
+                execute {_executor} command "tempban %{_p}% -s 14d Alt Farming / Spawn Abuse"
+            else if {severity::farming::%{_p}'s uuid%} = 8:
+                if {_executor}'s prefix contains "&8(<##2FC313>&lJUNIOR MOD&8)":
+                    send "&cYou need mod or higher to issue this severity!" to {_executor}
+                    stop
+                else:
+                    add 1 to {severity::farming::%{_p}'s uuid%}
+                    #set {_duration} to "FOREVER"
+                    execute {_executor} command "ban %{_p}% -s Alt Farming / Spawn Abuse"
+                    delete {severity::farming::%{_p}'s uuid%}

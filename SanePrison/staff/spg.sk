@@ -1,0 +1,29 @@
+command /setupgamerules:
+    aliases: spg
+    permission: staff.setupgamerules
+    permission message: &c&l(!) &7You must be &4&lADMIN &7or higher to perform this.
+    trigger:
+        make player execute "gamerule keepInventory true"
+        make player execute "gamerule announceAdvancements false"
+        make player execute "gamerule disableElytraMovementCheck false"
+        make player execute "gamerule disableRaids true"
+        make player execute "gamerule commandBlockOutput false"
+        make player execute "gamerule doDaylightCycle false"
+        make player execute "gamerule doFireTick false"
+        make player execute "gamerule doInsomnia false"
+        make player execute "gamerule doImmediateRespawn true"
+        make player execute "gamerule doMobLoot false"
+        make player execute "gamerule doMobSpawning false"
+        make player execute "gamerule doPatrolSpawning false"
+        make player execute "gamerule doTraderSpawning false"
+        make player execute "gamerule doWeatherCycle false"
+        make player execute "gamerule drowningDamage false"
+        make player execute "gamerule fallDamage false"
+        make player execute "gamerule fireDamage false"
+        make player execute "gamerule forgiveDeadPlayers true"
+        make player execute "gamerule logAdminCommands false"
+        make player execute "gamerule mobGriefing false"
+        make player execute "gamerule sendCommandFeedback true"
+        make player execute "gamerule showDeathMessages false"
+        make player execute "gamerule spectatorsGenerateChunks false"
+        send "&aUpdated gamerules."

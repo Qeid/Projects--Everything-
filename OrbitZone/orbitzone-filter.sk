@@ -1,0 +1,35 @@
+on load:
+	load yaml "plugins/Skript/scripts/config/filter-list.yml" as "plugins/Skript/scripts/config/filter-list.yml"
+options:
+	pr: <##3498db>&lCHAT &8•
+	mc: <##3498db>
+	sc: <##d5d5d5>
+
+command /filter [<text>] [<text>]:
+    permission: chatutils.filter
+    trigger:
+        if arg 1 is "add":
+            if arg 2 is set:
+                set {_list::*} to skript-yaml list "filter-list" of "plugins/Skript/scripts/config/filter-list.yml"
+                if "%skript-yaml list "filter-list" from "plugins/Skript/scripts/config/filter-list.yml"%" does not contain "%arg 2%":
+                    add arg 2 to yaml list "filter-list" from "plugins/Skript/scripts/config/filter-list.yml"
+
+                    save yaml "plugins/Skript/scripts/config/filter-list.yml"
+                    send "{@pr} {@sc}You added {@mc}&o%arg 2%{@sc} to the filter list."
+                else:
+                    send "{@pr} {@sc}Error: We found a filtered word matching {@mc}&o%arg 2%{@sc} already."
+            
+import:
+	java.util.regex.Matcher
+	java.util.regex.Pattern
+
+
+on chat:
+    set {_prefix} to formatted (player's prefix).replaceAll("&##([a-fA-F0-9]{6})", "<##$1>")
+    set {_suffix} to formatted (player's suffix).replaceAll("&##([a-fA-F0-9]{6})", "<##$1>")
+    set {_color} to {luckperms::players}.getMetaData(player).getMetaValue("chatcolor")
+    set chat format to "%getClanTag(player)%%{_prefix}%%player%%{_suffix}%&r: %{_color} ? ""%%message%"
+
+# command /deleteyaml:
+#     trigger:
+#         delete yaml "plugins/Skript/scripts/config/filter-list.yml"

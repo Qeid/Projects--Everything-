@@ -1,0 +1,205 @@
+command /rank [<text>] [<text>] [<text>]:
+    permission: lobby.rank
+    permission message: &cInsufficient permissions!
+    aliases: cloud:lobby:rank
+    trigger:
+        if arg 1 is not set:
+            send ""
+            send "&8> &aHelp commands"
+            send "&8"
+            send "&2&o/rank create <name> &8- &7&oCreates a rank"
+            send "&2&o/rank delete <name> &8- &7&oDeletes a rank"
+            send "&2&o/rank info <name> &8- &7&oCreates a rank"
+            send "&2&o/rank list &8- &7&oLists ranks"
+            send "&2&o/rank setprefix <rank> <prefix> &8- &7&oSets a rank's prefix"
+            send "&2&o/rank setsuffix <rank> <suffix> &8- &7&oSets a rank's prefix"
+            send "&2&o/rank setrank <player> <rank> &8- &7&oSets a player's rank to the desired."
+            send "&2&o/rank setplayerprefix <player> <prefix> &8- &7&oSets a player's prefix"
+            send ""
+            stop
+        if arg 1 is not "help" or "create" or "delete" or "info" or "list" or "setprefix" or "setsuffix" or "setrank" or "setplayerprefix" or "setplayersuffix":
+            send "&cUnknown sub-argument &7%arg 1%&c." and "&cPlease view &7/rank help &cfor more information."
+            stop
+        if arg 1 is "help":
+            send ""
+            send "&8> &aHelp commands"
+            send "&8"
+            send "&2&o/rank create <name> &8- &7&oCreates a rank"
+            send "&2&o/rank delete <name> &8- &7&oDeletes a rank"
+            send "&2&o/rank info <name> &8- &7&oCreates a rank"
+            send "&2&o/rank list &8- &7&oLists ranks"
+            send "&2&o/rank setprefix <rank> <prefix> &8- &7&oSets a rank's prefix"
+            send "&2&o/rank setsuffix <rank> <suffix> &8- &7&oSets a rank's prefix"
+            send "&2&o/rank setrank <player> <rank> &8- &7&oSets a player's rank to the desired."
+            send "&2&o/rank setplayerprefix <player> <prefix> &8- &7&oSets a player's prefix"
+            send "&2&o/rank setplayersuffix <player> <suffix> &8- &7&oSets a player's suffix"
+            send ""
+        if arg 1 is "create":
+            if arg 2 is set:   
+                createRank(player, arg 2)
+                stop
+            else:
+                send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "delete":
+            if arg 2 is set:   
+                deleteRank(player, arg 2)
+                stop
+            else:
+                send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "info":
+            if arg 2 is set:   
+                infoRank(player, arg 2)
+                stop
+            else:
+                send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "list":
+            listRanks(player)
+            stop
+        if arg 1 is "setprefix":
+            if arg 2 is set:
+                if arg 3 is set:
+                    setRankPrefix(player, arg 2, arg 3)
+                    stop
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+            else:
+                send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "setsuffix":
+            if arg 2 is not set:
+                if arg 3 is set:
+                    setRankSuffix(player, arg 2, arg 3)
+                    stop
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+            else:
+                send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+
+        if arg 1 is "setrank":
+            if arg 2 is set:
+                if arg 3 is set:
+                    set {_a2} to arg 2 parsed as a player
+                    setPlayerRank(player, {_a2}, arg 3)
+                    stop
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+            else:
+                send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+
+        if arg 1 is "setplayerprefix":
+            if arg 2 is set:
+                if arg 3 is set:
+                    set {_a2} to arg 2 parsed as a player
+                    setPlayerPrefix(player, {_a2}, arg 3)
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+            else:
+                send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "setplayersuffix":
+            if arg 2 is set:
+                if arg 3 is set:
+                    set {_a2} to arg 2 parsed as a player
+                    setPlayerSuffix(player, {_a2}, arg 3)
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+            else:
+                send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+
+
+every 10 seconds:
+    loop {data::ranks::ranklist::*}:
+        if {data::ranks::%loop-value%::prefix} is not set:
+            set {data::ranks::%loop-value%::prefix} to ""
+            stop
+        if {data::ranks::%loop-value%::suffix} is not set:
+            set {data::ranks::%loop-value%::suffix} to ""
+            stop
+        if {data::ranks::%{_n}%::list::*} is not set:
+            set {data::ranks::%{_n}%::list::*} to "None"
+            stop
+
+function infoRank(p: player, n: text):
+    if {data::ranks::ranklist::*} contains {_n}:
+        send "" to {_p}
+        send "&8> &aShowing information for &2%{_n}%" to {_p}
+        send "" to {_p}
+        send "&8> &aPrefix: &f%colored {data::ranks::%{_n}%::prefix}%" to {_p}
+        send "&8> &aSuffix: &f%colored {data::ranks::%{_n}%::suffix}%" to {_p}
+        send "" to {_p}
+        send "&8> &aPermissions:" to {_p}
+        send "   &2None" to {_p}
+        send "" to {_p}
+        send "&8> &aPlayers in this group:" to {_p}
+        send "   &2%{data::ranks::%{_n}%::list::*}%"  to {_p}
+        send "" to {_p}
+    else:
+        send "&cUnknown rank &7%{_n}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+
+function setPlayerRank(p: player, t: player, r: text):
+    if {data::ranks::ranklist::*} contains {_r}:
+        add {_t} to {data::ranks::%{_r}%::list::*}
+        execute console command "luckperms:permissions user %{_t}% parent set %{_r}%"
+        set {data::ranks::player::%{_t}'s uuid%::prefix} to "%{data::ranks::%{_r}%::prefix}%"
+        send "&aYou updated %{_t}%&a's rank to &2%{_r}%&a. They must rejoin for all effects to change." to {_p}
+    else:
+        send "&cUnknown rank &7%{_r}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+function cspr(p: player, t: player, r: text):
+    if {data::ranks::ranklist::*} contains {_r}:
+        add {_t} to {data::ranks::%{_r}%::list::*}
+        execute console command "luckperms:permissions user %{_t}% parent set %{_r}%"
+        set {data::ranks::player::%{_t}'s uuid%::prefix} to "%{data::ranks::%{_r}%::prefix}%"
+
+
+function setRankPrefix(p: player, g: text, v: text):
+    if {data::ranks::ranklist::*} contains {_g}:
+        set {data::ranks::%{_g}%::prefix} to "%{_v}%"
+        execute console command "luckperms:permissions group %{_g}% meta setprefix %{_v}%"
+        send "&aPrefix of &2%{_g}% &ais now &f%colored {_v}%" to {_p}
+    else:
+        send "&cUnknown rank &7%{_g}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+
+
+function setPlayerPrefix(p: player, t: player, r: text):
+    set {data::ranks::player::%{_t}'s uuid%::prefix} to "%colored {_r}%"
+    send "&aYou updated %{_t}%&a's prefix to &f%colored {_r}%" to {_p}
+
+function setPlayerSuffix(p: player, t: player, r: text):
+    set {data::ranks::player::%{_t}'s uuid%::suffix} to "%colored {_r}%"
+    send "&aYou updated %{_t}%&a's suffix to &f%colored {_r}%" to {_p}
+
+function setRankSuffix(p: player, g: text, v: text):
+    if {data::ranks::ranklist::*} contains {_g}:
+        set {data::ranks::%{_g}%::suffix} to "%{_v}%"
+        execute console command "luckperms:permissions group %{_g}% meta setprefix %{_v}%"
+        send "&aSuffix of &2%{_g}% &ais now &f%colored {_v}%" to {_p}
+    else:
+        send "&cUnknown rank &7%{_g}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+
+function createRank(p: player, n: string):
+    if {data::ranks::ranklist::*} contains "%{_n}%":
+        send "&cThat rank already exists!" to {_p}
+        stop
+    else:
+        execute console command "luckperms:permissions creategroup %{_n}%"
+        send "&aCreated rank &2%{_n}% &awith priority &20" to {_p}
+        add "%{_n}%" to {data::ranks::ranklist::*}
+function deleteRank(p: player, n: string):
+    if {data::ranks::ranklist::*} doesn't contain "%{_n}%":
+        send "&cUnknown rank &7%{_n}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+        stop
+    else:
+        execute console command "luckperms:permissions deletegroup %{_n}%"
+        send "&aDeleted rank &2%{_n}% &asuccessfully. Goodbye rank!" to {_p}
+        remove "%{_n}%" from {data::ranks::ranklist::*}
+        delete {data::ranks::%{_n}%::*}
+
+
+function listRanks(p: player):
+    send "" and "&7Showing all ranks:" to {_p}
+    loop {data::ranks::ranklist::*}:
+        send formatted " &8- &b<tooltip:&7Prefix: %{data::ranks::%loop-value%::prefix}%%nl%&7Suffix: %{data::ranks::%loop-value%::suffix}%>%loop-value%" to {_p}
+
+
+
+on command "lp" or "luckperms" or "luckperms:lp" or "luckperms:luckperms" or "luckperms:perm" or "perm" or "permission" or "luckperms:permission":
+    cancel event
+    send "&fUnknown command. Type ""help"" for help."

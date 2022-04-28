@@ -1,0 +1,32 @@
+command /rtp:
+	aliases: wild
+	trigger:
+		set {_waited} to difference between {rtp.%player%.lastused} and now
+		if {_waited} is less than 3 minutes:
+			set {_diff} to difference between 3 minutes and {_waited}
+			message "&8> &fYou can random TP in &7&o%{_diff}%&f."
+			stop
+		set {_x} to round(random number between -9999 and 9999)
+		set {_z} to round(random number between -9999 and 9999)
+		set {_block} to block at location at ({_x}, 0, {_z}) in world event-world
+		loop all blocks above {_block}:
+			if loop-block is air:
+				if block below loop-block is not water or lava or stone:
+					if block below loop-block is not air:
+						if block above loop-block is air:
+							teleport player to loop-block
+							send "&aSuccessfully teleported to a random location" to player
+							set {rtp.%player%.lastused} to now
+							exit loop
+						else:
+							execute player command "rtp"
+							send "&cTeleported to unsafe location, reteleporting."
+							exit loop
+					else:
+						execute player command "rtp"
+						send "&cTeleported to unsafe location, reteleporting."
+						exit loop
+				else:
+					execute player command "rtp"
+					send "&cTeleported to unsafe location, reteleporting."
+					exit loop

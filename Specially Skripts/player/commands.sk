@@ -1,0 +1,170 @@
+on chat:
+	if message is {message::%player%}:
+		player doesn't have permission "chat.bypass.repeatcheck"
+		send "&cYou cannot repeat messages."
+		cancel event
+		stop
+	if {racialslurs::*} contains message:
+		send "&7You cannot say racial slurs." to player
+		send "&e&o%player% &7&otried to say an racial slur. &7&o(&6&o%message%&o&7)" to all players where [input has permission "chatfilter.alerts"]
+		cancel event
+		stop
+	if player has permission "server.vip":
+		if difference between {chatcd::%player%} and now <= {chat::cooldown::donator}:
+			player doesn't have permission "chat.bypass.cooldowncheck"
+			send "&7You are sending messages too &cquickly &7(&cyou have &b%difference between {chatcd::%player%} and now% &cleft&7)&7."
+			cancel event
+			stop
+	else if player doesn't have permission "server.vip":
+		if difference between {chatcd::%player%} and now <= {chat::cooldown}:
+			player doesn't have permission "chat.bypass.cooldowncheck"
+			send "&7You are sending messages too &cquickly &7(&cyou have &b%difference between {chatcd::%player%} and now% &cleft&7)&7."
+			cancel event
+			stop
+	
+	set {_color} to "%{chatcolor::%player%}%" if player has permission "whitechat"
+	set {_color} to "&7" if player doesn't have permission "whitechat"
+	set {_clan} to getClanTag(player)
+	set {chatcd::%player%} to now if player doesn't have permission "chat.bypass.cooldowncheck"
+	set {message::%player%} to message if player doesn't have permission "chat.bypass.repeatcheck"
+	set chat format to "%{_clan}%%player's prefix%%player%&f: %{_color}%%message%"
+
+command /filter:racialslurs <text> [<text>]:
+	permission: op
+	trigger:
+		if arg 1 is "add":
+			if arg 2 is set:
+				if {racialslurs::*} doesn't contain arg 2:
+					add arg 2 to {racialslurs::*} 
+					send "&aAdded &b%arg 2% &ato racial slurs filter." to sender
+				else if {lagfilter::*} contains arg 2:
+					send "&cAlready have &b%arg 2% &cadded to racial slurs filter." to sender
+			else if arg 2 isn't set:
+				send "&cThis request (%arg 1%&c) requires a second argument." to sender
+		if arg 1 is "remove":
+			if arg 2 is set:
+				if {racialslurs::*} contains arg 2:
+					remove arg 2 from {racialslurs::*}
+					send "&aRemoved &b%arg 2% &afrom racial slurs filter." to sender
+				else if {racialslurs::*} doesn't contain arg 2:
+					send "&b%arg 2% &cdoesn't exist on the racial slurs filter." to sender
+			else if arg 2 isn't set:
+				send "&cThis request (%arg 1%&c) requires a second argument." to sender
+		if arg 1 is "list":
+			send "&6List:%nl%&e%{racialslurs::*}%" to sender
+
+command /setchatcooldown <text> <timespan>:
+	usage: &cCorrect usage: /setchatcooldown <donator/default> <timespan (5 second, etc)>
+	permission: server.mod
+	trigger:
+		if arg 1 is "donator":
+			set {chat::cooldown::donator} to arg 2
+			send "&b[S] &b%player% &bhas set donator chat cooldown to &3%arg 2%" to all players where [input has permission "staff"]
+		else if arg 1 is "default":
+			set {chat::cooldown} to arg 2
+			send "&b[S] &b%player% &bhas set default chat cooldown to &3%arg 2%" to all players where [input has permission "staff"]
+
+
+
+command /chatcolor:
+	permission: whitechat
+	permission message: &cYou must be a donator rank or higher to use color chat!
+	aliases: cc
+	trigger:
+		set metadata tag "chatcolor" of player to chest inventory with 4 rows named "Chat Colors"
+		set slot 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35 of metadata tag "chatcolor" of player to gray stained glass pane named "&f"
+		set slot 10 of metadata tag "chatcolor" of player to redstone block named "&4DARK_RED" with lore "" and "&7Your message will look like this:" and " %player's prefix%%player%&f: &4Example" and "" and "&8&oClick to select!"
+		set slot 11 of metadata tag "chatcolor" of player to red dye named "&cRED" with lore "" and "&7Your message will look like this:" and " %player's prefix%%player%&f: &cExample" and "" and "&8&oClick to select!"
+		set slot 12 of metadata tag "chatcolor" of player to gold ingot named "&6GOLD" with lore "" and "&7Your message will look like this:" and " %player's prefix%%player%&f: &6Example" and "" and "&8&oClick to select!"
+		set slot 13 of metadata tag "chatcolor" of player to yellow dye named "&eYELLOW" with lore "" and "&7Your message will look like this:" and " %player's prefix%%player%&f: &eExample" and "" and "&8&oClick to select!"
+		set slot 14 of metadata tag "chatcolor" of player to green dye named "&2DARK_GREEN" with lore "" and "&7Your message will look like this:" and " %player's prefix%%player%&f: &2Example" and "" and "&8&oClick to select!"
+		set slot 15 of metadata tag "chatcolor" of player to lime dye named "&aGREEN" with lore "" and "&7Your message will look like this:" and " %player's prefix%%player%&f: &aExample" and "" and "&8&oClick to select!"
+		set slot 16 of metadata tag "chatcolor" of player to light blue dye named "&bLIGHT_BLUE" with lore "" and "&7Your message will look like this:" and " %player's prefix%%player%&f: &bExample" and "" and "&8&oClick to select!"
+		set slot 19 of metadata tag "chatcolor" of player to cyan dye named "&3CYAN" with lore "" and "&7Your message will look like this:" and " %player's prefix%%player%&f: &3Example" and "" and "&8&oClick to select!"
+		set slot 20 of metadata tag "chatcolor" of player to blue dye named "&9BLUE" with lore "" and "&7Your message will look like this:" and " %player's prefix%%player%&f: &9Example" and "" and "&8&oClick to select!"
+		set slot 21 of metadata tag "chatcolor" of player to pink dye named "&dPINK" with lore "" and "&7Your message will look like this:" and " %player's prefix%%player%&f: &dExample" and "" and "&8&oClick to select!"
+		set slot 22 of metadata tag "chatcolor" of player to purple dye named "&5PURPLE" with lore "" and "&7Your message will look like this:" and " %player's prefix%%player%&f: &5Example" and "" and "&8&oClick to select!"
+		set slot 23 of metadata tag "chatcolor" of player to white dye named "&fWHITE" with lore "" and "&7Your message will look like this:" and " %player's prefix%%player%&f: &fExample" and "" and "&8&oClick to select!"
+		open (metadata tag "chatcolor" of player) to player
+
+
+on inventory click:
+    if compare(metadata tag "chatcolor" of player, event-inventory) = true:
+        cancel event
+        if index of event-slot = 10:
+            set {chatcolor::%player%} to "&4"
+            send "&aYou selected &4DARK RED &aas your chat color!"
+            close player's inventory
+            play sound "ui.button.click" at volume 1 to player
+        if index of event-slot = 11:
+            set {chatcolor::%player%} to "&c"
+            send "&aYou selected &cRED &aas your chat color!"
+            close player's inventory
+            play sound "ui.button.click" at volume 1 to player
+        if index of event-slot = 12:
+            set {chatcolor::%player%} to "&6"
+            send "&aYou selected &6GOLD &aas your chat color!"
+            play sound "ui.button.click" at volume 1 to player
+            close player's inventory
+        if index of event-slot = 13:
+            set {chatcolor::%player%} to "&eYELLOW"
+            send "&aYou selected &eYELLOW &aas your chat color!"
+            play sound "ui.button.click" at volume 1 to player
+            close player's inventory
+        if index of event-slot = 14:
+            set {chatcolor::%player%} to "&2"
+            play sound "ui.button.click" at volume 1 to player
+            send "&aYou selected &2DARK GREEN &aas your chat color!"
+            close player's inventory
+        if index of event-slot = 15:
+            set {chatcolor::%player%} to "&a"
+            play sound "ui.button.click" at volume 1 to player
+            send "&aYou selected &aGREEN &aas your chat color!"
+            close player's inventory
+        if index of event-slot = 16:
+            set {chatcolor::%player%} to "&b"
+            play sound "ui.button.click" at volume 1 to player
+            send "&aYou selected &bLIGHT BLUE &aas your chat color!"
+            close player's inventory
+        if index of event-slot = 19:
+            set {chatcolor::%player%} to "&3"
+            play sound "ui.button.click" at volume 1 to player
+            send "&aYou selected &3CYAN &aas your chat color!"
+            close player's inventory
+        if index of event-slot = 20:
+            set {chatcolor::%player%} to "&9"
+            play sound "ui.button.click" at volume 1 to player
+            send "&aYou selected &9BLUE &aas your chat color!"
+            close player's inventory
+        if index of event-slot = 21:
+            set {chatcolor::%player%} to "&d"
+            play sound "ui.button.click" at volume 1 to player
+            send "&aYou selected &dPINK &aas your chat color!"
+            close player's inventory
+        if index of event-slot = 22:
+            set {chatcolor::%player%} to "&5"
+            play sound "ui.button.click" at volume 1 to player
+            send "&aYou selected &5PURPLE &aas your chat color!"
+            close player's inventory
+        if index of event-slot = 23:
+            set {chatcolor::%player%} to "&f"
+            send "&aYou selected &fWHITE &aas your chat color!"
+            close player's inventory
+            play sound "ui.button.click" at volume 1 to player
+
+on join:
+	updateChatColor(player)
+
+command /updateallchatcolors:
+	permission: op
+	trigger:
+		loop all players:
+			updateChatColor(loop-player)
+		send "&aUpdated everyones chat colors!"
+
+
+function updateChatColor(p: player):
+	if {chatcolor::%{_p}%} is not set:
+		set {chatcolor::%{_p}%} to "&f"
+	else:
+		stop

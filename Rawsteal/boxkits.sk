@@ -1,0 +1,250 @@
+
+
+command /kit:
+	aliases: k, kgui, kitgui
+	usage: &cThere are no arguments after this command!
+	trigger:
+		if player's group = "default":
+			set metadata tag "kits" of player to chest inventory with 3 rows named "Kits"
+			set slot 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26 of metadata tag "kits" of player to glowing gray stained glass pane named "&f"
+			set slot 10 of metadata tag "kits" of player to coal block named "&3Captain &7Kit" with lore "&824 hour cooldown" and "&8&m-------------------------------" and "&7Contains:" and " &8- &7Netherite Helmet &f[Protection III]" and " &8- &7Netherite Chestplate &f[Protection III]" and " &8- &7Netherite Leggings &f[Protection III]" and " &8- &7Netherite Boots &f[Protection III]" and " &8- &7Netherite Sword &f[Sharpness III]" and " &8- &7Netherite Pickaxe &f[Efficiency III]" and "&8&m-------------------------------" and "&cYou do not have permission to use this kit." and "&cWant access to this kit? use /buy!"
+			set slot 12 of metadata tag "kits" of player to coal block named "&bMVP &7Kit" with lore "&86 hour cooldown" and "&8&m-------------------------------" and "&7Contains:" and " &8- &7Netherite Helmet &f[Protection II]" and " &8- &7Netherite Chestplate &f[Protection II]" and " &8- &7Netherite Leggings &f[Protection II]" and " &8- &7Netherite Boots &f[Protection II]" and " &8- &7Netherite Sword &f[Sharpness II]" and " &8- &7Netherite Pickaxe &f[Efficiency II]" and "&8&m-------------------------------" and "&cYou do not have permission to use this kit." and "&cWant access to this kit? use /buy!"
+			set slot 14 of metadata tag "kits" of player to lime dye named "&aVIP &7Kit" with lore "&81 hour cooldown" and "&8&m-------------------------------" and "&7Contains:" and " &8- &7Diamond Helmet &f[Protection II]" and " &8- &7Diamond Chestplate &f[Protection II]" and " &8- &7Diamond Leggings &f[Protection II]" and " &8- &7Diamond Leggings &f[Protection II]" and " &8- &7Diamond Sword &f[Sharpness II]" and " &8- &7Diamond Pickaxe &f[Efficiency II]" and "&8&m-------------------------------" and "&cYou do not have permission to use this kit." and "&cWant access to this kit? use /buy!"
+			set slot 16 of metadata tag "kits" of player to brown dye named "&7Default &7Kit" with lore "&81 minute cooldown" and "&8&m-------------------------------" and "&7Contains:" and " &8- &7Leather Cap" and " &8- &7Leather Chestplate" and " &8- &7Leather Leggings" and " &8- &7Leather Boots" and " &8- &7Wooden Sword" and " &8- &7Wooden Pickaxe" and " &8- &72 Steak" and "&8&m-------------------------------" and "&aLeft click to select this kit."
+			open (metadata tag "kits" of player) to player
+		# ////////////////////////////////////////////////////////////
+		# ////////////// VIP /////////////////////////////////////////
+		# ////////////////////////////////////////////////////////////
+		# ////////////////////////////////////////////////////////////
+		# ////////////// VIP /////////////////////////////////////////
+		# ////////////////////////////////////////////////////////////
+		# ////////////////////////////////////////////////////////////
+		# ////////////// VIP /////////////////////////////////////////
+		# ////////////////////////////////////////////////////////////
+		# ////////////////////////////////////////////////////////////
+		# ////////////// VIP /////////////////////////////////////////
+		# ////////////////////////////////////////////////////////////
+		else if player's group = "vip":
+			set metadata tag "kits" of player to chest inventory with 3 rows named "Kits"
+			set slot 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26 of metadata tag "kits" of player to glowing gray stained glass pane named "&f"
+			set slot 10 of metadata tag "kits" of player to coal block named "&3Captain &7Kit" with lore "&824 hour cooldown" and "&8&m-------------------------------" and "&7Contains:" and " &8- &7Netherite Helmet &f[Protection III]" and " &8- &7Netherite Chestplate &f[Protection III]" and " &8- &7Netherite Leggings &f[Protection III]" and " &8- &7Netherite Boots &f[Protection III]" and " &8- &7Netherite Sword &f[Sharpness III]" and " &8- &7Netherite Pickaxe &f[Efficiency III]" and "&8&m-------------------------------" and "&cYou do not have permission to use this kit." and "&cWant access to this kit? use /buy!"
+			set slot 12 of metadata tag "kits" of player to coal block named "&bMVP &7Kit" with lore "&86 hour cooldown" and "&8&m-------------------------------" and "&7Contains:" and " &8- &7Netherite Helmet &f[Protection II]" and " &8- &7Netherite Chestplate &f[Protection II]" and " &8- &7Netherite Leggings &f[Protection II]" and " &8- &7Netherite Boots &f[Protection II]" and " &8- &7Netherite Sword &f[Sharpness II]" and " &8- &7Netherite Pickaxe &f[Efficiency II]" and "&8&m-------------------------------" and "&cYou do not have permission to use this kit." and "&cWant access to this kit? use /buy!"
+			set slot 14 of metadata tag "kits" of player to lime dye named "&aVIP &7Kit" with lore "&81 hour cooldown" and "&8&m-------------------------------" and "&7Contains:" and " &8- &7Diamond Helmet &f[Protection II]" and " &8- &7Diamond Chestplate &f[Protection II]" and " &8- &7Diamond Leggings &f[Protection II]" and " &8- &7Diamond Leggings &f[Protection II]" and " &8- &7Diamond Sword &f[Sharpness II]" and " &8- &7Diamond Pickaxe &f[Efficiency II]" and "&8&m-------------------------------" and "&aLeft click to select this kit."
+			set slot 16 of metadata tag "kits" of player to brown dye named "&7Default &7Kit" with lore "&81 minute cooldown" and "&8&m-------------------------------" and "&7Contains:" and " &8- &7Leather Cap" and " &8- &7Leather Chestplate" and " &8- &7Leather Leggings" and " &8- &7Leather Boots" and " &8- &7Wooden Sword" and " &8- &7Wooden Pickaxe" and " &8- &72 Steak" and "&8&m-------------------------------" and "&aLeft click to select this kit."
+			open (metadata tag "kits" of player) to player
+		# ////////////////////////////////////////////////////////////
+		# ////////////// MVP /////////////////////////////////////////
+		# ////////////////////////////////////////////////////////////
+		# ////////////////////////////////////////////////////////////
+		# ////////////// MVP /////////////////////////////////////////
+		# ////////////////////////////////////////////////////////////
+		else if player's group = "mvp" or "tester":
+			set metadata tag "kits" of player to chest inventory with 3 rows named "Kits"
+			set slot 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26 of metadata tag "kits" of player to glowing gray stained glass pane named "&f"
+			set slot 10 of metadata tag "kits" of player to coal block named "&3Captain &7Kit" with lore "&824 hour cooldown" and "&8&m-------------------------------" and "&7Contains:" and " &8- &7Netherite Helmet &f[Protection III]" and " &8- &7Netherite Chestplate &f[Protection III]" and " &8- &7Netherite Leggings &f[Protection III]" and " &8- &7Netherite Boots &f[Protection III]" and " &8- &7Netherite Sword &f[Sharpness III]" and " &8- &7Netherite Pickaxe &f[Efficiency III]" and "&8&m-------------------------------" and "&cYou do not have permission to use this kit." and "&cWant access to this kit? use /buy!"
+			set slot 12 of metadata tag "kits" of player to light blue dye named "&bMVP &7Kit" with lore "&86 hour cooldown" and "&8&m-------------------------------" and "&7Contains:" and " &8- &7Netherite Helmet &f[Protection II]" and " &8- &7Netherite Chestplate &f[Protection II]" and " &8- &7Netherite Leggings &f[Protection II]" and " &8- &7Netherite Boots &f[Protection II]" and " &8- &7Netherite Sword &f[Sharpness II]" and " &8- &7Netherite Pickaxe &f[Efficiency II]" and "&8&m-------------------------------" and "&aLeft click to select this kit."
+			set slot 14 of metadata tag "kits" of player to lime dye named "&aVIP &7Kit" with lore "&81 hour cooldown" and "&8&m-------------------------------" and "&7Contains:" and " &8- &7Diamond Helmet &f[Protection II]" and " &8- &7Diamond Chestplate &f[Protection II]" and " &8- &7Diamond Leggings &f[Protection II]" and " &8- &7Diamond Leggings &f[Protection II]" and " &8- &7Diamond Sword &f[Sharpness II]" and " &8- &7Diamond Pickaxe &f[Efficiency II]" and "&8&m-------------------------------" and "&aLeft click to select this kit."
+			set slot 16 of metadata tag "kits" of player to brown dye named "&7Default &7Kit" with lore "&81 minute cooldown" and "&8&m-------------------------------" and "&7Contains:" and " &8- &7Leather Cap" and " &8- &7Leather Chestplate" and " &8- &7Leather Leggings" and " &8- &7Leather Boots" and " &8- &7Wooden Sword" and " &8- &7Wooden Pickaxe" and " &8- &72 Steak" and "&8&m-------------------------------" and "&aLeft click to select this kit."
+			open (metadata tag "kits" of player) to player
+		# ////////////////////////////////////////////////////////////
+		# ////////////// CAPTAIN /////////////////////////////////////////
+		# ////////////////////////////////////////////////////////////
+		# ////////////////////////////////////////////////////////////
+		# ////////////// CAPTAIN /////////////////////////////////////////
+		# ////////////////////////////////////////////////////////////
+		# ////////////////////////////////////////////////////////////
+		# ////////////// CAPTAIN /////////////////////////////////////////
+		# ////////////////////////////////////////////////////////////
+		# ////////////////////////////////////////////////////////////
+		# ////////////// CAPTAIN /////////////////////////////////////////
+		# ////////////////////////////////////////////////////////////
+		else if player's group = "captain" or "helper" or "moderator" or "administrator" or "manager" or "Heart/Former" or "partner" or "developer":
+			set metadata tag "kits" of player to chest inventory with 3 rows named "Kits"
+			set slot 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26 of metadata tag "kits" of player to glowing gray stained glass pane named "&f"
+			set slot 10 of metadata tag "kits" of player to cyan dye named "&3Captain &7Kit" with lore "&824 hour cooldown" and "&8&m-------------------------------" and "&7Contains:" and " &8- &7Netherite Helmet &f[Protection III]" and " &8- &7Netherite Chestplate &f[Protection III]" and " &8- &7Netherite Leggings &f[Protection III]" and " &8- &7Netherite Boots &f[Protection III]" and " &8- &7Netherite Sword &f[Sharpness III]" and " &8- &7Netherite Pickaxe &f[Efficiency III]" and "&8&m-------------------------------" and "&aLeft click to select this kit."
+			set slot 12 of metadata tag "kits" of player to light blue dye named "&bMVP &7Kit" with lore "&86 hour cooldown" and "&8&m-------------------------------" and "&7Contains:" and " &8- &7Netherite Helmet &f[Protection II]" and " &8- &7Netherite Chestplate &f[Protection II]" and " &8- &7Netherite Leggings &f[Protection II]" and " &8- &7Netherite Boots &f[Protection II]" and " &8- &7Netherite Sword &f[Sharpness II]" and " &8- &7Netherite Pickaxe &f[Efficiency II]" and "&8&m-------------------------------" and "&aLeft click to select this kit."
+			set slot 14 of metadata tag "kits" of player to lime dye named "&aVIP &7Kit" with lore "&81 hour cooldown" and "&8&m-------------------------------" and "&7Contains:" and " &8- &7Diamond Helmet &f[Protection II]" and " &8- &7Diamond Chestplate &f[Protection II]" and " &8- &7Diamond Leggings &f[Protection II]" and " &8- &7Diamond Leggings &f[Protection II]" and " &8- &7Diamond Sword &f[Sharpness II]" and " &8- &7Diamond Pickaxe &f[Efficiency II]" and "&8&m-------------------------------" and "&aLeft click to select this kit."
+			set slot 16 of metadata tag "kits" of player to brown dye named "&7Default &7Kit" with lore "&81 minute cooldown" and "&8&m-------------------------------" and "&7Contains:" and " &8- &7Leather Cap" and " &8- &7Leather Chestplate" and " &8- &7Leather Leggings" and " &8- &7Leather Boots" and " &8- &7Wooden Sword" and " &8- &7Wooden Pickaxe" and " &8- &72 Steak" and "&8&m-------------------------------" and "&aLeft click to select this kit."
+			open (metadata tag "kits" of player) to player
+			
+			
+on inventory click:
+	if compare(metadata tag "kits" of player, event-inventory) = true:
+		cancel event
+		if index of event-slot = 16:
+			set {_w} to difference between {cooldown::default::%player%::lastused} and now
+			if {_w} < 1 minute:
+			
+				set {_value} to difference between 1 minute and {_w}
+				set {_str} to "%{_value}%"
+				set {_l::*} to split {_str} at " "
+				loop {_l::*}:
+					delete {_i}
+					set {_i} to loop-value parsed as a number
+					{_i} is set
+					set {_i} to round({_i})
+					replace every "%loop-value%" in {_str} with "%{_i}%"
+					replace every " seconds" in {_str} with " SECONDS"
+					replace every " second" in {_str} with " SECOND"
+
+					replace every " minutes" in {_str} with " MINUTES"
+					replace every " minute" in {_str} with " MINUTE"
+
+					replace every " hours" in {_str} with " HOURS"
+					replace every " hour" in {_str} with " HOUR"
+					
+				send "&7You're on kit cooldown for &d%{_str}%&7!"
+			else:
+				set {cooldown::default::%player%::lastused} to now
+				give player all leather armor
+				give wooden sword to player
+				play sound "ui.button.click" at volume 1 to player
+				close player's inventory
+				give wooden pickaxe to player
+				give 2 of steak to player
+		if index of event-slot = 14:
+			if player's group = "vip" or "mvp" or "captain" or "helper" or "moderator" or "administrator" or "manager" or "Heart/Former" or "partner" or "developer":
+				set {_w} to difference between {cooldown::vip::%player%::lastused} and now
+				if player's group != "administrator" or "manager" or "developer":
+					if {_w} < 1 hour:
+					
+						set {_value} to difference between 1 hour and {_w}
+						set {_str} to "%{_value}%"
+						set {_l::*} to split {_str} at " "
+						loop {_l::*}:
+							delete {_i}
+							set {_i} to loop-value parsed as a number
+							{_i} is set
+							set {_i} to round({_i})
+							replace every "%loop-value%" in {_str} with "%{_i}%"
+							replace every " seconds" in {_str} with " SECONDS"
+							replace every " second" in {_str} with " SECOND"
+
+							replace every " minutes" in {_str} with " MINUTES"
+							replace every " minute" in {_str} with " MINUTE"
+
+							replace every " hours" in {_str} with " HOURS"
+							replace every " hour" in {_str} with " HOUR"
+					
+						send "&7You're on kit cooldown for &d%{_str}%&7!"
+					else:
+						set {cooldown::vip::%player%::lastused} to now
+						give player all diamond armor of protection 2 named "<##30ff00>VIP &7Armor"
+						give diamond sword of sharpness 2 named "<##30ff00>VIP &7Sword" to player
+						give diamond pickaxe of efficiency 2 named "<##30ff00>VIP &7Pickaxe" to player
+						close player's inventory
+						play sound "ui.button.click" at volume 1 to player
+				else:
+					give player all diamond armor of protection 2 named "<##30ff00>VIP &7Armor"
+					give diamond sword of sharpness 2 named "<##30ff00>VIP &7Sword" to player
+					give diamond pickaxe of efficiency 2 named "<##30ff00>VIP &7Pickaxe" to player
+					send "&aSince your rank is ADMIN+, you bypass the kit cooldown!"
+					play sound "ui.button.click" at volume 1 to player
+					close player's inventory
+			else:
+				send "&cYou do not have permission to use this kit!"
+		if index of event-slot = 12:
+			if player's group = "mvp" or "captain" or "helper" or "moderator" or "administrator" or "manager" or "Heart/Former" or "partner" or "developer":
+				set {_w} to difference between {cooldown::mvp::%player%::lastused} and now
+				if player's group != "administrator" or "manager" or "developer":
+					if {_w} < 6 hours:
+					
+						set {_value} to difference between 6 hours and {_w}
+						set {_str} to "%{_value}%"
+						set {_l::*} to split {_str} at " "
+						loop {_l::*}:
+							delete {_i}
+							set {_i} to loop-value parsed as a number
+							{_i} is set
+							set {_i} to round({_i})
+							replace every "%loop-value%" in {_str} with "%{_i}%"
+							replace every " seconds" in {_str} with " SECONDS"
+							replace every " second" in {_str} with " SECOND"
+
+							replace every " minutes" in {_str} with " MINUTES"
+							replace every " minute" in {_str} with " MINUTE"
+
+							replace every " hours" in {_str} with " HOURS"
+							replace every " hour" in {_str} with " HOUR"
+					
+						send "&7You're on kit cooldown for &d%{_str}%&7!"
+					else:
+						set {cooldown::mvp::%player%::lastused} to now
+						give player all netherite armor of protection 2 named "<##41DAF7>MVP &7Armor"
+						give netherite sword of sharpness 2 named "<##41DAF7>MVP &7Sword" to player
+						give netherite pickaxe of efficiency 2 named "<##41DAF7>MVP &7Pickaxe" to player
+						play sound "ui.button.click" at volume 1 to player
+						close player's inventory
+				else:
+					give player all netherite armor of protection 2 named "<##41DAF7>MVP &7Armor"
+					give netherite sword of sharpness 2 named "<##41DAF7>MVP &7Sword" to player
+					give netherite pickaxe of efficiency 2 named "<##41DAF7>MVP &7Pickaxe" to player
+					send "&aSince your rank is ADMIN+, you bypass the kit cooldown!"
+					play sound "ui.button.click" at volume 1 to player
+					close player's inventory
+			else:
+				send "&cYou do not have permission to use this kit!"
+		if index of event-slot = 10:
+			if player's group = "captain" or "helper" or "moderator" or "administrator" or "manager" or "Heart/Former" or "partner" or "developer":
+				set {_w} to difference between {cooldown::captain::%player%::lastused} and now
+				if player's group != "administrator" or "manager" or "developer":
+					if {_w} < 24 hours:
+					
+						set {_value} to difference between 24 hours and {_w}
+						set {_str} to "%{_value}%"
+						set {_l::*} to split {_str} at " "
+						loop {_l::*}:
+							delete {_i}
+							set {_i} to loop-value parsed as a number
+							{_i} is set
+							set {_i} to round({_i})
+							replace every "%loop-value%" in {_str} with "%{_i}%"
+							replace every " seconds" in {_str} with " SECONDS"
+							replace every " second" in {_str} with " SECOND"
+
+							replace every " minutes" in {_str} with " MINUTES"
+							replace every " minute" in {_str} with " MINUTE"
+
+							replace every " hours" in {_str} with " HOURS"
+							replace every " hour" in {_str} with " HOUR"
+					
+						send "&7You're on kit cooldown for &d%{_str}%&7!"
+					else:
+						set {cooldown::captain::%player%::lastused} to now
+						give player all netherite armor of protection 3 named "&3Captain &7Armor"
+						give netherite sword of sharpness 3 named "&3Captain &7Sword" to player
+						give netherite pickaxe of efficiency 3 named "&3Captain &7Pickaxe" to player
+						play sound "ui.button.click" at volume 1 to player
+						close player's inventory
+				else:
+					give player all netherite armor of protection 3 named "&3Captain &7Armor"
+					give netherite sword of sharpness 3 named "&3Captain &7Sword" to player
+					give netherite pickaxe of efficiency 3 named "&3Captain &7Pickaxe" to player
+					play sound "ui.button.click" at volume 1 to player
+					send "&aSince your rank is ADMIN+, you bypass the kit cooldown!"
+					close player's inventory
+			else:
+				send "&cYou do not have permission to use this kit!"
+		else:
+			cancel event
+				
+				
+on join:
+	if player's group = "mvp":
+		send "&aYour rank <##41DAF7>MVP&a, which inherits from <##30ff00>VIP&a, can use VIP and below perks!"
+		stop
+	else if player's group = "captain":
+		send "&aYour rank &3Captain&a, which inherits from <##41DAF7>MVP &aand <##30ff00>VIP&a, can use Captain and below perks!"
+		stop
+	else if player's group = "helper":
+		send "&aYour rank &2JMOD&a, which inherits from &3Captain&a, <##41DAF7>MVP&a, &aand <##30ff00>VIP&a, can use Captain and below perks!"
+	else if player's group = "moderator":
+		send "&aYour rank &eMOD&a, which inherits from &3Captain&a, <##41DAF7>MVP&a, &aand <##30ff00>VIP&a, can use Captain and below perks!"
+	else if player's group = "administrator":
+		send "&aYour rank &cADMIN&a, which inherits from &3Captain&a, <##41DAF7>MVP&a, &aand <##30ff00>VIP&a, can use Captain and below perks!"
+	else if player's group = "manager":
+		send "&aYour rank &cMANAGER&a, which inherits from &3Captain&a, <##41DAF7>MVP&a, &aand <##30ff00>VIP&a, can use Captain and below perks!"
+	else if player's group = "developer":
+		send "&aYour rank <##2088A5>Developer&a, which inherits from &3Captain&a, <##41DAF7>MVP&a, &aand <##30ff00>VIP&a, can use Captain and below perks!"
+		
+			

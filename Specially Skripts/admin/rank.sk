@@ -1,0 +1,498 @@
+command /rank [<text>] [<text>] [<text>] [<text>]:
+    permission: easyranks.rank
+    permission message: &cYou must be admin or higher to use this command!
+    aliases: easyranks:rank
+    trigger:
+        if arg 1 is not set:
+            helpCMD(player)
+            stop
+        if arg 1 is not "group" or "player" or "help":
+            send "&cUnknown method &7%arg 1%&c." and "&cPlease view &7/rank help &cfor more information."
+            stop
+        if arg 2 is not "create" or "setdefault" or "setitalic" or "setbold" or "setcolor" or "delete" or "info" or "list" or "setprefix" or "setsuffix" or "setrank" or "setplayerprefix" or "setplayersuffix":
+            send "&cUnknown sub-method&c." and "&cPlease view &7/rank help &cfor more information."
+            stop
+        if arg 1 is "help":
+            helpCMD(player)
+            stop
+        if arg 1 is "group":
+            if arg 2 is "setdefault":
+                if arg 3 is set:
+                    setDefaultRank(player, arg 3)
+                    stop
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information." 
+        if arg 1 is "group":
+            if arg 2 is "setcolor":
+                if arg 3 is set:
+                    if arg 4 is set:
+                        setRankColor(player, arg 3, arg 4)
+                        stop
+                    else:
+                        send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "group":
+            if arg 2 is "create":
+                if arg 3 is set:
+                    if arg 4 is set:
+                        set {_a4} to arg 4 parsed as a number   
+                        createRankWithWeight(player, arg 3, {_a4})
+                        stop
+                    else:
+                        createRankWithoutWeight(player, arg 3)
+                        stop
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "group":
+            if arg 2 is "setitalic":
+                if arg 3 is set:   
+                    setItalic(player, arg 3)
+                    stop
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "group":
+            if arg 2 is "setbold":
+                if arg 3 is set:   
+                    setBold(player, arg 3)
+                    stop
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "group":
+            if arg 2 is "delete":
+                if arg 3 is set:   
+                    deleteRank(player, arg 3)
+                    stop
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "group":
+            if arg 2 is "info":
+                if arg 3 is set:   
+                    infoRank(player, arg 3)
+                    stop
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "group":
+            if arg 2 is "list":
+                listRanks(player)
+                stop
+        if arg 1 is "group":
+            if arg 2 is "setprefix":
+                if arg 3 is set:
+                    if arg 4 is set:
+                        setRankPrefix(player, arg 3, arg 4)
+                        stop
+                    else:
+                        send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "group":
+            if arg 2 is "setsuffix":
+                if arg 3 is set:
+                    if arg 4 is set:
+                        setRankSuffix(player, arg 3, arg 4)
+                        stop
+                    else:
+                        send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "player":
+            if arg 2 is "setrank":
+                if arg 3 is set:
+                    if arg 4 is set:
+                        set {_a2} to arg 3 parsed as a player
+                        setPlayerRank(player, {_a2}, arg 4)
+                        stop
+                    else:
+                        send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "player":
+            if arg 2 is "setprefix":
+                if arg 3 is set:
+                    if arg 4 is set:
+                        set {_a2} to arg 3 parsed as a player
+                        setPlayerPrefix(player, {_a2}, arg 4)
+                    else:
+                        send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+        if arg 1 is "player":
+            if arg 2 is "setsuffix":
+                if arg 3 is set:
+                    if arg 4 is set:
+                        set {_a2} to arg 3 parsed as a player
+                        setPlayerSuffix(player, {_a2}, arg 4)
+                    else:
+                        send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+                else:
+                    send "&cMissing or unknown arguments." and "&cPlease view &7/rank help &cfor more information."
+
+function helpCMD(p: player):
+    send "" to {_p}
+    send "&8> &bHelp commands" to {_p}
+    send "&8&oMethods: player, help, group" to {_p}
+    send "" to {_p}
+    send "&7- &f/rank group create <name> [weight] &8- &7&oCreates a rank" to {_p}
+    send "&7- &f/rank group delete <name> &8- &7&oDeletes a rank" to {_p}
+    send "&7- &f/rank group info <name> &8- &7&oCreates a rank" to {_p}
+    send "&7- &f/rank group setprefix <rank> <prefix> &8- &7&oSets a rank's prefix" to {_p}
+    send "&7- &f/rank group setsuffix <rank> <suffix> &8- &7&oSets a rank's prefix" to {_p}
+    send "&7- &f/rank group setitalic <rank> &8- &7&oSets a rank's color name to italic" to {_p}
+    send "&7- &f/rank group setbold <rank> &8- &7&oSets a rank's color name to bold" to {_p}
+    send "&7- &f/rank group setcolor <rank> <color name> &8- &7&oSets a rank's color" to {_p}
+    send "&7- &f/rank group setdefault <rank> &8- &7&oSets a rank to be the default rank given on first join" to {_p}
+    send "&7- &f/rank group list &8- &7&oLists ranks" to {_p}
+    send "" to {_p}
+    send "&7- &f/rank player setrank <player> <rank> &8- &7&oSets a player's rank to the desired." to {_p}
+    send "&7- &f/rank player setprefix <player> <prefix> &8- &7&oSets a player's prefix" to {_p}
+    send "&7- &f/rank player setsuffix <player> <suffix> &8- &7&oSets a player's suffix" to {_p}
+    send "" to {_p}
+every 10 seconds:
+    loop {data::ranks::ranklist::*}:
+        if {data::ranks::%loop-value%::prefix} is not set:
+            set {data::ranks::%loop-value%::prefix} to ""
+        if {data::ranks::%loop-value%::suffix} is not set:
+            set {data::ranks::%loop-value%::suffix} to ""
+        if {data::ranks::%loop-value%::color} is not set:
+            set {data::ranks::%loop-value%::color} to "§f"
+        if {data::ranks::%{_n}%::list::*} is not set:
+            set {data::ranks::%{_n}%::list::*} to "None"
+
+function infoRank(p: player, n: text):
+    if {data::ranks::ranklist::*} contains {_n}:
+        send "" to {_p}
+        send "&8> &aShowing information for &2%{_n}%" to {_p}
+        send "" to {_p}
+        send "&8> &aPrefix: &f%colored {data::ranks::%{_n}%::prefix}%" to {_p}
+        send "&8> &aSuffix: &f%colored {data::ranks::%{_n}%::suffix}%" to {_p}
+        send "" to {_p}
+        send "&8> &aPermissions:" to {_p}
+        send "   &2None" to {_p}
+        send "" to {_p}
+        send "&8> &aPlayers in this group:" to {_p}
+        send "   &2%{data::ranks::%{_n}%::list::*}%"  to {_p}
+        send "" to {_p}
+    else:
+        send "&cUnknown rank &7%{_n}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+
+function setDefaultRank(p: player, t: text):
+    if {data::ranks::ranklist::*} contains {_t}:
+        set {data::ranks::defaultgroup} to "%{_t}%"
+        send "&aDefault group was updated to &2%{_t}%&a." to {_p}
+        send "&aPlayer's will receive this rank on first join." to {_p}
+
+on first join:
+    if {data::ranks::defaultgroup} is set:
+        cspr(player, {data::ranks::defaultgroup})
+        send "&fYou were granted %{data::ranks::defaultgroup}%"
+        stop
+    else:
+        send "&c[LOG] No default group was set! Not granting rank..." to console
+        stop
+
+on join:
+    set {data::ranks::player::%player's uuid%::prefix} to "%{data::ranks::%{data::ranks::player::%player's uuid%::group}%::prefix}%"
+    set {data::ranks::player::%player's uuid%::color} to "%{data::ranks::%{data::ranks::player::%player's uuid%::group}%::color}%"
+
+    send "&7Loading data..."
+    set {_time} To a random integer between 2 and 5
+    set {_end} To "%{_time}% seconds" parsed as a time span
+    wait {_end}
+    send "&a[DATA] Retrieved data of %player% &asuccessfully!" to console
+    send "&aYour data loaded successfully."
+
+every 10 seconds:
+    loop all players:
+        set {data::ranks::player::%loop-player's uuid%::prefix} to "%{data::ranks::%{data::ranks::player::%loop-player's uuid%::group}%::prefix}%"
+        set {data::ranks::player::%loop-player's uuid%::color} to "%{data::ranks::%{data::ranks::player::%loop-player's uuid%::group}%::color}%"
+        #send "&7Saved all your data." to loop-player
+
+function setPlayerRank(p: player, t: player, r: text):
+    if {data::ranks::ranklist::*} contains {_r}:
+        add {_t} to {data::ranks::%{_r}%::list::*}
+        execute console command "luckperms:permissions user %{_t}% parent set %{_r}%"
+        set {data::ranks::player::%{_t}'s uuid%::prefix} to "%{data::ranks::%{_r}%::prefix}%"
+        set {data::ranks::player::%{_t}'s uuid%::color} to "%{data::ranks::%{_r}%::color}%"
+        set {data::ranks::player::%{_t}'s uuid%::group} to "%{_r}%"
+        send "&aYou updated %{_t}%&a's rank to &2%{_r}%&a. They must rejoin for all effects to change." to {_p}
+    else:
+        send "&cUnknown rank &7%{_r}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+
+function cspr(p: player, r: text):
+    if {data::ranks::ranklist::*} contains {_r}:
+        add {_p} to {data::ranks::%{_r}%::list::*}
+        execute console command "luckperms:permissions user %{_t}% parent set %{_r}%"
+        set {data::ranks::player::%{_p}'s uuid%::prefix} to "%{data::ranks::%{_r}%::prefix}%"
+        set {data::ranks::player::%{_p}'s uuid%::color} to "%{data::ranks::%{_r}%::color}%"
+        set {data::ranks::player::%{_p}'s uuid%::group} to "%{_r}%"
+
+
+function setRankColor(p: player, r: text, c: text):
+    if {data::ranks::ranklist::*} contains {_r}:
+        if {_c} = "dark_red":
+            set {data::ranks::%{_r}%::color} to "§4"
+            send "&aColor of &2%{_r}% &awas updated to §4dark_red&a." to {_p}
+            stop
+        else if {_c} = "red":
+            set {data::ranks::%{_r}%::color} to "§c"
+            send "&aColor of &2%{_r}% &awas updated to §cred&a." to {_p}
+            stop
+        else if {_c} = "gold":
+            set {data::ranks::%{_r}%::color} to "§6"
+            send "&aColor of &2%{_r}% &awas updated to §6gold&a." to {_p}
+            stop
+        else if {_c} = "yellow":
+            set {data::ranks::%{_r}%::color} to "§e"
+            send "&aColor of &2%{_r}% &awas updated to §eyellow&a." to {_p}
+            stop
+        else if {_c} = "dark_green":
+            set {data::ranks::%{_r}%::color} to "§2"
+            send "&aColor of &2%{_r}% &awas updated to §2dark_green&a." to {_p}
+            stop
+        else if {_c} = "green":
+            set {data::ranks::%{_r}%::color} to "§a"
+            send "&aColor of &2%{_r}% &awas updated to §agreen&a." to {_p}
+            stop
+        else if {_c} = "cyan":
+            set {data::ranks::%{_r}%::color} to "§3"
+            send "&aColor of &2%{_r}% &awas updated to §3cyan&a." to {_p}
+            stop
+        else if {_c} = "dark_blue":
+            set {data::ranks::%{_r}%::color} to "§1"
+            send "&aColor of &2%{_r}% &awas updated to §1dark_blue&a." to {_p}
+            stop
+        else if {_c} = "blue":
+            set {data::ranks::%{_r}%::color} to "§9"
+            send "&aColor of &2%{_r}% &awas updated to §9blue&a." to {_p}
+            stop
+        else if {_c} = "pink":
+            set {data::ranks::%{_r}%::color} to "§d"
+            send "&aColor of &2%{_r}% &awas updated to §dpink&a." to {_p}
+            stop
+        else if {_c} = "purple":
+            set {data::ranks::%{_r}%::color} to "§5"
+            send "&aColor of &2%{_r}% &awas updated to §5purple&a." to {_p}
+            stop
+        else if {_c} = "white":
+            set {data::ranks::%{_r}%::color} to "§f"
+            send "&aColor of &2%{_r}% &awas updated to §fwhite&a." to {_p}
+            stop
+        else if {_c} = "gray":
+            set {data::ranks::%{_r}%::color} to "§7"
+            send "&aColor of &2%{_r}% &awas updated to §7gray&a." to {_p}
+            stop
+        else if {_c} = "dark_gray":
+            set {data::ranks::%{_r}%::color} to "§8"
+            send "&aColor of &2%{_r}% &awas updated to §8dark_gray&a." to {_p}
+            stop
+        else if {_c} = "black":
+            set {data::ranks::%{_r}%::color} to "§0"
+            send "&aColor of &2%{_r}% &awas updated to §0black&a." to {_p}
+            stop
+        else if {_c} = "aqua":
+            set {data::ranks::%{_r}%::color} to "§b"
+            send "&aColor of &2%{_r}% &awas updated to §baqua&a." to {_p}
+            stop
+        else:
+            send "&cUnknown color &7%{_c}%&c." to {_p}
+    else:
+        send "&cUnknown rank &7%{_r}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+        
+function setRankPrefix(p: player, g: text, v: text):
+    if {data::ranks::ranklist::*} contains {_g}:
+        set {data::ranks::%{_g}%::prefix} to "%{_v}%"
+        execute console command "luckperms:permissions group %{_g}% meta setprefix %{_v}%"
+        send "&aPrefix of &2%{_g}% &ais now &f%colored {_v}%" to {_p}
+    else:
+        send "&cUnknown rank &7%{_g}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+
+
+function setItalic(p: player, r: text):
+    if {data::ranks::ranklist::*} contains {_r}:
+        set {data::ranks::%{_r}%::color} to "%{data::ranks::%{_r}%::color}%&o"
+        send "&2%{_r}% &anow has a italic color. &7(%{data::ranks::%{_r}%::color}%&7)" to {_p}
+
+    else:
+        send "&cUnknown rank &7%{_r}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+
+function setBold(p: player, r: text):
+    if {data::ranks::ranklist::*} contains {_r}:
+        set {data::ranks::%{_r}%::color} to "%{data::ranks::%{_r}%::color}%&l"
+        send "&2%{_r}% &anow has a bold color. &7(%{data::ranks::%{_r}%::color}%&7)" to {_p}
+
+    else:
+        send "&cUnknown rank &7%{_r}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+
+
+function setPlayerPrefix(p: player, t: player, r: text):
+    set {data::ranks::player::%{_t}'s uuid%::prefix} to "%colored {_r}%"
+    send "&aYou updated %{_t}%&a's prefix to &f%colored {_r}%" to {_p}
+
+function setPlayerSuffix(p: player, t: player, r: text):
+    set {data::ranks::player::%{_t}'s uuid%::suffix} to "%colored {_r}%"
+    send "&aYou updated %{_t}%&a's suffix to &f%colored {_r}%" to {_p}
+
+function setRankSuffix(p: player, g: text, v: text):
+    if {data::ranks::ranklist::*} contains {_g}:
+        set {data::ranks::%{_g}%::suffix} to "%{_v}%"
+        execute console command "luckperms:permissions group %{_g}% meta setsuffix %{_v}%"
+        send "&aSuffix of &2%{_g}% &ais now &f%colored {_v}%" to {_p}
+    else:
+        send "&cUnknown rank &7%{_g}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+
+function createRankWithWeight(p: player, n: string, weight: number):
+    if {data::ranks::ranklist::*} contains "%{_n}%":
+        send "&cThat rank already exists!" to {_p}
+        stop
+    else:
+        execute console command "luckperms:permissions creategroup %{_n}%"
+        set {data::rankweight::%{_n}%} to {_weight}
+        send "&aCreated rank &2%{_n}% &awith priority &2%{_weight}%" to {_p}
+
+        add "%{_n}%" to {data::ranks::ranklist::*}
+
+function createRankWithoutWeight(p: player, n: string):
+    if {data::ranks::ranklist::*} contains "%{_n}%":
+        send "&cThat rank already exists!" to {_p}
+        stop
+    else:
+        execute console command "luckperms:permissions creategroup %{_n}%"
+        set {data::rankweight::%{_n}%} to 0
+        send "&aCreated rank &2%{_n}% &awith priority &20" to {_p}
+
+        add "%{_n}%" to {data::ranks::ranklist::*}
+
+function deleteRank(p: player, n: string):
+    if {data::ranks::ranklist::*} doesn't contain "%{_n}%":
+        send "&cUnknown rank &7%{_n}%&c. Are you sure you typed it right?" and "&cView &7/rank list &cto view all ranks." to {_p}
+        stop
+    else:
+        execute console command "luckperms:permissions deletegroup %{_n}%"
+        send "&aDeleted rank &2%{_n}% &asuccessfully. Goodbye rank!" to {_p}
+        remove {_n} from {data::ranks::ranklist::*}
+        delete {data::ranks::%{_n}%::*}
+
+
+function listRanks(p: player):
+    send "" and "&7Showing all ranks:" to {_p}
+    set {_top} to 15
+
+    send "" to {_p}
+    set {_top::*} to sorted {data::rankweight::*} from highest to lowest with format "@index" # Assuming {kills::%uuid of player%} is your kills variable
+    loop {_top::*}:
+        add 1 to {_n}
+
+        set {_p} to "%loop-value%"
+        set {_w} to {data::rankweight::%loop-value%}
+        set {_player} to {_p}'s uuid
+
+        send "&3(##%{_n}%) &b%{_p}% &3(%{_w}% weight)" to {_p}
+
+        if {_n} is {_top}:
+            stop loop
+
+        send "" to {_p}
+        
+        
+        
+        
+        
+        
+        
+#send formatted " &8- &b<tooltip:&7Prefix: %{data::ranks::%loop-value-1%::prefix}%%nl%&7Suffix: %{data::ranks::%loop-value-1%::suffix}%>%loop-value-1% &8(%loop-value-2% &8weight)" to {_p}
+
+
+                
+
+on chat:
+    set chat format to "%colored {data::ranks::player::%player's uuid%::prefix}%%player%&7: %message%"
+
+
+on command "lp":
+    cancel event
+    send "&fUnknown command. Type ""/help"" for help."
+on command "luckperms":
+    cancel event
+    send "&fUnknown command. Type ""/help"" for help."
+on command "luckperms:lp":
+    cancel event
+    send "&fUnknown command. Type ""/help"" for help."
+on command "luckperms:luckperms":
+    cancel event
+    send "&fUnknown command. Type ""/help"" for help."
+on command "luckperms:perm":
+    cancel event
+    send "&fUnknown command. Type ""/help"" for help."
+on command "perm":
+    cancel event
+    send "&fUnknown command. Type ""/help"" for help."
+on command "permission":
+    cancel event
+    send "&fUnknown command. Type ""/help"" for help."
+on command "luckperms:permission":
+    cancel event
+    send "&fUnknown command. Type ""/help"" for help."
+on tab complete of "/":
+    remove "lp" from tab completions
+
+
+
+command /getMyRank:
+    permission: easyranks.debug
+    permission message: &cYou must be admin or higher to use this command!
+    aliases: easyranks:getMyRank
+    trigger:
+        send "Your prefix is: %colored {data::ranks::player::%player's uuid%::prefix}%"
+        send "Your suffix is: %{data::ranks::player::%player's uuid%::suffix}%"
+        send "Your color is: %colored {data::ranks::player::%player's uuid%::color}%this"
+        send "Your group is: %{data::ranks::player::%player's uuid%::group}%"
+
+on tab complete of "/rank":
+    set tab completions for position 1 to "group", "player" and "other"
+    if tab arg-1 = "group":
+        set tab completions for position 2 to "setprefix", "setsuffix", "setcolor", "setbold", "setitalic", "delete", "create", "list", "setdefault", "info"
+    if tab arg-2 = "setprefix":
+        set tab completions for position 3 to "-" and "--"
+
+
+command /gmc [<player>]:
+    permission: easyessentials.gmc
+    permission message: &cYou must be admin or higher to use this command!
+    aliases: easyessentials:gmc
+    trigger:
+        if arg-1 is set:
+            set arg-1's gamemode to creative
+            set {_arg1} to "%colored {data::ranks::player::%player's uuid%::prefix}%%arg 1%"
+            send "&9(Gamemode) &7Gamemode of %{_arg1}% &7is now Creative." to player
+        else:
+            set player's gamemode to creative
+            send "&9(Gamemode) &7Your gamemode was updated to Creative." to player
+
+command /gms [<player>]:
+    permission: easyessentials.gms
+    permission message: &cYou must be admin or higher to use this command!
+    aliases: easyessentials:gmss
+    trigger:
+        if arg-1 is set:
+            set arg-1's gamemode to survival
+            set {_arg1} to "%colored {data::ranks::player::%player's uuid%::prefix}%%arg 1%"
+            send "&9(Gamemode) &7Gamemode of %{_arg1}% &7is now Survival." to player
+        else:
+            set player's gamemode to survival
+            send "&9(Gamemode) &7Your gamemode was updated to Survival." to player
+
+command /gmsp [<player>]:
+    permission: easyessentials.gmsp
+    permission message: &cYou must be admin or higher to use this command!
+    aliases: easyessentials:gmsp
+    trigger:
+        if arg-1 is set:
+            set arg-1's gamemode to spectator
+            set {_arg1} to "%colored {data::ranks::player::%player's uuid%::prefix}%%arg 1%"
+            send "&9(Gamemode) &7Gamemode of %{_arg1}% &7is now Spectator." to player
+        else:
+            set player's gamemode to spectator
+            send "&9(Gamemode) &7Your gamemode was updated to Spectator." to player
+on join:	
+    set player's tablist name to "%colored {data::ranks::player::%player's uuid%::prefix}%%player%"

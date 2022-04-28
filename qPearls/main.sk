@@ -1,0 +1,110 @@
+
+# qPearls by Qeid
+
+
+# Version. DO NOT CHANGE
+
+options:
+    version: 1.0
+
+# Script load sequence
+
+on script load:
+    set {_time} to now
+
+    set {_diff} to difference between {_time} and now
+    send "[qPearls] Loaded in %{_diff}%ms" to console
+
+
+# +----------------------------------------------------------------------------------------------+ #
+# |                                                                                              | #
+# |                                       CONFIGURATION                                          | #
+# |                                                                                              | #
+# |                                  Configuration for qPearls                                   | #
+# |                                                                                              | #
+# +----------------------------------------------------------------------------------------------+ #
+options:
+    # prefix for the skript
+    prefix: &8[&b&lqPearls&8]
+    # main color
+    main_color: &f
+    # accent color
+    accent_color: &b
+    # How long the cooldown should be before they can use the pearl again [measured] in seconds
+    pearl_cooldown: 10 seconds
+    # message when they're on cooldown ( do not forget [time] )
+    on_cooldown: &8[&b&lqPearls&8] &fYou can use your pearl again in &b[time]&f!
+    # permission message
+    permission_message: &cInsufficient permissions!
+    # permission to use qPearl administrator commands
+    node: qpearl.admin
+
+
+# +----------------------------------------------------------------------------------------------+ #
+# |                                                                                              | #
+# |                                         CODE                                                 | #
+# |                          do not touch unless you know what you're doing!                     | #
+# |                                                                                              | #
+# |                                Code to make the skript work                                  | #
+# |                                                                                              | #
+# +----------------------------------------------------------------------------------------------+ #
+
+
+
+on rightclick with ender pearl:
+    set {_w} to difference between {cooldown::pearl::%player%::lastused} and now
+    if {_w} < {@pearl_cooldown}:
+        cancel event
+        set {_value} to difference between {@pearl_cooldown} and {_w}
+
+        # ////////////////////////////////////
+        set {_str} to "%{_value}%"
+        set {_l::*} to split {_str} at " "
+        loop {_l::*}:
+            delete {_i}
+            set {_i} to loop-value parsed as a number
+            {_i} is set
+            set {_i} to round({_i})
+            replace every "%loop-value%" in {_str} with "%{_i}%"
+
+            replace every " seconds" in {_str} with " SECONDS"
+            replace every " second" in {_str} with " SECOND"
+
+            replace every " minutes" in {_str} with " MINUTES"
+            replace every " minute" in {_str} with " MINUTE"
+
+            replace every " hours" in {_str} with " HOURS"
+            replace every " hour" in {_str} with " HOUR"
+
+
+        # ////////////////////// 
+
+        set {_message} to "{@on_cooldown}"
+        replace every "[time]" in {_message} with "%{_str}%" 
+
+        send "%{_message}%"
+        stop
+    set {cooldown::pearl::%player%::lastused} to now
+
+
+
+
+command /qpearl [<text>] [<player>]:
+    permission: {@node}
+    permission message: {@permission_message}
+    trigger:
+        if arg 1 is not set:
+            send "&7&m-----------------------------------------------"
+            send "{@accent_color}* {@main_color}/qpearl resetcooldown (player) &8- {@accent_color}&oResets enderpearl cooldown for player"
+            send "{@accent_color}* {@main_color}/qpearl ver &8- {@accent_color}&oView version of skript"
+            send "&7&m-----------------------------------------------"
+        if arg 1 is "resetcooldown":
+            if arg 2 is set:
+                set {cooldown::pearl::%arg 2%::lastused} to 0
+                send "{@prefix} &fYou resetted this player's pearl cooldown"
+                stop
+            else:
+                send "&fPlease supply a player"
+        if arg 1 is "ver":
+            send "&fRunning qPearls version {@version}"
+            stop

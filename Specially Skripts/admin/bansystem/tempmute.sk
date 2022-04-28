@@ -1,0 +1,175 @@
+        #set {_timespan} to toTimespan(arg 1)
+options:
+    appeal: https://discord.gg/rawsteal
+    no-reason: No provided reason
+    permission-msg: &cInsufficient permissions!
+
+command /tempmute [<offline player>] [<text>] [<string>]:
+    permission: punish.tempmute
+    permission message: {@permission-msg}
+    aliases: tm, tmute
+    trigger:
+        if arg 1 is set:
+            if arg 2 is set:
+                if arg 2 contains "d" or "m" or "s":
+                    if arg 3 is set:
+                        if first 3 characters of arg 3 is "-s ":
+                            if length of arg 3 < 2:
+                                send "&cPlease provide a reason"
+                                stop
+                            else:
+                                if {punish_mute::true::%uuid of arg 1%} is true:
+                                    if player has permission "punish.replacePunishments":
+                                        set {_timespan} to toTimespan(arg 2)
+                                        set {_reason} to arg 3
+                                        set {_reason} to last (length of {_reason} - 2) characters of {_reason}
+                                        send "&8[Previous punishment removed] &7You temporarily banned &3%arg 1% &7for&c%{_reason}%&7."
+                                        send "&7[Silent] &3%player% &7muted &3%arg 1% &7for&c%{_reason}%&7. [%{_timespan}%&7]" to all players where [input has permission "punish.notify"]
+
+                                        set {punish_mute::duration::%uuid of arg 1%} to {_timespan}
+                                        set {punish_mute::date::%uuid of arg 1%} to now
+                                        set {punish_mute::reason::%uuid of arg 1%} to {_reason}
+                                        set {punish_mute::executor::%uuid of arg 1%} to player
+                                        set {punish_mute::target::%uuid of arg 1%} to arg 1
+                                        set {punish_mute::true::%uuid of arg 1%} to true
+                                        set {punish_temp_mute::true::%uuid of arg 1%} to true
+
+
+
+
+                                        send "" and "&7You have been muted for &c%{_timespan}% &7for&c%{punish_mute::reason::%uuid of arg 1%}%&7.%nl%&7If you think you were &3unfairly &7muted?, appeal at &c{@appeal}&7." and "" to arg 1
+                                        add "&7[%{punish_mute::date::%uuid of arg 1%}%&7] &3%{punish_mute::executor::%uuid of arg 1%}% &7temporarily &fmuted &3%arg 1% &7for &c%{punish_mute::duration::%uuid of arg 1%}% &7for&c%{punish_mute::reason::%uuid of arg 1%}%" to {history::%uuid of arg 1%::*}
+                                        stop
+                                    else:
+                                        send "&c%arg 1% &cis already muted and you don't have permission to replace existing punishments!"
+                                else:
+                                    set {_timespan} to toTimespan(arg 2)
+                                    set {_reason} to arg 3
+                                    set {_reason} to last (length of {_reason} - 2) characters of {_reason}
+
+                                    send "&7You temporarily muted &3%arg 1% &7for&c%{_reason}%&7."
+                                    send "&7[Silent] &3%player% &7muted &3%arg 1% &7for&c%{_reason}%&7. [%{_timespan}%&7]" to all players where [input has permission "punish.notify"]
+
+                                    set {punish_mute::duration::%uuid of arg 1%} to {_timespan}
+                                    set {punish_mute::date::%uuid of arg 1%} to now
+                                    set {punish_mute::reason::%uuid of arg 1%} to {_reason}
+                                    set {punish_mute::executor::%uuid of arg 1%} to player
+                                    set {punish_mute::target::%uuid of arg 1%} to arg 1
+                                    set {punish_mute::true::%uuid of arg 1%} to true
+                                    set {punish_temp_mute::true::%uuid of arg 1%} to true
+
+
+
+                                    send "" and "&7You have been muted for &c%{_timespan}% &7for&c%{punish_mute::reason::%uuid of arg 1%}%&7.%nl%&7If you think you were &3unfairly &7muted?, appeal at &c{@appeal}&7." and "" to arg 1
+                                    
+                                    add "&7[%{punish_mute::date::%uuid of arg 1%}%&7] &3%{punish_mute::executor::%uuid of arg 1%}% &7temporarily &fmuted &3%arg 1% &7for &c%{punish_mute::duration::%uuid of arg 1%}% &7for&c%{punish_mute::reason::%uuid of arg 1%}%" to {history::%uuid of arg 1%::*}
+                                    stop
+
+                        else:
+                            if {punish_mute::true::%uuid of arg 1%} is true:
+                                if player has permission "punish.replacePunishments":
+                                    set {_timespan} to toTimespan(arg 2)
+
+
+                                    set {punish_mute::duration::%uuid of arg 1%} to {_timespan}
+                                    set {punish_mute::date::%uuid of arg 1%} to now
+                                    set {punish_mute::reason::%uuid of arg 1%} to arg 3
+                                    set {punish_mute::executor::%uuid of arg 1%} to player
+                                    set {punish_mute::target::%uuid of arg 1%} to arg 1
+                                    set {punish_mute::true::%uuid of arg 1%} to true
+                                    set {punish_temp_mute::true::%uuid of arg 1%} to true
+
+                                    send "" and "&7You have been muted for &c%{_timespan}% &7for &c%{punish_mute::reason::%uuid of arg 1%}%&7.%nl%&7If you think you were &3unfairly &7muted?, appeal at &c{@appeal}&7." and "" to arg 1
+                            
+                                    add "&7[%{punish_mute::date::%uuid of arg 1%}%&7] &3%{punish_mute::executor::%uuid of arg 1%}% &7temporarily &fmuted &3%arg 1% &7for &c%{punish_mute::duration::%uuid of arg 1%}% &7for &c%{punish_mute::reason::%uuid of arg 1%}%" to {history::%uuid of arg 1%::*}
+                            
+                                    send "&8[Previous punishment removed] &7You temporarily muted &3%arg 1% &7for &c%arg 3%&7."
+                                    broadcast "&3%player% &7muted &3%arg 1% &7for &c%arg 3%&7. [%{_timespan}%&7]"
+                                else:
+                                    send "&c%arg 1% &cis already banned and you don't have permission to replace existing punishments!"
+
+                            else:
+                                set {_timespan} to toTimespan(arg 2)
+
+
+                                set {punish_mute::duration::%uuid of arg 1%} to {_timespan}
+                                set {punish_mute::date::%uuid of arg 1%} to now
+                                set {punish_mute::reason::%uuid of arg 1%} to arg 3
+                                set {punish_mute::executor::%uuid of arg 1%} to player
+                                set {punish_mute::target::%uuid of arg 1%} to arg 1
+                                set {punish_mute::true::%uuid of arg 1%} to true
+                                set {punish_temp_mute::true::%uuid of arg 1%} to true
+
+                                send "" and "&7You have been muted for &c%{_timespan}% &7for &c%{punish_mute::reason::%uuid of arg 1%}%&7.%nl%&7If you think you were &3unfairly &7muted?, appeal at &c{@appeal}&7." and "" to arg 1
+                            
+                                add "&7[%{punish_mute::date::%uuid of arg 1%}%&7] &3%{punish_mute::executor::%uuid of arg 1%}% &7temporarily &fmuted &3%arg 1% &7for &c%{punish_mute::duration::%uuid of arg 1%}% &7for &c%{punish_mute::reason::%uuid of arg 1%}%" to {history::%uuid of arg 1%::*}
+                            
+                                send "&7You temporarily muted &3%arg 1% &7for &c%arg 3%&7."
+                                broadcast "&3%player% &7muted &3%arg 1% &7for &c%arg 3%&7. [%{_timespan}%&7]"
+
+                    else:
+                        send "&cPlease provide a reason! - /tempmute (player) (duration) [-s] (reason)"
+                        send "&c                                                                ^"
+                else:
+                    send "&cPlease enter a valid duration, 1d, 1s , 1h. - /tempban (player) (duration) [-s] (reason)"
+                    send "&c                                                                    ^"
+            else:
+                send "&cPlease enter a duration! - /tempmute (player) (duration) [-s] (reason)"
+                send "&c                                                 ^"
+        else:
+            send "&cPlease enter a valid player. - /tempmute (player) (duration) [-s] (reason)"
+            send "&c  "
+
+on chat:
+    if {punish_temp_mute::true::%uuid of player%} is true:
+        set {_waited} to difference between {punish_mute::duration::%uuid of player%} and now
+        if {_waited} < {punish_mute::duration::%uuid of player%}:
+            set {_expire} to difference between {punish_mute::duration::%uuid of player%} and {_waited}
+            send formatted "&3%player% &7tried to chat whilst muted. <run command:/checkpuns %player%>&7[Click to view history]" to all players where [input has permission "punish.notify"]
+            cancel event 
+            send "" and "&7You have been muted for &c%{_expire}% &7for &c%{punish_mute::reason::%uuid of player%}%&7.%nl%&7If you think you were &3unfairly &7muted?, appeal at &c{@appeal}&7." and ""
+            stop
+        else:
+            send "why???????"
+            set {_now} to now
+            add "&7[%{_now}%&7] &3Automatic unmute. &c[EXPIRED]" to {history::%uuid of player%::*}
+            delete {punish_mute::duration::%uuid of player%}	
+            delete {punish_mute::date::%uuid of player%}	
+            delete {punish_mute::reason::%uuid of player%}
+            delete {punish_mute::executor::%uuid of player%}
+            delete {punish_mute::true::%uuid of player%}
+            delete {punish_mute::target::%uuid of player%}
+            delete {punish_temp_mute::true::%uuid of player%}
+            delete {punish_perm_mute::true::%uuid of player%}
+    else:
+        stop
+#every 15 seconds:
+    #loop all players:
+        #if {punish_temp_mute::true::%uuid of loop-player%} is true:
+            #set {_waited} to difference between {punish_mute::duration::%uuid of loop-player%} and now
+            #{_waited} > {punish_mute::duration::%uuid of loop-player%}
+               
+            #set {_now} to now
+            #add "&7[%{_now}%&7] &3Automatic unmute. &c[EXPIRED]" to {history::%uuid of loop-player%::*}
+            #delete {punish_mute::duration::%uuid of loop-player%}	
+            #delete {punish_mute::date::%uuid of loop-player%}	
+            #delete {punish_mute::reason::%uuid of loop-player%}
+            #delete {punish_mute::executor::%uuid of loop-player%}
+            #delete {punish_mute::true::%uuid of loop-player%}
+            #delete {punish_mute::target::%uuid of loop-player%}
+            #delete {punish_temp_mute::true::%uuid of loop-player%}
+            #delete {punish_perm_mute::true::%uuid of loop-player%}
+        #else:
+            #stop
+
+
+command /debag: 
+    trigger:
+        if {punish_temp_mute::true::%uuid of player%} is true:
+            send "staeg 1"
+            set {_waited} to difference between {punish_mute::duration::%uuid of player%} and now
+            send "stage 2"
+            if {_waited} < {punish_mute::duration::%uuid of player%}:
+                send "stage 3"
+                send "%{_waited}%"
+                

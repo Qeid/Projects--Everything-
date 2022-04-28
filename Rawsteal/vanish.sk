@@ -1,0 +1,149 @@
+command /v [<player>]:
+	permission: staff.notify
+	permission message: &cYou must be junior mod or higher to use this command!
+	aliases: vanish, vanish:v
+	executable by: player
+	trigger:
+		if arg 1 is not set:
+			if player's prefix contains "junior mod" or "&7" or "captain" or "mvp" or "vip" or "tester":
+				if {vanish::%player%} is not set:
+					hide the player from all players
+					send "&fYou are now &bonly visible &fto &bJMOD and up&f!"
+					set {vanish::juniormod::%player%} to true
+					set {vanish::%player%} to true
+					add player to {vanished::*}
+					send "&b[V] &f%player% &fenabled vanish." to all players where [input has permission "staff.notify"]
+				else:
+					reveal the player from all players
+					send "&fYou're now visible." to arg 1
+					delete {vanish::juniormod::%player%}
+					delete {vanish::%player%}
+					set {vanish::priority::%Player%} to "1"
+					remove player from {vanished::*}
+					
+					send "&b[V] &f%player% &fdisabled vanish." to all players where [input has permission "staff.notify"]
+			else if player's prefix contains "MOD":
+				if {vanish::%player%} is not set:
+					hide the player from all players
+					send "&fYou are now &bonly visible &fto &bMOD and up&f!"
+					set {vanish::mod::%player%} to true
+					set {vanish::%player%} to true
+					add player to {vanished::*}
+					send "&b[V] &f%player% &fenabled vanish." to all players where [input has permission "staff.notify"]
+				else:
+					reveal the player from all players
+					send "&fYou're now visible."
+					set {vanish::priority::%Player%} to "2"
+					delete {vanish::mod::%player%}
+					delete {vanish::%player%}
+					remove player from {vanished::*}
+					send "&b[V] &f%player% &fdisabled vanish." to all players where [input has permission "staff.notify"]
+			else if player's prefix contains "developer" or "admin" or "manager":
+				if {vanish::%player%} is not set:
+					hide the player from all players
+					send "&fYou are now &bonly visible &fto &bADMIN and up&f!"
+					set {vanish::admin::%player%} to true
+					set {vanish::%player%} to true
+					send "&b[V] &f%player% &fenabled vanish." to all players where [input has permission "staff.notify"]
+
+					set {prefix::%player%} to player's prefix
+					set {vanish::priority::%Player%} to "3"
+					add player to {vanished::*}
+				else:
+					reveal the player from all players
+					send "&fYou're now visible."
+					delete {vanish::admin::%player%}
+					delete {vanish::%player%}
+					remove player from {vanished::*}
+					send "&b[V] &f%player% &fdisabled vanish." to all players where [input has permission "staff.notify"]
+
+		if arg 1 is set:
+			if {vanish::%arg 1%} is not set:
+				hide the player from all players
+				send "&fYou are now &bonly visible &fto &bJMOD and up&f!" to arg 1
+				send "&b%arg 1% is now &bonly visible &fto &bJMOD and up&f!"
+				set {vanish::juniormod::%arg 1%} to true
+				set {vanish::%arg 1%} to true
+				add arg 1 to {vanished::*}
+				set {vanish::priority::%arg 1%} to "1"
+			else:
+				reveal the player from all players
+				send "&fYou're now visible." to arg 1
+				send "&b%arg 1% &fis now visible."
+				delete {vanish::juniormod::%arg 1%}
+				delete {vanish::mod::%arg 1%}
+				delete {vanish::admin::%arg 1%}
+				delete {vanish::%arg 1%}
+				remove arg 1 from {vanished::*}
+				delete {vanish::priority::%player%}
+
+on command "/vanish":
+	cancel event
+	execute player command "v"
+
+on quit:
+	if {vanish::%player%} is set:
+		delete {vanish::%player%}
+		remove player from {vanished::*}
+		send "&b[V] &f%player% &fleft whilst vanished." to all players where [input has permission "staff.notify"]
+
+on join:
+	if {vanish::juniormod::%player%} is true:
+		send "&cSince you left in vanish, you were automatically put into vanish!"
+		execute player command "v"
+	else if {vanish::mod::%player%} is true:
+		send "&cSince you left in vanish, you were automatically put into vanish!"
+		execute player command "v"
+	else if {vanish::admin::%player%} is true:
+		send "&cSince you left in vanish, you were automatically put into vanish!"
+		execute player command "v"
+
+on join:
+	loop all players:
+		{vanish::%loop-player%} = true
+		hide the loop-player from all players
+every 1 second:
+	loop all players:
+		if {vanish::juniormod::%loop-player%} is true:
+			loop all players:
+				if loop-player-2's prefix contains "junior mod" or "&8(##2FC313&lMOD&8)" or "admin" or "manager" or "developer":
+					reveal the loop-player-1 from loop-player-2
+		else if {vanish::mod::%loop-player%} is true:
+			loop all players:
+				if loop-player-2's prefix contains "&8(##2FC313&lMOD&8)" or "admin" or "manager" or "developer":
+					reveal the loop-player-1 from loop-player-2
+		else if {vanish::admin::%loop-player%} is true:
+			loop all players:
+				if loop-player-2's prefix contains "admin" or "manager" or "developer" or "owner":
+					reveal the loop-player-1 from loop-player-2
+
+
+
+every 2 seconds:
+	loop all players:
+		if {vanish::%loop-player%} is set:
+			if {vanish::juniormod::%loop-player%} is true:
+				send action bar "&fYou are &bonly visible &fto &bJMOD and up&f!" to loop-player
+			else if {vanish::mod::%loop-player%} is true:
+				send action bar "&fYou are &bonly visible &fto &bMOD and up&f!" to loop-player
+			else if {vanish::admin::%loop-player%} is true:
+				send action bar "&fYou are &bonly visible &fto &bADMIN and up&f!" to loop-player
+ 
+on pickup:
+	{vanish::%player%} is set
+	cancel event
+
+on damage:
+	{vanish::%attacker%} is set
+	cancel event
+	send "&cYou cannot hit entities in vanish!" to attacker
+
+
+command /vlist:
+	permission: server.admin
+	permission message: &cYou must be admin or higher to use this command!
+	aliases: vanish:vlist
+	trigger:
+		send "&e&lVanished players:" and ""
+		loop {vanished::*}:
+			send "&b%loop-value% &7(%{vanish::priority::%loop-value%}% &7priority)"

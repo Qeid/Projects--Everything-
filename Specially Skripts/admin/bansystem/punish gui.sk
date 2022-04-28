@@ -1,0 +1,34 @@
+command /god [<player>]:
+    permission: god.use
+    aliases: godmode
+    permission message: &cInsufficient permissions!
+    trigger:
+        if arg 1 is not set:
+            if {god::%player%} is false:
+                set {god::%player%} to true
+                send "&7&oGod mode &aenabled &7&ofor %player's prefix%%player%"
+            else:   
+                set {god::%player%} to false
+                send "&7&oGod mode &cdisabled &7&ofor %player's prefix%%player%"
+        else:
+            if {god::%arg 1%} is false:
+                set {god::%arg 1%} to true
+                send "&7&oGod mode &aenabled &7&ofor %player's prefix%%player%"
+            else:   
+                set {god::%arg 1%} to false
+                send "&7&oGod mode &cdisabled &7&ofor %player's prefix%%player%"
+on damage:
+    if {god::%attacker%} is true:
+        send "&cYou cannot hit entities in God mode." to attacker
+        cancel event
+        stop
+
+on damage:
+    if {god::%victim%} is true:
+        cancel event
+        stop
+
+on command "/god":
+    "%region at player%" = "dungeon"
+    cancel event
+    send "&cYou cannot use God mode whilst in a dungeon!"

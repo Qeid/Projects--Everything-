@@ -1,0 +1,104 @@
+on chat:
+    set chat format to "%colored {data::ranks::player::%player's uuid%::prefix}%%player%&f: %message%"
+on first join:
+    cspr(player, player, "default")
+    broadcast "%colored {data::ranks::player::%player's uuid%::prefix}%%player% &7joined for the first time!"
+    
+on join:
+    loop all players:
+        if loop-player is in world "lobby-1" or "lobby-2" or "world":
+            set join message to ""
+            send "%colored {data::ranks::player::%player's uuid%::prefix}%%player% &3joined your lobby." to loop-player
+        
+command /hub:
+    aliases: ahub
+    trigger:
+        joinServer(player, "lobby")
+
+every 3.5 seconds:
+    loop all players:
+        reloadScoreboard(loop-player)
+
+
+function reloadScoreboard(p: player):
+    if {_p} is in world "lobby-1" or "lobby-2" or "world":
+        wipe {_p}'s sidebar
+        set {_world} to {_p}'s world
+        replace all "lobby-" in {_world} with ""
+    
+        set name of sidebar of {_p} to "   &3&lAcid&b&lSystem    "
+        set score "&1" in sidebar of {_p} to 10
+        set score "&7Rank: %colored {data::ranks::player::%{_p}'s uuid%::prefix}%" in sidebar of {_p} to 9
+        set score "&7Lobby: &f##%{_world}%" in sidebar of {_p} to 8
+        set score "&3" in sidebar of {_p} to 7
+        set score "&7Players: &f%size of all players%" in sidebar of {_p} to 6
+        set score "&7Servers: &f%{server::serversAmount}%" in sidebar of {_p} to 5
+        set score "&a" in sidebar of {_p} to 4
+        set score "&fStart your own server" in sidebar of {_p} to 3
+        set score "&ffor free using" in sidebar of {_p} to 2
+        set score "&b/create&f!" in sidebar of {_p} to 1
+    else:
+        wipe {_p}'s sidebar
+        stop
+
+on join:
+    if player is op:
+        set player's tablist name to "%colored {data::ranks::player::%player's uuid%::prefix} ? """"%%player%"
+    else:
+        set player's tablist name to "%colored {data::ranks::player::%player's uuid%::prefix} ? """"%%player%"
+
+every second:
+    set all players where [world of player input is "lobby-1" or "lobby-2"]' tab list header to "%nl%&3&lAcid&b&lSystem%nl%&7Number ##1 server host on Minehut.%nl%"
+    set {_tps::*} to tps
+    set all players where [world of player input is "lobby-1" or "lobby-2"]' tab list footer to "%nl%&8(&f%player count%&7/&f%max player count% &8| &f%{server::serversAmount}% &7SERVERS &8| &f%{_tps::1}% &7TPS&8)%nl%"
+
+
+#format gui slot {_num}
+
+on rightclick:
+    if player's held item is stick:
+        execute player command "servermenu"
+command /servermenu:
+    aliases: cloud:lobby:servermenu
+    trigger:
+        psOnline(player)
+
+
+function psOnline(P: player):
+    loop all players:
+        set {_loop-player} to loop-player
+    set metadata tag "serverlist" of {_p} to chest inventory with 4 rows named "&3[AcidSystems] &8Server List"
+    set {_S} to 0
+    loop {server::servers::*}:
+        set {_server-name} to loop-value
+        set {_server-owner} to {data::serverOwner::%{_server-name}%} parsed as offline player
+        set {_server-motd} to {ps::server::%{_server-name}%::motd}
+        set {_players} to amount of all players in world("%{_loop-player}%-%{_server-name}%")
+        set {_max-players} to {ps::server::%{_server-name}%::max-players}
+        set slot {_S} of metadata tag "serverlist" of {_p} to oak sign named "&b%{_server-name}%" with lore "" and "&7Owner &b%{_server-owner}%" and "&7MOTD &b%{_server-motd}%" and "&7Players &b%{_players}%&7/&b%{_max-players}%" and ""
+        add 1 to {_S}
+    open (metadata tag "serverlist" of {_p}) to {_p}
+
+on inventory click:
+    if compare(metadata tag "serverlist" of player, event-inventory) = true:
+        cancel event
+        if index of event-slot = (all integers between 0 and {_s}):
+            #myothercode
+            send "&aatest"
+
+on unload:
+    delete {server::serverMenu::count}
+
+on join:
+    set slot 0 of player's inventory to stick named "&3Server Selector &7(Right Click)"
+
+
+
+
+
+
+function compare(1: inventory, 2: inventory) :: boolean:
+	return false if (name of {_1}) != (name of {_2})
+	return false if (rows of {_1}) != (rows of {_2})
+	return false if type of {_1} != type of {_2}
+	return true

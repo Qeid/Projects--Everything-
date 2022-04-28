@@ -1,0 +1,9 @@
+import:
+    org.bukkit.Bukkit
+
+every 2 seconds:    
+    loop all players:
+        set {_p} to loop-player
+
+        {_tps} = org.bukkit.Bukkit.getTPS()
+        {_p}.sendMessage(org.bukkit.Bukkit.getTPS())

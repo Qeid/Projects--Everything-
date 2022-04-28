@@ -1,0 +1,41 @@
+        #set {_timespan} to toTimespan(arg 1)
+options:
+    appeal: https://discord.gg/rawsteal
+    no-reason: No provided reason
+    permission-msg: &cInsufficient permissions!
+
+command /unban <offline player> [<text>]:
+    usage: &7Improper usage: &3/unban (player) [reason]
+    permission: punish.unban
+    permission message: {@permission-msg}
+    trigger:
+        if {punish::true::%uuid of arg 1%} is not set:
+            send "&c%arg 1% &cis not banned!"
+            stop
+        else:
+            if arg 2 is not set:
+                delete {punish::duration::%uuid of arg 1%}	
+                delete {punish::date::%uuid of arg 1%}	
+                delete {punish::reason::%uuid of arg 1%}
+                delete {punish::executor::%uuid of arg 1%}
+                delete {punish::target::%uuid of arg 1%}
+                delete {punish_temp::true::%uuid of arg 1%}
+                delete {punish_perm::true::%uuid of arg 1%}
+                delete {punish::true::%uuid of arg 1%}
+                set {unban::date::%uuid of arg 1%} to now
+                send "&7You unbanned &3%arg 1% &7for &c{@no-reason}"
+                send "&7[Silent] &3%player% &7unbanned &3%arg 1% &7for &c{@no-reason}&7." to all players where [input has permission "punish.notify"]
+                add "&7[%{unban::date::%uuid of arg 1%}%&7] &3%player% &funbanned &3%arg 1% &7for &c{@no-reason}&7." to {history::%uuid of arg 1%::*}
+            else:
+                delete {punish::duration::%uuid of arg 1%}	
+                delete {punish::date::%uuid of arg 1%}	
+                delete {punish::reason::%uuid of arg 1%}
+                delete {punish::executor::%uuid of arg 1%}
+                delete {punish::target::%uuid of arg 1%}
+                delete {punish_temp::true::%uuid of arg 1%}
+                delete {punish_perm::true::%uuid of arg 1%}
+                delete {punish::true::%uuid of arg 1%}
+                set {unban::date::%uuid of arg 1%} to now
+                send "&7You unbanned &3%arg 1% &7for &c%arg 2%"
+                send "&7[Silent] &3%player% &7unbanned &3%arg 1% &7for &c%arg 2%&7." to all players where [input has permission "punish.notify"]
+                add "&7[%{unban::date::%uuid of arg 1%}%&7] &3%player% &funbanned &3%arg 1% &7for &c%arg 2%&7." to {history::%uuid of arg 1%::*}

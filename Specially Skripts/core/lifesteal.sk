@@ -1,0 +1,87 @@
+on death of a player:
+    attacker is a player:
+
+        remove 1 from victim's maximum health
+        if victim's maximum health <= 1:
+            if {lifesteal::difficulty} is "EASY":
+                set victim's maximum health to 1
+                stop
+            if {lifesteal::difficulty} is "HARD":
+                set victim's maximum health to 1
+                ban player due to "&cYou have been deathbanned! Please wait 1 hour"
+        add 1 to attacker's maximum health
+
+on load:
+    if {lifesteal::difficulty} is not set:
+        send "&4[Error] difficulty for Lifesteal is not set, defaulting to Easy" to op
+
+command /lifesteal [<text>] [<text>]:
+    trigger:
+        if arg 1 is not set:
+            send "<##FF3659>&lOaksteal <##FF3659>commands"
+            send "&8&m---------------------------"
+            send "&8> &c/lifesteal setdifficulty (easy/hard) &8- &8&oIf difficulty is &aEASY&8&o, players will not get deathbanned on death. &8&oIf difficulty is &cHARD&8&o, players will get deathbanned on death."
+            send "&7Requires: &c[ADMIN]"
+            send ""
+            send "&8> &c/lifesteal withdraw (number) &8- &8&oWithdraws hearts"
+            send "&7Aliases: &7/withdraw"
+            send ""
+            send "&8> &c/lifesteal gift (player) &8- &8&oGifts a player 1 heart, usable every 12h."
+            send "&7Aliases: &7/gift"
+            send "&7Requires: &a[VIP]"
+            send ""
+            send "&8> &c/lifesteal addhearts (player) (amount) &8- &8&oAdd hearts to a player"
+            send "&7Requires: &c[ADMIN]"
+            send ""
+            send "&8&m---------------------------"
+        if arg 1 is "setdifficulty":
+            if player doesn't have permission "lifesteal.setdifficulty":
+                send "&cYou must be admin or higher to use this command!"
+            else:
+                if arg 2 is not set:
+                    send "&cMissing arguments - /lifesteal setdifficulty (easy/hard)"
+                    stop
+                if arg 2 is not "easy" or "hard":
+                    send "&cExpected 'hard' or 'easy' got %arg 2% &cinstead."
+                    stop
+                if arg 2 is "easy":
+                    set {lifesteal::difficulty} to "EASY"
+                    send "<##FF3659>&lOaksteal &8> &7Difficulty is now &a&lEASY"
+                    stop
+                if arg 2 is "hard":
+                    set {lifesteal::difficulty} to "HARD"
+                    send "<##FF3659>&lOaksteal &8> &7Difficulty is now &c&lHARD"
+        if arg 1 is "withdraw":
+            set {_n} to arg 2 parsed as a number
+            if arg 2 is not set:
+                send "&cMissing a number. - /lifesteal withdraw (number)"
+                stop
+            if {_n} < 1:
+                send "&cYou have inputted a number lower than 0!"
+                stop
+            if {_n} >= player's max health:
+                send "&cYou do not have that many hearts to withdraw."
+                stop
+            else:
+                set {lifesteal::heart::owner} to player's uuid
+                send "<##FF3659>&lOaksteal &8> &7You have withdrawed &c%{_n}% &7hearts"
+                remove {_n} from player's max health
+                give {_n} of glowing fermented spider eye named "&aHeart" with lore "" and "&7This heart can be yours! All you" and "&7have to do is &e&lRIGHT CLICK &7and" and "&7you'll gain a heart!" and "" and "&7Owner: %colored {data::ranks::player::%{lifesteal::heart::owner}%::prefix}%%player%" and "" and "&a&lUNCOMMON CONSUMABLE" to player 
+on rightclick:
+    "%player's tool%" contains "fermented spider eye"
+    "%player's tool%" contains "&aHeart"
+    play sound "entity.player.burp" at volume 1
+    send "&a+1&A Heart"
+    remove 1 of player's tool from player's inventory
+    add 1 to player's max health
+
+every 1.5 seconds:
+    loop all players:
+        if (metadata "combattag" of loop-player) is not set:
+            set {_l} to loop-player's health
+            set {_m} to loop-player's max health
+            send action bar "&c%round {_l}%&c/%round {_m}%❤" to loop-player
+
+on rightclick on player:
+    if player is sneaking:
+        send "test"

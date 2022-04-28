@@ -1,0 +1,431 @@
+define new bot named "Peacekeeper":
+    token: "OTYzNzc3MDQxMTcyNDI2ODEz.YlbBUA.cJckW9Uaac-XEqq2vIfUyiq9lsc"
+    intents: default intents
+    policy: all
+    auto reconnect: true
+    compression: none
+
+# discord command guildcross [<text>]:
+#     prefixes: !
+#     trigger:
+#         if arg 1 is not set:
+#             reply with ":x: **Missing arguments!** `guildcross <text>`"
+#         else:
+#             set {g::%id of event-guild%::gc} to arg 1
+#             reply with ":white_check_mark: **Guild cross set!**"
+
+# discord command showguildcross:
+#     prefixes: !
+#     trigger:
+#         if {g::%id of event-guild%::gc} is not set:
+#             reply with ":white_check_mark: **Guild cross:** `None`"
+#         else:
+#             set {_id} to id of event-guild
+#             reply with ":white_check_mark: **Guild cross:** `%{g::%{_id}%::gc}%`"
+
+# discord command purge [<text>] [<number>] [<text>]:
+#     prefixes: !
+#     trigger:
+#         if event-member has discord permission message manage:
+#             if arg 1 is "channel":
+#                 if arg 2 is set:
+#                     if arg 3 is not set:
+#                         if arg 2 <= 100:
+#                             purge last arg 2 messages from event-channel
+#                             make embed:
+#                                 set description of embed to "<:pk_success:963918228638298132> *Deleted `%arg 2%` messages in %mention of event-channel%*"
+#                                 set color of embed to green
+#                             reply to event-message with last embed with bot "Peacekeeper" and store the message in {_be}
+#                             channelLog()
+#                             wait 5 seconds
+#                             destroy {_be}
+#                             stop
+#                         else:
+#                             reply to event-message with ":x: *Sorry, but you cannot put a number higher than 100!*" with bot "Peacekeeper" and store the message in {_be}
+#                             wait 5 seconds
+#                             destroy event-message
+#                             destroy {_be}
+#                             stop
+#                     else:
+#                         if arg 2 <= 100:
+#                             set {_channel} to arg 3 parsed as a channel
+#                             if {_channel} is a channel:
+#                                 purge last arg 2 messages from channel with id "%arg 3%"
+#                                 make embed:
+#                                     set description of embed to "<:pk_success:963918228638298132> *Deleted `%arg 2%` messages in %mention of channel with id arg 3%*"
+#                                     set color of embed to green
+#                                 reply to event-message with last embed with bot "Peacekeeper" and store the message in {_be}
+#                                 wait 5 seconds
+#                                 destroy event-message
+#                                 destroy {_be}
+#                                 stop 
+#                             else:
+#                                 reply to event-message with ":x: *Sorry! But I couldn't find a channel matching `%arg 3%`*" with bot "Peacekeeper"
+#                                 wait 5 seconds
+#                                 destroy event-message
+#                                 destroy {_be}
+#                                 stop
+#                         else:
+#                             reply to event-message with ":x: *Sorry, but you cannot put a number higher than 100!*" with bot "Peacekeeper" and store the message in {_be}
+#                             wait 5 seconds
+#                             destroy event-message
+#                             destroy {_be}
+#                             stop
+#                 else:
+#                     make embed:
+#                         set description of embed to ":x: **Missing arguments!** `purge channel <number> [channel id]`%nl%**Example | ** `purge channel 25` *<- will purge 25 messages in current channel (if not past 14d)*%nl%**Example | ** `purge channel 25 904469454883262534` <- *will purge 25 messages in the supplied channel id (if a valid id)*"
+#                         set color of embed to red
+#                     reply to event-message with last embed with bot "Peacekeeper" and store the message in {_be}
+#                     wait 15 seconds
+#                     destroy event-message
+#                     destroy {_be}
+#                     stop
+#             else if arg 1 is "user":
+#                 reply with "**Oops!** *This command is not yet implemented! Please wait for a update.*"
+
+#             else:
+#                 make embed:
+#                     add ":x: **Missing a type of method:**" to {_nl::*}
+#                     add "*Available methods for this command:* `channel`, `user`" to {_nl::*}
+#                     set description of embed to join {_nl::*} with nl
+#                     set color of embed to red
+#                 reply to event-message with last embed with bot "Peacekeeper" and store the message in {_be}
+#                 wait 15 seconds
+#                 destroy event-message
+#                 destroy {_be}
+#                 stop
+                        
+#         else:
+#             make embed:
+#                 set description of embed to ":x: *You need the permission `manage_messages` to use this command!*"
+#                 set color of embed to red
+
+#             reply to event-message with last embed with bot "Peacekeeper" and store the message in {_be}
+#             wait 5 seconds
+#             destroy event-message
+#             destroy {_be}
+#             stop
+#     else:
+#         make embed:
+#             set description of embed to ":x: **Error | ** *I cannot any messages as I don't have `MANAGE_MESSAGES`!*"
+#             set color of embed to red
+
+#         reply to event-message with last embed with bot "Peacekeeper" and store the message in {_be}
+#         wait 5 seconds
+#         destroy event-message
+#         destroy {_be}
+
+# discord command setlogchannel [<text>]:
+#     prefixes: !
+#     trigger:
+#         set {_a} to arg 1 parsed as a channel
+#         if {_a} is a channel:
+#             set {g::%id of event-guild%::logchannel::executor} to mention of event-user
+#             set {_oldlogchannel} to {g::%id of event-guild%::logchannel}
+#             set {g::%id of event-guild%::logchannel} to arg 1
+#             updateLogChannel("moderation", {g::%id of event-guild%::logchannel}, {_oldlogchannel}, "log-channel-update", {_userid}, "%id of event-guild%")
+#             reply to event-message with "> <:pk_success:963918228638298132> %Nl%> **Done!** *all moderation logs will now sent to* %mention of channel with id arg 1%!" with bot "Peacekeeper"
+#         else:
+#             reply to event-message with "> :x: %nl%> **Sorry!** *But I couldn't a find channel matching* `%arg 1%`" with bot "Peacekeeper" and store the message in {_be}
+#             wait 5 seconds
+#             destroy event-message
+#             destroy {_be}
+#             stop
+
+# function updateLogChannel(category: text, logchannel: text, oldlogchannel: text, action: text, executor: text, eventguild: text):
+#     set {_c} to {_logchannel}
+#     set {_oc} to {_oldlogchannel}
+#     set {_eg} to {_eventguild}
+#     set {_e} to {_executor} parsed as a member
+
+#     make embed:
+#         set {_t} to the timestamp of last embed
+#         set title of embed to ":tools: **__Log channel change__** (%{_t}%)"
+#         add "**Old log channel:** %mention of channel with id {_oc}%" to {_nl::*}
+#         add "**New log channel:** %mention of channel with id {_c}%" to {_nl::*}
+#         add "**Updated by:** %{g::%{_eg}%::logchannel::executor}%" to {_nl::*}
+#         set description of embed to join {_nl::*} with nl
+#         set timestamp of {_embed} to now
+#         set footer of embed to "Made with <3 from Qeid"
+#     post last embed to text channel with id "%{_oldlogchannel}%"
+#     post "> :tools: %Nl%> **Log channel change;** %nl%> This channel will now receive __moderation logs__ from Peacekeeper" to text channel with id "%{_logchannel}%"
+
+discord command testuserinfo <user>:
+    prefixes: !
+    trigger:
+        set {_buttons} to new components row
+        add new danger button with url "button-id-here" named "Ban" with reaction ":tools:" to components of {_buttons}
+        add new success button with url "cant-have-two-same-id" named "Mute" with reaction ":wrench:" to components of {_buttons}
+        add new disabled secondary button with url "no-space-e-either" named "i don't know yet" with reaction "sob" to components of {_buttons}
+        add new disabled secondary button with url "no-space-allowed-either" named "i don't know yet" with reaction "sob" to components of {_buttons}
+        
+        set {_dropdownRow} to new components row
+        set {_dropdown} to new dropdown with id "unique-id-here-too"
+
+        set min range of {_dropdown} to 1
+        set max range of {_dropdown} to 2
+        
+        add new option with value "value" named "Join date" with description "Get join date" with reaction ":zero:" to options of {_dropdown}
+
+        add new default option with value "value-2" named "Discord join date:" with description "view discord join date" with reaction ":one:" to options of {_dropdown}
+        add new option with value "3" named "Nickname history" with description "view nickname history" with reaction ":two:" to options of dropdown
+        add new option with value "4" named "punish history" with description "view punishment history" with reaction ":three:" to options of {_dropdown}
+        add new option with value "value-5" named "idk lol" with description "." with reaction ":four:" to options of {_dropdown}
+        add new option with value "value-6" named "idk" with description "." with reaction ":five:" to options of {_dropdown}
+        add new option with value "value-7" named "idk" with description "this dropdown shit's really cool u can have like 25 of these things per component" with reaction ":six:" to options of {_dropdown}
+
+        add {_dropdown} to components of {_dropdownRow}
+
+        retrieve member with id arg 1 and store it in {_u}
+        reply with "> :wrench: **User info** for %arg 1%" with components {_buttons} and {_dropdownRow}
+
+on button click:
+    set {_id} to event-string # get back the unique ID defined above.
+    {_id} is "button-id-here", "cant-have-two-same-id" or "no-space-allowed-either"
+
+    reply with hidden "You selected: %event-button%" # avoid the 'interaction failed' message
+
+on dropdown click:
+    set {_id} to event-string # get back the unique ID defined above.
+    {_id} is "unique-id-here-too"
+
+    reply with hidden "Selected values: %selected values%" # replying will defer the interaction
+
+
+on load:
+
+    set {_c} to newSlash("setnick", "Set nickname of a player")
+    newOption_Slash({_c}, "user", "The user to change the nickname of", "USER", false)
+    newOption_Slash({_c}, "nickname", "The nickname to set", "string", false)
+    addSlash_Local({_c}, "setnick")
+
+    set {_c} to newSlash("setlogchannel", "Set the channel to where all logs will be sent to")
+    newOption_Slash({_c}, "channel", "Channel to supply", "channel", false)
+    addSlash_Local({_c}, "setlogchannel")
+
+    set {_c} to newSlash("test", "Debug command")
+    addSlash_Local({_c}, "test")
+
+    set {_1} to newSlash("kick", "Kick a player from the server")
+    newOption_Slash({_1}, "member", "User to kick", "user", false)
+    newOption_Slash({_1}, "reason", "Reason to kick, if any", "string", true)
+    newOption_Slash({_1}, "silent", "Broadcast this punishment silently or publicly, if supplied true/false", "string", true)
+    addSlash_Local({_1}, "kick")
+
+
+options:
+    #   Replace with your guild ID
+    #               ↓
+    guild: "902288608470401045"
+
+    #  Replace with your bot name
+    #        ↓
+    bot: "Peacekeeper"
+
+
+on guild ready:
+    if {g::logchannel::%discord id of event-guild%} is not set:
+        set {g::logchannel::%discord id of event-guild%} to "N/A"
+
+# If the example has [nr] after it, that means the argument isn't required.
+
+# Command maker
+#                              Command Name   Command Description
+#                                    ↓                ↓
+# Example: set {_c} to newSlash("mycommand", "Best command ever!")
+
+function newSlash(n: string, d: string) :: object:
+    set {_nslash} to new slash command named "%{_n}%" with desc {_d}
+    return {_nslash}
+    send "Registered new slash command | %{_n}%" to console
+
+# Options editor
+# NOTE: If you don't enter an option type, it will default to "string" type.
+
+#                Slash command  Option Name  Option Description  Option Type    Is optional
+#                           ↓       ↓               ↓                 ↓             ↓
+# Example: newOption_Slash({_c}, "option", "Enter a string here!", "string" [nr], true [nr])
+
+function newOption_Slash(v: object, n: string, d: string, t: string="string", o: boolean=false):
+    if {_t} = "string":
+        if {_o} = false:
+            add required string option named "%{_n}%" with description "%{_d}%" to options of {_v}
+        
+        else:
+            add string option named "%{_n}%" with description "%{_d}%" to options of {_v}
+
+    if {_t} = "boolean":
+        if {_o} = false:
+            add required boolean option named "%{_n}%" with description "%{_d}%" to options of {_v}
+        
+        else:
+            add boolean option named "%{_n}%" with description "%{_d}%" to options of {_v}
+
+    if {_t} = "user":
+        if {_o} = false:
+            add required user option named "%{_n}%" with description "%{_d}%" to options of {_v}
+        
+        else:
+            add user option named "%{_n}%" with description "%{_d}%" to options of {_v}
+    
+    if {_t} = "integer":
+        if {_o} = false:
+            add required integer option named "%{_n}%" with description "%{_d}%" to options of {_v}
+        
+        else:
+            add integer option named "%{_n}%" with description "%{_d}%" to options of {_v}
+
+    if {_t} = "number":
+        if {_o} = false:
+            add required number option named "%{_n}%" with description "%{_d}%" to options of {_v}
+        
+        else:
+            add number option named "%{_n}%" with description "%{_d}%" to options of {_v}
+    
+    if {_t} = "channel":
+        if {_o} = false:
+            add required channel option named "%{_n}%" with description "%{_d}%" to options of {_v}
+        
+        else:
+            add channel option named "%{_n}%" with description "%{_d}%" to options of {_v}
+    
+    if {_t} = "role":
+        if {_o} = false:
+            add required role option named "%{_n}%" with description "%{_d}%" to options of {_v}
+        
+        else:
+            add role option named "%{_n}%" with description "%{_d}%" to options of {_v}
+
+# Subcommands
+#                       Sub command name   Sub command description
+#                               ↓                    ↓
+# Example: newSubCmd_Slash("subcommand", "Just a lil' sub command.")
+
+function newSubCmd_Slash(n: string, d: string) :: object:
+    set {_r} to new sub command named {_n} with description {_d}
+    return {_r}
+    send "done!!!!!!!!!!!!!!!!!!!!!" to console
+
+# Slash command adders
+# NOTE: The local function will add the slash command to your guild only, as the global will add the slash command to all guilds.
+# The example applies to both local and global.
+
+#                 Slash Command  Command Name
+#                          ↓         ↓
+# Example: addSlash_Local({_c}, "mycommand")
+
+function addSlash_Local(slash: object, name: string):
+
+    delete {slashcmd.Local::%{_name}%}
+    set {slashcmd.Local::%{_name}%} to {_slash}
+
+    update command {slashcmd.Local::*} locally in guild with id {@guild}
+
+on slash command:
+    set {_c} to event-string
+    if {_c} is "setnick" or "setnickname":
+        set {_u} to argument "user" as user
+        set {_member} to {_u} parsed as a member
+        set {_n} to argument "nickname" as string
+
+        set {_oldnick} to member nickname of {_member}
+        set member nickname of {_member} to "%{_n}%"
+        reply with hidden "<:pk_success:963918228638298132>%mention of event-user%: Successfully changed **nickname** of %mention of {_member}% `%discord id of {_member}%` to **__%{_n}%__**"
+
+        set {_id} to discord id of {g::logchannel::%discord id of event-guild%}
+        make embed:
+
+            add "**Logs - Nickname Change**" to {_nl::*}
+            add "" to {_nl::*}
+            set {_aoc} to discord id of {_oc}
+            set {_ac} to discord id of {_c}
+
+            add ":scroll:**SUPPLIED NICK:**" to {_nl::*}
+            add "> %{_n}%" to {_nl::*}
+            add "" to {_nl::*}
+            add ":one:**OLD NICK**" to {_nl::*}
+            add "> %{_oldnick}%" to {_nl::*}
+            add "" to {_nl::*}
+            add ":two:**NEW NICK**" to {_nl::*}
+            add "> %mention of {_member}%" to {_nl::*}
+            add "" to {_nl::*}
+            add ":mechanic:**STAFF MEMBER**" to {_nl::*}
+            add "> %mention of event-user%" to {_nl::*}
+            set description of embed to join {_nl::*} with nl
+            set timestamp of embed to now
+            set footer of embed to "<3"
+
+
+        post last embed to text channel with id "%{_id}%" 
+    if {_c} is "setlogchannel" or "slc":
+        set {_c} to argument "channel" as channel
+        set {_channel} to {_c}
+
+
+        if {_c} is set:
+            reply with "<:pk_success:963918228638298132>%mention of event-member%: Set new **log channel** to %mention of {_c}% `%discord id of {_c}%`"
+            set {_oc} to {g::logchannel::%discord id of event-guild%}
+            set {g::logchannel::%discord id of event-guild%} to {_c}
+            set {_aoc} to discord id of {_oc}
+            set {_ac} to discord id of {_c}
+            make embed:
+
+                add "**Logs**" to {_nl::*}
+                add "" to {_nl::*}
+
+                add ":wrench:**OLD CHANNEL**" to {_nl::*}
+                add "> %mention of channel with id {_aoc}%" to {_nl::*}
+                add "" to {_nl::*}
+                add ":pencil:**NEW CHANNEL**" to {_nl::*}
+                add "> %mention of channel with id {_ac}%" to {_nl::*}
+                add "" to {_nl::*}
+                add ":mechanic:**STAFF MEMBER**" to {_nl::*}
+                add "> %mention of event-member%" to {_nl::*}
+                set description of embed to join {_nl::*} with nl
+                set timestamp of embed to now
+                set embed color of embed to gray
+                set footer of embed to "<3"
+
+
+            post last embed to text channel with id "%{_aoc}%"
+            
+            post ":pencil:: This channel will now receive **logs**!" to text channel with id "%{_ac}%"
+        else:
+            make embed:
+                add ":biohazard:%mention of event-member%: Failed to set new **log channel**!" to {_nl::*}
+                set description of embed to join {_nl::*} with nl
+                set embed color of embed to yellow
+            reply with last embed 
+    if {_c} is "kick":
+        set {_u} to argument "member" as user
+        set {_user} to {_u} parsed as a member
+
+        set {_args-2} to argument "reason" as string
+        set {_args-3} to argument "silent" as boolean
+        if {_args-2} is set:
+            if {_args-3} is not set:
+                kick discord {_user} due to "%{_args-2}%"
+                set {_case} to random integer between 1000 and 9999
+                make embed:
+                    add ":hammer:%mention of event-user%: Kicked %{_user}% `%discord id of {_user}%` for **%{_args-2}%**" to {_nl::*}
+                    set description of embed to join {_nl::*} with nl
+                    set embed color of embed to orange
+                    set footer of embed to "Case: ##%{_case}%"
+                reply with last embed
+
+                make embed:
+                    add "**Logs**" to {_nl::*}
+                    add "" to {_nl::*}
+                    add ":hammer:%mention of event-user%: Kicked %{_user}% `%discord id of {_user}%` for **%{_args-2}%**" to {_nl::*}
+                    set description of embed to join {_nl::*} with nl
+                    set timestamp of embed to now
+                    set footer of embed to "<3"
+                set {_id} to discord id of {g::logchannel::%discord id of event-guild%}
+                post last embed to text channel with id "%{_id}%"
+                
+                
+
+
+
+
+

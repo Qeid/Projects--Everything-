@@ -1,0 +1,35 @@
+        #set {_timespan} to toTimespan(arg 1)
+options:
+    appeal: https://discord.gg/rawsteal
+    no-reason: No provided reason
+    permission-msg: &cInsufficient permissions!
+
+
+
+command /warn <player> [<text>]:
+    trigger:
+        if arg 2 is set:
+            if first 3 characters of arg 2 is "-s ":
+                if length of arg 2 < 2:
+                    send "&cPlease provide a reason"
+                    stop
+                else:
+                    set {_reason} to arg 2
+                    set {_reason} to last (length of {_reason} - 2) characters of {_reason}
+                    send "" to arg 1
+                    send "&7You were warned for&c%{_reason}% &7for &cNEVER&7." to arg 1
+                    send "&7Anymore warnings might result in a &3higher severity &7punishment." to arg 1
+                    send "&7Unfairly warned? &7appeal at &3{@appeal}&7." to arg 1
+                    send "" to arg 1
+                    send "&7[Silent] &3%player% &7warned &3%arg 1% &7for&c%{_reason}%&7."
+                    set {warn::date::%uuid of arg 1%} to now
+                    add "&7[%{warn::date::%uuid of arg 1%}%&7] &3%player% &fwarned &3%arg 1% &7for&c%{_reason}%&7." to {history::%uuid of arg 1%::*}
+            else:
+                send "" to arg 1
+                send "&7You were warned for &c%arg 2% &7for &cNEVER&7." to arg 1
+                send "&7Anymore warnings might result in a &3higher severity &7punishment." to arg 1
+                send "&7Unfairly warned? &7appeal at &3{@appeal}&7." to arg 1
+                send "" to arg 1
+                broadcast "&3%player% &7warned &3%arg 1% &7for &c%arg 2%&7."
+                set {warn::date::%uuid of arg 1%} to now
+                add "&7[%{warn::date::%uuid of arg 1%}%&7] &3%player% &fwarned &3%arg 1% &7for &c%arg 2%&7." to {history::%uuid of arg 1%::*}

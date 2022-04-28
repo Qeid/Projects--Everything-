@@ -1,0 +1,200 @@
+on rightclick:
+	if player is sneaking:
+		if player's tool = glowing tripwire hook named "&8&l<&6&l&k||&8&l> &6&lLEGENDARY &7Crate Key &8&l<&6&l&k||&8&l>" with lore "&7&oRight Click &7to open &6&lLEGENDARY" and "&7crate.":
+			remove 1 of glowing tripwire hook named "&8&l<&6&l&k||&8&l> &6&lLEGENDARY &7Crate Key &8&l<&6&l&k||&8&l>" with lore "&7&oRight Click &7to open &6&lLEGENDARY" and "&7crate." from player's inventory
+			execute console command "cc forceopen legendary %player%"
+		if player's tool = glowing tripwire hook named "&8&l<&f-&8&l> &f&lCOMMON &7Crate Key &8&l<&f-&8&l>" with lore "&7&oShift Right Click &7to open &f&lCOMMON" and "&7crate.":
+			remove 1 of glowing tripwire hook named "&8&l<&f-&8&l> &f&lCOMMON &7Crate Key &8&l<&f-&8&l>" with lore "&7&oShift Right Click &7to open &f&lCOMMON" and "&7crate." from player's inventory
+			execute console command "cc forceopen common %player%"
+		if player's tool = glowing tripwire hook named "&8&l<&a-&8&l> &a&lUNCOMMON &7Crate Key &8&l<&a-&8&l>" with lore "&7&oRight Click &7to open &a&lUNCOMMON" and "&7crate.":
+			remove 1 of glowing tripwire hook named "&8&l<&a-&8&l> &a&lUNCOMMON &7Crate Key &8&l<&a-&8&l>" with lore "&7&oRight Click &7to open &a&lUNCOMMON" and "&7crate." from player's inventory
+			execute console command "cc forceopen uncommon %player%"
+		if player's tool = glowing tripwire hook named "&8&l<&b-&8&l> &b&lRARE &7Crate Key &8&l<&b-&8&l>" with lore "&7&oShift Right Click &7to open &b&lRARE" and "&7crate.":
+			remove 1 of glowing tripwire hook named "&8&l<&b-&8&l> &b&lRARE &7Crate Key &8&l<&b-&8&l>" with lore "&7&oShift Right Click &7to open &b&lRARE" and "&7crate." from player's inventory
+			execute console command "cc forceopen uncommon %player%"
+		
+
+
+on join:
+	set join message to "&8&l<&a+&8&l> &7%colored player's prefix%%player%"
+on quit:
+	set quit message to "&8&l<&c-&8&l> &7%colored player's prefix%%player%"
+	
+command /sanehub:
+	aliases: shub
+	trigger:
+		execute player command "server sanehub"
+
+
+
+command /prestigeannounce [<text>]:
+	permission: op
+	permission message: &c&l(!) &7You must be &9&lDEVELOPER &7or higher to perform this.
+	trigger:
+		if arg 1 is set:
+			broadcast "%colored arg 1%"
+		else:
+			send "&cUsage: /prestigeannounce (text)"
+command /rankupannounce [<text>]:
+	permission: op
+	permission message: &c&l(!) &7You must be &9&lDEVELOPER &7or higher to perform this.
+	trigger:
+		if arg 1 is set:
+			broadcast "%colored arg 1%"
+		else:
+			send "&cUsage: /rankupannounce (text)"
+command /announce <text>:
+	aliases: a, bc, broadcast
+	permission: staff.announce
+	usage: &cUsage: /announce (text)
+	permission message: &c&l(!) &7You must be &4&lADMIN &7or higher to perform this.
+	trigger:
+		broadcast "&c&lANNOUNCEMENT &7» &c%colored arg 1%"
+		
+		
+command /keyall <text> [<number>]:
+	usage: &c&l(!) &7Improper usage: /keyall (key) [number]
+	permission: staff.keyall
+	permission message: &c&l(!) &7You must be &4&lADMIN &7or higher to perform this.
+	trigger:
+		if arg 1 is "common":
+			if arg 2 is not set:
+				give 1 of glowing tripwire hook named "&8&l<&f-&8&l> &f&lCOMMON &7Crate Key &8&l<&f-&8&l>" with lore "&7&oShift Right Click &7to open &f&lCOMMON" and "&7crate." to all players
+				send "&aYou received 1 common crate key from %player%" to all players
+			else:
+				if arg 2 is set:
+					if arg 2 > 65:
+						send "&cYou cannot apply higher then 64!"
+						stop
+					if arg 2 <= 0:
+						send "&cSorry, I cannot parse this number. Please try again."
+					if arg 2 < 65:
+						if arg 2 > 0:
+							give arg 2 of glowing tripwire hook named "&8&l<&f-&8&l> &f&lCOMMON &7Crate Key &8&l<&f-&8&l>" with lore "&7&oShift Right Click &7to open &f&lCOMMON" and "&7crate." to all players
+							send "&aYou received %arg 2% &acommon crate keys from %player%" to all players
+		if arg 1 is "uncommon":
+			if arg 2 is not set:
+				give 1 of glowing tripwire hook named "&8&l<&a-&8&l> &a&lUNCOMMON &7Crate Key &8&l<&a-&8&l>" with lore "&7&oRight Click &7to open &a&lUNCOMMON" and "&7crate." to all players
+				send "&aYou received 1 uncommon crate key from %player%" to all players
+			else:
+				if arg 2 is set:
+					if arg 2 > 65:
+						send "&cYou cannot apply higher then 64!"
+						stop
+					if arg 2 <= 0:
+						send "&cSorry, I cannot parse this number. Please try again."
+					if arg 2 < 65:
+						if arg 2 > 0:
+							give arg 2 of glowing tripwire hook named "&8&l<&a-&8&l> &a&lUNCOMMON &7Crate Key &8&l<&a-&8&l>" with lore "&7&oShift Right Click &7to open &a&lUNCOMMON" and "&7crate." to all players
+							send "&aYou received %arg 2% &auncommon crate keys from %player%" to all players
+		if arg 1 is "rare":
+			if arg 2 is not set:
+				give 1 of glowing tripwire hook named "&8&l<&b-&8&l> &b&lRARE &7Crate Key &8&l<&b-&8&l>" with lore "&7&oShift Right Click &7to open &b&lRARE" and "&7crate." to all players
+				send "&aYou received 1 rare crate key from %player%" to all players
+			else:
+				if arg 2 is set:
+					if arg 2 > 65:
+						send "&cYou cannot apply higher then 64!"
+						stop
+					if arg 2 <= 0:
+						send "&cSorry, I cannot parse this number. Please try again."
+					if arg 2 < 65:
+						if arg 2 > 0:
+							give arg 2 of glowing tripwire hook named "&8&l<&b-&8&l> &b&lRARE &7Crate Key &8&l<&b-&8&l>" with lore "&7&oShift Right Click &7to open &b&lRARE" and "&7crate." to all players
+							send "&aYou received %arg 2% &arare crate keys from %player%" to all players
+		if arg 1 is "legendary":
+			if arg 2 is not set:
+				give 1 of glowing tripwire hook named "&8&l<&6&l&k||&8&l> &6&lLEGENDARY &7Crate Key &8&l<&6&l&k||&8&l>" with lore "&7&oShift Right Click &7to open &6&lLEGENDARY" and "&7crate." to all players
+				send "&aYou received 1 legendary crate key from %player%" to all players
+			else:
+				if arg 2 is set:
+					if arg 2 > 65:
+						send "&cYou cannot apply higher then 64!"
+						stop
+					if arg 2 <= 0:
+						send "&cSorry, I cannot parse this number. Please try again."
+					if arg 2 < 65:
+						if arg 2 > 0:
+							give arg 2 of glowing tripwire hook named "&8&l<&6&l&k||&8&l> &6&lLEGENDARY &7Crate Key &8&l<&6&l&k||&8&l>" with lore "&7&oShift Right Click &7to open &6&lLEGENDARY" and "&7crate." to all players
+							send "&aYou received %arg 2% &alegendary crate keys from %player%" to all players
+		if arg 1 is "basic":
+			if arg 2 is not set:
+				give 1 of glowing tripwire hook named "&7&lBasic Crate &b&lKey" with lore "&7A special Key" and "&7For a special Crate." to all players
+				send "&aYou received 1 common crate key from %player%" to all players
+			else:
+				if arg 2 is set:
+					if arg 2 > 65:
+						send "&cYou cannot apply higher then 64!"
+						stop
+					if arg 2 <= 0:
+						send "&cSorry, I cannot parse this number. Please try again."
+					if arg 2 < 65:
+						if arg 2 > 0:
+							give arg 2 of glowing tripwire hook named "&7&lBasic Crate &b&lKey" with lore "&7A special Key" and "&7For a special Crate." to all players
+							send "&aYou received %arg 2% &abasic crate keys from %player%" to all players
+command /uncommonkey <player> <number>:
+	usage: &cThis command is for console only!
+	trigger:
+		if command sender is not console:
+			send "&cThis command is for console only!"
+			stop
+		else:
+			give arg 2 of glowing tripwire hook named "&8&l<&a-&8&l> &a&lUNCOMMON &7Crate Key &8&l<&a-&8&l>" with lore "&7&oShift Right Click &7to open &a&lUNCOMMON" and "&7crate." to arg 1
+command /rarekey <player> <number>:
+	usage: &cThis command is for console only!
+	trigger:
+		if command sender is not console:
+			send "&cThis command is for console only!"
+			stop
+		else:
+			give arg 2 of glowing tripwire hook named "&8&l<&b-&8&l> &b&lRARE &7Crate Key &8&l<&b-&8&l>" with lore "&7&oShift Right Click &7to open &b&lRARE" and "&7crate." to arg 1
+			
+command /legendarykey <player> <number>:
+	usage: &cThis command is for console only!
+	trigger:
+		if command sender is not console:
+			send "&cThis command is for console only!"
+			stop
+		else:
+			give arg 2 of glowing tripwire hook named "&8&l<&6&l&k||&8&l> &6&lLEGENDARY &7Crate Key &8&l<&6&l&k||&8&l>" with lore "&7&oShift Right Click &7to open &6&lLEGENDARY" and "&7crate." to arg 1
+command /discord:
+	trigger:
+		message "&9▇▇▇▇▇▇▇▇▇"
+		message "&9▇&7▇▇&9▇▇▇&7▇▇&9▇"
+		message "&9▇&7▇▇▇▇▇▇▇&9▇         &b&lJoin Our Discord&b&l:"
+		message "&9▇&7▇&9▇&7▇▇▇&9▇&7▇&9▇"
+		message "&9▇&7▇▇▇▇▇▇▇&9▇  <tooltip:Click to join!><link:https://discord.gg/T7AWp9RtH7!>&7  -- > &b&l&nClick Here"
+		message "&9▇&7▇&9▇▇▇▇▇&7▇&9▇"
+		message "&9▇&7▇▇&9▇▇▇&7▇▇&9▇"
+		message "&9▇▇▇&9▇▇▇▇▇▇"
+
+command /setspawn:
+    permission: staff.setspawn
+    permission message: &cYou do not have permission to use this command.
+    trigger:
+        send "&bSpawn has been updated to %player's location%"
+        set {spawn} to player's location
+
+command /spawn:
+    trigger:
+        teleport player to {spawn}
+
+on join:
+    if {spawn} is not set:
+        loop all players:
+            send "&d&lDEBUG &7» &eSpawn location for world [&d%player's world%&e] is not set!" to all players where [{debug::%uuid of loop-player%} is true]
+    else:
+        if {debug::%uuid of player%} is true:
+            send "&d&lDEBUG &7» &eYour debug mode is enabled."
+        teleport player to {spawn}
+
+		
+command /chatcolor:
+    usage: &c/chatcolor
+    trigger:
+        make player execute "chatcolor2:chatcolor gui"
+
+command /sell:
+    trigger:
+        execute player command "sellall"
+        

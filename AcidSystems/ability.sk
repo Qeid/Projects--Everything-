@@ -1,0 +1,58 @@
+import:
+    org.bukkit.Bukkit
+    org.bukkit.inventory.ShapedRecipe
+    org.bukkit.inventory.RecipeChoice$ExactChoice
+    org.bukkit.NamespacedKey
+ 
+#! Register shaped recipe with custom ingredients !#
+effect register [new] shaped recipe for %item% using %items% with id %string%:
+    trigger:
+        set {_ing::*} to expressions-2
+        loop 9 times:
+            if {_ing::%loop-number%} is not set:
+                set {_ing::%loop-number%} to air
+        #! ID + NamespacedKey !#
+        set {_id} to expression-3
+        replace all " " with "_" in {_id}
+        set {_key} to new NamespacedKey(Bukkit.getPluginManager().getPlugin("Skript"), {_id})
+        #! Create Recipe !#
+        set {_recipe} to new ShapedRecipe({_key}, expression-1)
+        loop 9 times:
+            set {_choices::%loop-number%} to new ExactChoice({_ing::%loop-number%})
+        #! Ingredients !#
+        {_recipe}.shape("123","456","789")
+        loop {_ing::*}:
+            {_recipe}.setIngredient(loop-index, {_choices::%loop-index%})
+        Bukkit.addRecipe({_recipe})
+effect [(1¦un)]discover recipe %string% for %players%:
+    trigger:
+        set {_string} to expression-1
+        replace all " " with "_" in {_string}
+        set {_key} to new NamespacedKey(Bukkit.getPluginManager().getPlugin("Skript"), {_string})
+        loop expressions-2:
+            if parse mark is 1:
+                loop-expression.undiscoverRecipe({_key})
+            else:
+                loop-expression.discoverRecipe({_key})		
+		
+on skript load:
+    set {_item} to glowing cookie named "&9Enchanted Cookie" with lore "" and "&7This cookie has a... special" and "&7touch to it :)" and "" and "&6Ability: Yummy Mode &e&lRIGHT CLICK" and "&7Once you consume this cookie, you will" and  "&7get &cStrength I" and "&7for &a10 seconds &7and &bSpeed II &7for &a15 seconds" and "" and "&9&lRARE CONSUMABLE"
+    register new shaped recipe for {_item} using diamond block, feather, stone sword, air, gold ingot, air, gold ingot, gold ingot and gold ingot with id "enchanted_cookie"
+
+on join:
+    discover recipe "enchanted_cookie" for player
+
+on rightclick:
+    if player's tool = glowing cookie named "&9Enchanted Cookie":
+        if {_cooldown::%player%} is true:
+            send "&cPlease wait before using this again!"
+            wait 3 seconds
+            set {_cooldown::%player%} to false
+            send "&aYou can use your ability again."
+        else:
+            cancel event
+            play sound "entity.player.burp" at volume 1 to player
+            send "&aYou activated Yummy Mode!"
+            apply potion of speed of tier 2 to player for 15 seconds
+            apply potion of strength of tier 1 to player for 10 seconds
+            remove 1 of glowing cookie named "&9Enchanted Cookie" from player's inventory
