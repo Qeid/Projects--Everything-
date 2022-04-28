@@ -41,6 +41,14 @@ on load:
     builderLocalSlashUpdate({_cmd}, "setsuggestcooldown")
     delete {_cmd}
 
+    set {_cmd} to builderNewSlash("invitelink", "Need a invite link?")
+    builderLocalSlashUpdate({_cmd}, "invitelink")
+    delete {_cmd}
+
+    set {_cmd} to builderNewSlash("invite", "Need a invite link?")
+    builderLocalSlashUpdate({_cmd}, "invite")
+    delete {_cmd}
+
 
 on slash command:
     set {_c} to event-string
@@ -91,6 +99,19 @@ on slash command:
             reply with "> **Reloaded all modules and commands**"
         else:
             reply with ":x: *Unable to do this action*"
+    else if {_c} is "invitelink" or "invite":
+        make embed:
+
+            add "Here is the invite link!" to {_nl::*}
+            set description of embed to join {_nl::*} with nl
+            set timestamp of embed to now
+            set embed color of embed to blue
+            set footer of embed to "Requested by %event-user%""
+            set footer icon of embed to "%avatar of event-user%"
+
+
+        post last embed to event-channel
+
 
 on button click:
     set {_button} to event-string
