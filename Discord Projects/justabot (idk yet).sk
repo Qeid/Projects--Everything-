@@ -106,7 +106,7 @@ on slash command:
             set description of embed to join {_nl::*} with nl
             set timestamp of embed to now
             set embed color of embed to blue
-            set footer of embed to "Requested by %event-user%""
+            set footer of embed to "Requested by %event-user%"
             set footer icon of embed to "%avatar of event-user%"
 
 
