@@ -1,5 +1,5 @@
 define new bot named "Peacekeeper":
-    token: "OTYzNzc3MDQxMTcyNDI2ODEz.YlbBUA.cJckW9Uaac-XEqq2vIfUyiq9lsc"
+    token: ""
     intents: default intents
     policy: all
     auto reconnect: true
