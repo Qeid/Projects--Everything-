@@ -7,7 +7,7 @@ on load:
 
 options:
     bot: Just A Bot
-    presence_type: streaming
+    presence_type: watching
     presence_msg: Qeid's hot sister
 
 command /a:
