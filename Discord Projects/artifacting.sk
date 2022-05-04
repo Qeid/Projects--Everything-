@@ -1,0 +1,7 @@
+define new bot named "Artifacting Bot":
+    token: ""
+    intents: default intents
+    policy: all
+    auto reconnect: true
+    compression: none
+
