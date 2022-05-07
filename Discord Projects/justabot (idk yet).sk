@@ -13,6 +13,7 @@ options:
 command /a:
     trigger:
         delete {token}
+        
 define new bot named "Just A Bot":
     token: "%yaml value "token" from "plugins/discord/justabot-token.yml"%"
     intents: default intents
@@ -67,8 +68,9 @@ on load:
     builderLocalSlashUpdate({_cmd}, "invite")
     delete {_cmd}
     
-    set {_cmd} to builderNewSlash("token", "Testing purposes")
-    builderLocalSlashUpdate({_cmd}, "token")
+
+    set {_cmd} to builderNewSlash("artifacting", "Artifacting is a focking monkey")
+    builderLocalSlashUpdate({_cmd}, "artifacting")
     delete {_cmd}
 
 
@@ -135,10 +137,10 @@ on slash command:
             set footer icon of embed to "%avatar of event-bot%"
 
         set {_row} to new components row
-        add new link button with url "https://discord.gg/flawlessed" named "Invite link with needed permissions"  to components of {_row}
+        add new link button with url "https://discord.com/api/oauth2/authorize?client_id=968698429222031420&permissions=2147568640&scope=bot%%20applications.commands" named "Invite link with needed permissions"  to components of {_row}
         reply with hidden last embed with components {_row}
-    else if {_c} is "token":
-        reply with hidden "%yaml value "token" from "plugins/discord/justabot-token.yml"%"
+    else if {_c} is "artifacting":
+        reply with "<@259772688631857155> is a focking **monkey!**"
 
 
 on button click:
@@ -288,7 +290,7 @@ function builderLocalSlashUpdate(slash: object, name: text):
     delete {local::%{_name}%}
     set {local::%{_name}%} to {_slash}
 
-    update command {local::*} locally in guild with id "839283557658132570"
+    update command {local::*} locally in guild with id "915660839804084234"
 
 function timespanFormat(value: timespan) :: text:
     set {_str} to "%{_value}%"
